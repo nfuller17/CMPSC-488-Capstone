@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 //PawnJerry is the pawn class for human players
+//If the player is hunted, the Pawn is destroyed and a new Pawn object is re-spawned
+//Therefore, anything that should exist indefinitely for the player should be placed on the Controller
 
 #pragma once
 

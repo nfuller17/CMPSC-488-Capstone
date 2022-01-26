@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 //ControllerJerry is the controller class for human players
+//Anything that should exist indefinitely on the player should be under Controller
 
 #pragma once
 
