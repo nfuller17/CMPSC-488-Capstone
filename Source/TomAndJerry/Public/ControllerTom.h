@@ -7,11 +7,16 @@
 #include "ControllerTom.generated.h"
 
 /**
- * 
+ * Controller for AI
  */
 UCLASS()
 class TOMANDJERRY_API AControllerTom : public AAIController
 {
 	GENERATED_BODY()
-	
+
+public:
+	virtual void Tick(float DeltaSeconds) override;
+
+protected:
+	virtual void BeginPlay() override;
 };
