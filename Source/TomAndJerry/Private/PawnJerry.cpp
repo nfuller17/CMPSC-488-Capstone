@@ -32,3 +32,35 @@ void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 }
 
+// Called to bind functionality to input
+void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APawnJerry::MoveForward);
+	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis(TEXT("Strafe"), this, &APawnJerry::Strafe);
+	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
+	PlayerInputComponent->BindAxis(TEXT("LookUpRate"), this, &APawnJerry::LookUpRate);
+	PlayerInputComponent->BindAxis(TEXT("LookRightRate"), this, &APawnJerry::LookRightRate);
+}
+
+void APawnJerry::MoveForward(float AxisValue)
+{
+		AddMovementInput(GetActorForwardVector() * AxisValue);
+}
+
+void APawnJerry::Strafe(float AxisValue)
+{
+		AddMovementInput(GetActorRightVector() * AxisValue);
+}
+
+void APawnJerry::LookUpRate(float AxisValue)
+{
+	AddControllerPitchInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
+}
+
+void APawnJerry::LookRightRate(float AxisValue)
+{
+	AddControllerYawInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
+}
