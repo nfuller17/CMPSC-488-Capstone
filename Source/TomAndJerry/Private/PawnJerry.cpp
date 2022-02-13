@@ -2,6 +2,7 @@
 
 
 #include "PawnJerry.h"
+#include "WeaponMaterial.h"
 
 // Sets default values
 APawnJerry::APawnJerry()
@@ -38,10 +39,19 @@ void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void APawnJerry::MoveForward(float AxisValue)
 {
-		AddMovementInput(GetActorForwardVector() * AxisValue);
+	AddMovementInput(GetActorForwardVector() * AxisValue);
 }
 
 void APawnJerry::Strafe(float AxisValue)
 {
-		AddMovementInput(GetActorRightVector() * AxisValue);
+	AddMovementInput(GetActorRightVector() * AxisValue);
+}
+
+void APawnJerry::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+	AWeaponMaterial* WeaponMaterial = Cast<AWeaponMaterial>(OtherActor);
+	if (WeaponMaterial) {
+		UE_LOG(LogTemp, Warning, TEXT("Player walked over a Weapon Material!"));
+	}
 }
