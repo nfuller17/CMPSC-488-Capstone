@@ -14,3 +14,5 @@ Saved
 *.xcworkspace
 Content/ParagonKhaimera
 Content/ParagonGideon
+Build/
+Releases/
