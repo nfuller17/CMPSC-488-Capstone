@@ -12,8 +12,9 @@
 void AControllerTom::BeginPlay()
 {
 	Super::BeginPlay();
-	APawn* Jerry = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	SetFocus(Jerry);
+	if(AIBehavior == nullptr){
+	    RunBehaviorTree(AIBehavior);
+	}
 }
 
 //Called every frame
