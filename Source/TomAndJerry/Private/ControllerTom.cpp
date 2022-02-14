@@ -3,7 +3,7 @@
 
 #include "ControllerTom.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "BehaviorTree/BlackboardComponent.h"
 
 //Called when game begins play
 //Sets focus of AI to player (AI will constantly look at player)
@@ -12,9 +12,11 @@
 void AControllerTom::BeginPlay()
 {
 	Super::BeginPlay();
-	if(AIBehavior == nullptr){
+	if(AIBehavior != nullptr){
 	    RunBehaviorTree(AIBehavior);
-	}
+        APawn* Jerry = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+        GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), Jerry->GetActorLocation());
+    }
 }
 
 //Called every frame
