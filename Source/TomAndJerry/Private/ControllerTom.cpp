@@ -16,6 +16,8 @@ void AControllerTom::BeginPlay()
 	    RunBehaviorTree(AIBehavior);
         APawn* Jerry = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
         GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), Jerry->GetActorLocation());
+        APawn* Tom = UGameplayStatics::GetPawn();
+        GetBlackboardComponent()->SetValueAsVector(TEXT("AIStartLocation"), Tom->GetActorLocation());
     }
 }
 
