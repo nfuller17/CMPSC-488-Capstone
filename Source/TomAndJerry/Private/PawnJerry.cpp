@@ -3,6 +3,7 @@
 
 #include "PawnJerry.h"
 #include "WeaponMaterial.h"
+#include "ControllerJerry.h"
 
 // Sets default values
 APawnJerry::APawnJerry()
@@ -47,11 +48,18 @@ void APawnJerry::Strafe(float AxisValue)
 	AddMovementInput(GetActorRightVector() * AxisValue);
 }
 
+//Called when player walks over a weapon material
+//Calls the AddWeaponMaterial in ControllerJerry, and destroys the material
 void APawnJerry::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 	AWeaponMaterial* WeaponMaterial = Cast<AWeaponMaterial>(OtherActor);
 	if (WeaponMaterial) {
 		UE_LOG(LogTemp, Warning, TEXT("Player walked over a Weapon Material!"));
+		AControllerJerry* playerController = Cast<AControllerJerry>(GetController());
+		if (playerController) {
+			playerController->AddWeaponMaterial(1);
+			WeaponMaterial->Destroy();
+		}
 	}
 }

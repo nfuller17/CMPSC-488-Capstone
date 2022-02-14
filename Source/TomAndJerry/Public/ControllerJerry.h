@@ -6,12 +6,17 @@
 #include "GameFramework/PlayerController.h"
 #include "ControllerJerry.generated.h"
 
-/**
- * 
- */
+//Forward class declaration - ie tell Compiler to compile this class first
+class AWeaponMaterial;
+
 UCLASS()
 class TOMANDJERRY_API AControllerJerry : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+public:
+	void AddWeaponMaterial(uint8 WeaponMaterialNumber);
+
+private:
+	TArray<uint8>	MaterialInventory;
 };
