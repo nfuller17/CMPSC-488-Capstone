@@ -16,7 +16,7 @@ void AControllerTom::BeginPlay()
 	    RunBehaviorTree(AIBehavior);
         APawn* Jerry = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
         GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), Jerry->GetActorLocation());
-        APawn* Tom = UGameplayStatics::GetPawn();
+        APawn* Tom = GetPawn();
         GetBlackboardComponent()->SetValueAsVector(TEXT("AIStartLocation"), Tom->GetActorLocation());
     }
 }
@@ -26,6 +26,4 @@ void AControllerTom::BeginPlay()
 void AControllerTom::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	APawn* Jerry = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	MoveToActor(Jerry, 50);
 }
