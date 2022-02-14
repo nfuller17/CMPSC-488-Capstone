@@ -9,7 +9,6 @@
 void AControllerJerry::AddWeaponMaterial(uint8 WeaponMaterialNumber)
 {
 	MaterialInventory.Emplace(WeaponMaterialNumber);
-	for (uint8 x = 0; x < MaterialInventory.Num(); x++)
-		UE_LOG(LogTemp, Warning, TEXT("Added Material %d to Inventory!"), WeaponMaterialNumber);
+	UE_LOG(LogTemp, Warning, TEXT("Added Material %d to Inventory!"), WeaponMaterialNumber);
 }
 

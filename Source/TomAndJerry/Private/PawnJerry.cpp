@@ -58,7 +58,7 @@ void APawnJerry::NotifyActorBeginOverlap(AActor* OtherActor)
 		UE_LOG(LogTemp, Warning, TEXT("Player walked over a Weapon Material!"));
 		AControllerJerry* playerController = Cast<AControllerJerry>(GetController());
 		if (playerController) {
-			playerController->AddWeaponMaterial(1);
+			playerController->AddWeaponMaterial(WeaponMaterial->GetMaterialID());
 			WeaponMaterial->Destroy();
 		}
 	}
