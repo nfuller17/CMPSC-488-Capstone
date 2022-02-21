@@ -4,6 +4,7 @@
 #include "CraftingPost.h"
 #include "PawnJerry.h"
 #include "ControllerJerry.h"
+#include "../TomAndJerryGameModeBase.h"
 
 // Sets default values
 ACraftingPost::ACraftingPost()
@@ -39,8 +40,12 @@ void ACraftingPost::NotifyActorBeginOverlap(AActor* OtherActor)
 		AControllerJerry* JerryController = Cast<AControllerJerry>(Jerry->GetController());
 		if (JerryController) {
 			TArray<uint8> Materials = JerryController->GetMaterials();
-			uint8 NumMaterials = Materials.Num();
+			const uint8 NumMaterials = Materials.Num();
 			JerryController->CollectMaterials();
+			ATomAndJerryGameModeBase* TomAndJerryGame = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
+			if (TomAndJerryGame){
+				TomAndJerryGame->AddMaterial(NumMaterials);
+			}
 			UE_LOG(LogTemp, Warning, TEXT("Collected %d materials from player."), NumMaterials);
 		}
 	}

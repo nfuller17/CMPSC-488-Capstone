@@ -14,4 +14,14 @@ class TOMANDJERRY_API ATomAndJerryGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	void AddMaterial(const uint8 Count);
+	void EndGame(const bool bPlayerWon);
+	
+protected:
+	virtual void BeginPlay() override;
+	
+private:
+	uint8	MaterialsCollected = 0;
+	uint8	MaterialsTotal = 0;
 };
