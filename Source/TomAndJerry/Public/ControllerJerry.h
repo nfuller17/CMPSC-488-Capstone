@@ -16,6 +16,8 @@ class TOMANDJERRY_API AControllerJerry : public APlayerController
 
 public:
 	void AddWeaponMaterial(uint8 WeaponMaterialNumber);
+	TArray<uint8> GetMaterials() { return MaterialInventory; }
+	void CollectMaterials();
 
 private:
 	TArray<uint8>	MaterialInventory;

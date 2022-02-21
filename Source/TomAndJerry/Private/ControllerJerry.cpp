@@ -12,3 +12,8 @@ void AControllerJerry::AddWeaponMaterial(uint8 WeaponMaterialNumber)
 	UE_LOG(LogTemp, Warning, TEXT("Added Material %d to Inventory!"), WeaponMaterialNumber);
 }
 
+//Called by CraftingPost when player walks into crafting location
+void AControllerJerry::CollectMaterials()
+{
+	MaterialInventory.Empty();
+}
