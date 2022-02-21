@@ -18,6 +18,10 @@ public:
 	void AddWeaponMaterial(uint8 WeaponMaterialNumber);
 	TArray<uint8> GetMaterials() { return MaterialInventory; }
 	void CollectMaterials();
+	virtual void GameHasEnded(class AActor* EndGameFocus = nullptr, bool bIsWinner = false) override;
+	UPROPERTY(EditAnywhere)
+	float RestartDelay = 5.f;
+	FTimerHandle RestartTimer;
 
 private:
 	TArray<uint8>	MaterialInventory;

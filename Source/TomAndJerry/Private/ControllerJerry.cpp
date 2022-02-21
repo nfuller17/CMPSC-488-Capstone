@@ -17,3 +17,10 @@ void AControllerJerry::CollectMaterials()
 {
 	MaterialInventory.Empty();
 }
+
+void AControllerJerry::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)
+{
+	Super::GameHasEnded(EndGameFocus, bIsWinner);
+	UE_LOG(LogTemp, Warning, TEXT("Game Over! Restarting in %d seconds."), RestartDelay);
+	GetWorldTimerManager().SetTimer(RestartTimer, this, &APlayerController::RestartLevel, RestartDelay);
+}
