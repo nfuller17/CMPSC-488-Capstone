@@ -12,7 +12,6 @@ Saved
 *.suo
 *.xcodeproj
 *.xcworkspace
-Content/ParagonKhaimera
-Content/ParagonGideon
+Content/*
 Build/
 Releases/
