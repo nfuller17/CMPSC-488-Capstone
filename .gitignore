@@ -12,13 +12,6 @@ Saved
 *.suo
 *.xcodeproj
 *.xcworkspace
-<<<<<<< HEAD
 Content/*
-=======
-Content/ParagonKhaimera
-Content/ParagonGideon
-Content/StarterContent
-Content/GrassLandscape
->>>>>>> b97c525a564e82cd2b35715ef05a9d370388ad02
 Build/
 Releases/
