@@ -22,6 +22,9 @@ public:
 	//Called when Pawn walks over another Actor with collision set to overlap Pawns- in this case, Materials, Minor Objectives, etc.
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
+	//Called when Player walks away from a previously overlapping Actor- used to determine when Player steps off a Minor Objective
+	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
