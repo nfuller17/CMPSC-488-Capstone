@@ -26,4 +26,14 @@ void AControllerTom::BeginPlay()
 void AControllerTom::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	APawn * JerryPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	if (LineOfSightTo(JerryPawn))
+	{
+		GetBlackboardComponent()->SetValueAsVector(TEXT("PlayerLocation"), JerryPawn->GetActorLocation());
+		GetBlackboardComponent()->SetValueAsVector(TEXT("LastPlayerLocation"), JerryPawn->GetActorLocation());
+	}
+	else
+	{
+		GetBlackboardComponent()->ClearValue(TEXT("PlayerLocation"));
+	}
 }
