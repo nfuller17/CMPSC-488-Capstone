@@ -35,7 +35,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-private:	
+private:
+	//WeaponInventory is an array of Subclasses of type Weapon
+	//It represents the weapons the player has collected
+	TArray<TSubclassOf<AWeapon>> WeaponInventory;
+	
 	//Allows the character to move forward(AxisValue = 1.0) or backward(AxisValue = -1.0)
 	//Already framerate independent
 	void MoveForward(float AxisValue);
@@ -44,8 +48,6 @@ private:
 	//Already framerate independent
 	void Strafe(float AxisValue);
 	
-	//WeaponInventory is an array of Subclasses of type Weapon
-	//It represents the weapons the player has collected
-	TArray<TSubclassOf<AWeapon>> WeaponInventory;
+	void SelectWeapon1();
 };
 

@@ -17,6 +17,7 @@ public:
 	AWeapon();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	uint8 GetWeaponNumber(){return WeaponNumber;}
 
 protected:
 	// Called when the game starts or when spawned
@@ -27,5 +28,5 @@ private:
 		USceneComponent* Root;
 	UPROPERTY(VisibleAnywhere)
 		USkeletalMeshComponent* Mesh;
-
+	const uint8 WeaponNumber = 0;
 };

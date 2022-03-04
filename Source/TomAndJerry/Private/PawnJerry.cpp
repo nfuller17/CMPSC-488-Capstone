@@ -41,6 +41,7 @@ void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis(TEXT("Strafe"), this, &APawnJerry::Strafe);
 	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
+	PlayerInputComponent->BindAction(TEXT("SelectWeapon1"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon1);
 }
 
 void APawnJerry::MoveForward(float AxisValue)
@@ -100,4 +101,23 @@ void APawnJerry::AddWeapon(TSubclassOf<AWeapon> WeaponClass)
 		}
 	}
 	WeaponInventory.Emplace(WeaponClass);
+}
+
+void APawnJerry::SelectWeapon1()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Select Weapon 1"));
+	for (auto wClass: WeaponInventory)
+	{
+		AWeapon* Weapon = Cast<AWeapon>(wClass);
+		if (Weapon)
+		{
+			uint8 WeaponNumber = Weapon->GetWeaponNumber();
+			if (WeaponNumber == 1)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Weapon 1 found - selecting."));
+				return;
+			}
+		}
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Weapon 1 not found."));
 }
