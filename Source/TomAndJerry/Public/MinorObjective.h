@@ -20,8 +20,8 @@ public:
 	void BeginActivation();
 	// Called when player walks off Minor Objective
 	void StopActivation();
-	// Called when player successfully completes Minor Objective
-	void Complete();
+	// Called when player successfully completes Minor Objective. Set as virtual so child classes can override to provide their own rewards (weapons, allies, health, etc.)
+	virtual void Complete();
 	FTimerHandle ActivationTimer;
 
 protected:
@@ -31,5 +31,4 @@ protected:
 private:
 	UPROPERTY(EditAnywhere)
 	float CompletionTime = 10.0;	//How long, in seconds, the player must stand on a Minor Objective to complete it
-
 };

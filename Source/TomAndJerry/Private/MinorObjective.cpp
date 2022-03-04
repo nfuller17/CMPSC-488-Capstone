@@ -44,5 +44,5 @@ void AMinorObjective::Complete()
 {
 	GetWorldTimerManager().ClearTimer(ActivationTimer);
 	UE_LOG(LogTemp, Warning, TEXT("Minor Objective completed!"));
-	Destroy();
+	//Destroy();
 }

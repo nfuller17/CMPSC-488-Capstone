@@ -25,6 +25,4 @@ public:
 
 private:
 	TArray<uint8>	MaterialInventory;
-	UPROPERTY(EditAnywhere)
-	float MaxSpeed = 400.00;
 };

@@ -19,8 +19,8 @@ void APawnJerry::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//Hide the weapon mesh that comes with the character mesh
-	//GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
+	//Hide the weapon mesh that comes with the Wraith mesh
+	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
 	
 }
 
