@@ -3,11 +3,16 @@
 
 #include "ObjectiveWeapon.h"
 #include "Weapon.h"
+#include "PawnJerry.h"
 
 void AObjectiveWeapon::Complete()
 {
 	Super::Complete();
-	//Spawn a weapon for the player
-	GetWorld()->SpawnActor<AWeapon>(WeaponClass);
+	if (ActivatingPawn != nullptr)
+	{
+		APawnJerry* JerryPawn = Cast<APawnJerry>(ActivatingPawn);
+		if (JerryPawn)
+			JerryPawn->AddWeapon(WeaponClass);
+	}
 }
 

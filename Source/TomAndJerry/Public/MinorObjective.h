@@ -23,10 +23,13 @@ public:
 	// Called when player successfully completes Minor Objective. Set as virtual so child classes can override to provide their own rewards (weapons, allies, health, etc.)
 	virtual void Complete();
 	FTimerHandle ActivationTimer;
+	
+	void SetActivatingPawn(APawn* PawnActivator){ActivatingPawn = PawnActivator;}
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	APawn* ActivatingPawn;
 
 private:
 	UPROPERTY(EditAnywhere)

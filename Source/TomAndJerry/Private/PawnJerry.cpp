@@ -5,6 +5,7 @@
 #include "WeaponMaterial.h"
 #include "ControllerJerry.h"
 #include "MinorObjective.h"
+#include "Weapon.h"
 
 // Sets default values
 APawnJerry::APawnJerry()
@@ -70,6 +71,7 @@ void APawnJerry::NotifyActorBeginOverlap(AActor* OtherActor)
 	else {	//Not a Weapon Material. Check if we are standing on a Minor Objective
 		AMinorObjective* MinorObjective = Cast<AMinorObjective>(OtherActor);
 		if (MinorObjective) {
+			MinorObjective->SetActivatingPawn(this);
 			MinorObjective->BeginActivation();
 		}
 	}
@@ -83,4 +85,19 @@ void APawnJerry::NotifyActorEndOverlap(AActor* OtherActor)
 	if (MinorObjective) {
 		MinorObjective->StopActivation();
 	}
+}
+
+//Called by ObjectiveWeapon when a player has completed a Weapon Objective
+//Adds the WeaponClass to the WeaponInventory array
+void APawnJerry::AddWeapon(TSubclassOf<AWeapon> WeaponClass)
+{
+	//Only add if player does not have this weapon
+	for (auto wClass: WeaponInventory)
+	{
+		if (wClass == WeaponClass){
+			UE_LOG(LogTemp, Warning, TEXT("Player already has this weapon - not adding."));
+			return;
+		}
+	}
+	WeaponInventory.Emplace(WeaponClass);
 }

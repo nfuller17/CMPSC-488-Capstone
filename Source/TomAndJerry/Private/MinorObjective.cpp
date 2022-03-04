@@ -37,6 +37,7 @@ void AMinorObjective::BeginActivation()
 void AMinorObjective::StopActivation()
 {
 	GetWorldTimerManager().ClearTimer(ActivationTimer);
+	SetActivatingPawn(nullptr);
 	UE_LOG(LogTemp, Warning, TEXT("De-activated Minor Objective"));
 }
 // Called when player successfully completes Minor Objective after CompletionTime seconds
@@ -44,5 +45,4 @@ void AMinorObjective::Complete()
 {
 	GetWorldTimerManager().ClearTimer(ActivationTimer);
 	UE_LOG(LogTemp, Warning, TEXT("Minor Objective completed!"));
-	//Destroy();
 }

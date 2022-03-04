@@ -4,6 +4,9 @@
 #include "GameFramework/Character.h"
 #include "PawnJerry.generated.h"
 
+//Forward class declaration - ie tell Compiler to compile this class first
+class AWeapon;
+
 UCLASS()
 class TOMANDJERRY_API APawnJerry : public ACharacter
 {
@@ -24,6 +27,9 @@ public:
 
 	//Called when Player walks away from a previously overlapping Actor- used to determine when Player steps off a Minor Objective
 	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+	
+	void AddWeapon(TSubclassOf<AWeapon> WeaponClass);
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,5 +43,9 @@ private:
 	//Allows the character to move rightward(AxisValue = 1.0) or leftward(AxisValue = -1.0)
 	//Already framerate independent
 	void Strafe(float AxisValue);
+	
+	//WeaponInventory is an array of Subclasses of type Weapon
+	//It represents the weapons the player has collected
+	TArray<TSubclassOf<AWeapon>> WeaponInventory;
 };
 
