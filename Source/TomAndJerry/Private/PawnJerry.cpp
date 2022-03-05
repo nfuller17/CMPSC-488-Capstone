@@ -42,6 +42,7 @@ void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAxis(TEXT("Strafe"), this, &APawnJerry::Strafe);
 	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon1"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 1);
+	PlayerInputComponent->BindAction(TEXT("FirePrimary"), EInputEvent::IE_Pressed, this, &APawnJerry::FirePrimary);
 }
 
 void APawnJerry::MoveForward(float AxisValue)
@@ -130,4 +131,14 @@ void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 		}
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Player does not have this weapon in inventory."));
+}
+
+//Called when a player clicks with left mouse
+//Input binding is used here, as SetupPlayerInputComponent is called before BeginPlay and Weapon will be null
+void APawnJerry::FirePrimary()
+{
+	if (Weapon)
+		Weapon->FirePrimary();
+	else
+		UE_LOG(LogTemp, Warning, TEXT("No weapon to fire!"));
 }
