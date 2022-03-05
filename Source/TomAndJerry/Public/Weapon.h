@@ -38,6 +38,10 @@ private:
 		UParticleSystem* MuzzleFlash;
 	UPROPERTY(EditAnywhere)
 		UParticleSystem* ImpactEffect;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly, Category="HitScan Properties")
+		bool bIsHitScan;		//Whether or not the weapon will fire a projectile
+	UPROPERTY(EditAnywhere, Category="HitScan Properties")
 		float MaxRange = 1000.f;
+	UPROPERTY(EditAnywhere, Category="HitScan Properties")
+		float Damage;
 };

@@ -49,15 +49,34 @@ void AWeapon::FirePrimary()
 			FVector FireLocation;
 			FRotator FireRotation;
 			OwnerController->GetPlayerViewPoint(FireLocation, FireRotation);	//Parameters are passed by reference, so FireLocation and FireRotation will contain values of player view point
-			FVector EndLocation = FireLocation + FireRotation.Vector() * MaxRange;
-			FHitResult Hit;
-			bool bHitActor = GetWorld()->LineTraceSingleByChannel(Hit, FireLocation, EndLocation, ECollisionChannel::ECC_GameTraceChannel2);	//Trace from FireLocation, in direction of FireRotation, end at EndLocation
-			if (bHitActor)
+			
+			//Handle hit scan firing
+			if (bIsHitScan)
 			{
-				if (ImpactEffect)
+				FVector EndLocation = FireLocation + FireRotation.Vector() * MaxRange;
+				FHitResult Hit;
+				bool bHitActor = GetWorld()->LineTraceSingleByChannel(Hit, FireLocation, EndLocation, ECollisionChannel::ECC_GameTraceChannel2);	//Trace from FireLocation, in direction of FireRotation, end at EndLocation
+				if (bHitActor)
 				{
-					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.Location, (-FireRotation.Vector()).Rotation());
-				}
+					//Damage Actor
+					FVector DirectionFromShot = -FireRotation.Vector();
+					AActor* HitActor = Hit.GetActor();
+					if (HitActor)
+					{
+						FPointDamageEvent DamageEvent(Damage, Hit, DirectionFromShot, nullptr);
+						HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
+					}
+					
+					//Impact
+					if (ImpactEffect)
+					{
+						UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.Location, DirectionFromShot.Rotation());
+					}
+				}	
+			}
+			else	//Handle Projectile firing
+			{
+				
 			}
 		}
 	}
