@@ -36,6 +36,9 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	//Pointer to currently held weapon, if any
+	AWeapon* Weapon;
+	
 	//WeaponInventory is an array of Subclasses of type Weapon
 	//It represents the weapons the player has collected
 	TArray<TSubclassOf<AWeapon>> WeaponInventory;

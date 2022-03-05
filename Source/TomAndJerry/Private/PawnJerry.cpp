@@ -108,14 +108,26 @@ void APawnJerry::AddWeapon(TSubclassOf<AWeapon> WeaponClass)
 //If so, destroy the weapon being currently held and spawn an instance of the desired weapon
 void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 {
+	//Check if the currently held weapon is already selected
+	if (Weapon)
+	{
+		if (Weapon->GetWeaponNumber() == WeaponNumber)
+			return;
+	}
 	for (auto wClass: WeaponInventory)
 	{
-		//uint8 WeaponNumber = wClass->GetDefaultObject<AWeapon>()->GetWeaponNumber();	//wClass is a TSubclassOf template. Need to get the actual weapon class using GetDefaultObject
-		if (wClass->GetDefaultObject<AWeapon>()->GetWeaponNumber() == WeaponNumber)
+		if (wClass->GetDefaultObject<AWeapon>()->GetWeaponNumber() == WeaponNumber)	//wClass is a TSubclassOf template. Need to get the actual weapon class using GetDefaultObject
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Weapon %d found!"), WeaponNumber);
+			//Destroy the weapon the Weapon pointer is currently pointing to
+			if (Weapon)
+				Weapon->Destroy();
+			//Spawn an instance of the selected Weapon
+			Weapon = GetWorld()->SpawnActor<AWeapon>(wClass);
+			Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+			Weapon->SetOwner(this);
 			return;
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Weapon not found."));
+	UE_LOG(LogTemp, Warning, TEXT("Player does not have this weapon in inventory."));
 }
