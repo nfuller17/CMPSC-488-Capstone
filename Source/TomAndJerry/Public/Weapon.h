@@ -20,6 +20,9 @@ public:
 	
 	virtual uint8 GetWeaponNumber() PURE_VIRTUAL(AWeapon::GetWeaponNumber, return WeaponNumber;);
 	virtual void FirePrimary();
+	void BeginFire();
+	void StopFire();
+	FTimerHandle FiringTimer;
 
 protected:
 	// Called when the game starts or when spawned
@@ -44,4 +47,6 @@ private:
 		float MaxRange = 1000.f;
 	UPROPERTY(EditAnywhere, Category="HitScan Properties")
 		float Damage;
+	UPROPERTY(EditDefaultsOnly)
+		float FireRate;		//Time, in seconds, between each shot
 };

@@ -42,7 +42,8 @@ void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAxis(TEXT("Strafe"), this, &APawnJerry::Strafe);
 	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon1"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 1);
-	PlayerInputComponent->BindAction(TEXT("FirePrimary"), EInputEvent::IE_Pressed, this, &APawnJerry::FirePrimary);
+	PlayerInputComponent->BindAction(TEXT("FirePrimary"), EInputEvent::IE_Pressed, this, &APawnJerry::BeginFire);
+	PlayerInputComponent->BindAction(TEXT("FirePrimary"), EInputEvent::IE_Released, this, &APawnJerry::StopFire);
 }
 
 void APawnJerry::MoveForward(float AxisValue)
@@ -122,7 +123,10 @@ void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 			UE_LOG(LogTemp, Warning, TEXT("Weapon %d found!"), WeaponNumber);
 			//Destroy the weapon the Weapon pointer is currently pointing to
 			if (Weapon)
+			{
+				Weapon->StopFire();
 				Weapon->Destroy();
+			}
 			//Spawn an instance of the selected Weapon
 			Weapon = GetWorld()->SpawnActor<AWeapon>(wClass);
 			Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
@@ -135,10 +139,16 @@ void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 
 //Called when a player clicks with left mouse
 //Input binding is used here, as SetupPlayerInputComponent is called before BeginPlay and Weapon will be null
-void APawnJerry::FirePrimary()
+void APawnJerry::BeginFire()
 {
 	if (Weapon)
-		Weapon->FirePrimary();
-	else
-		UE_LOG(LogTemp, Warning, TEXT("No weapon to fire!"));
+		Weapon->BeginFire();
+}
+
+//Called when a player releases left mouse
+//Input binding is used here, as SetupPlayerInputComponent is called before BeginPlay and Weapon will be null
+void APawnJerry::StopFire()
+{
+	if (Weapon)
+		Weapon->StopFire();
 }
