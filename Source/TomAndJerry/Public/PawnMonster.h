@@ -29,10 +29,10 @@ protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(VisibleAnywhere)
 		float Health;
+	UPROPERTY(EditAnywhere)
+		float HealthMax;
 
 private:
-	UPROPERTY(EditAnywhere)
-		float HealthMax = 100;
 	UPROPERTY(EditAnywhere, Category="Combat")
 		bool bIsMeleeOnly;
 
