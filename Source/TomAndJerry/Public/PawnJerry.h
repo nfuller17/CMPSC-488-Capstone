@@ -48,6 +48,7 @@ private:
 	//Already framerate independent
 	void Strafe(float AxisValue);
 	
-	void SelectWeapon1();
+	void SelectWeapon(const int32 WeaponNumber);
+	DECLARE_DELEGATE_OneParam(FSelectWeaponDelegate, const int32);
 };
 

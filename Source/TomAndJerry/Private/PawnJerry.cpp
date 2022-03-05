@@ -41,7 +41,7 @@ void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis(TEXT("Strafe"), this, &APawnJerry::Strafe);
 	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAction(TEXT("SelectWeapon1"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon1);
+	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon1"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 1);
 }
 
 void APawnJerry::MoveForward(float AxisValue)
@@ -103,12 +103,15 @@ void APawnJerry::AddWeapon(TSubclassOf<AWeapon> WeaponClass)
 	WeaponInventory.Emplace(WeaponClass);
 }
 
-void APawnJerry::SelectWeapon1()
+//Called when a player presses a number on the keyboard
+//Checks if the player has the desired weapon
+//If so, destroy the weapon being currently held and spawn an instance of the desired weapon
+void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 {
 	for (auto wClass: WeaponInventory)
 	{
-		uint8 WeaponNumber = wClass->GetDefaultObject<AWeapon>()->GetWeaponNumber();	//wClass is a TSubclassOf template. Need to get the actual weapon class using GetDefaultObject
-		if (WeaponNumber == 1)
+		//uint8 WeaponNumber = wClass->GetDefaultObject<AWeapon>()->GetWeaponNumber();	//wClass is a TSubclassOf template. Need to get the actual weapon class using GetDefaultObject
+		if (wClass->GetDefaultObject<AWeapon>()->GetWeaponNumber() == WeaponNumber)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Weapon %d found!"), WeaponNumber);
 			return;
