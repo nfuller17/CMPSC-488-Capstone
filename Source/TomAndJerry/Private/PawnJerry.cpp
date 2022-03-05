@@ -105,19 +105,14 @@ void APawnJerry::AddWeapon(TSubclassOf<AWeapon> WeaponClass)
 
 void APawnJerry::SelectWeapon1()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Select Weapon 1"));
 	for (auto wClass: WeaponInventory)
 	{
-		AWeapon* Weapon = Cast<AWeapon>(wClass);
-		if (Weapon)
+		uint8 WeaponNumber = wClass->GetDefaultObject<AWeapon>()->GetWeaponNumber();	//wClass is a TSubclassOf template. Need to get the actual weapon class using GetDefaultObject
+		if (WeaponNumber == 1)
 		{
-			uint8 WeaponNumber = Weapon->GetWeaponNumber();
-			if (WeaponNumber == 1)
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Weapon 1 found - selecting."));
-				return;
-			}
+			UE_LOG(LogTemp, Warning, TEXT("Weapon %d found!"), WeaponNumber);
+			return;
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Weapon 1 not found."));
+	UE_LOG(LogTemp, Warning, TEXT("Weapon not found."));
 }

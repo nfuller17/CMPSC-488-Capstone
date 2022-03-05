@@ -7,7 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
-UCLASS()
+UCLASS(abstract)
 class TOMANDJERRY_API AWeapon : public AActor
 {
 	GENERATED_BODY()
@@ -17,7 +17,7 @@ public:
 	AWeapon();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	uint8 GetWeaponNumber(){return WeaponNumber;}
+	virtual uint8 GetWeaponNumber() PURE_VIRTUAL(AWeapon::GetWeaponNumber, return WeaponNumber;);
 
 protected:
 	// Called when the game starts or when spawned

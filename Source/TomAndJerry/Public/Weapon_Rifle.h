@@ -14,6 +14,9 @@ class TOMANDJERRY_API AWeapon_Rifle : public AWeapon
 {
 	GENERATED_BODY()
 	
+public:
+	virtual uint8 GetWeaponNumber() override{return WeaponNumber;}
+	
 private:
 	const uint8 WeaponNumber = 1;
 };
