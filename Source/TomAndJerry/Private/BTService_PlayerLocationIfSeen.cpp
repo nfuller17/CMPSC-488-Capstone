@@ -22,6 +22,7 @@ void UBTService_PlayerLocationIfSeen::TickNode(UBehaviorTreeComponent& OwnerComp
 		return;
 	if (OwnerComp.GetAIOwner()->LineOfSightTo(PlayerPawn))
 	{
+		//Update blackboard key
 		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), PlayerPawn->GetActorLocation());
 	}
 	else
