@@ -35,13 +35,24 @@ void AWeapon::Tick(float DeltaTime)
 //Turn on the timer, handled by FiringTimer, to begin firing for as long as player holds down mouse button
 void AWeapon::BeginFire()
 {
-	GetWorldTimerManager().SetTimer(FiringTimer, this, &AWeapon::FirePrimary, FireRate, true, 0);
+	if (bCanFire)
+	{
+		bCanFire = false;
+		GetWorldTimerManager().SetTimer(SpamTimer, this, &AWeapon::EnableFire, FireRate, false, FireRate);
+		GetWorldTimerManager().SetTimer(FiringTimer, this, &AWeapon::FirePrimary, FireRate, true, 0);
+	}
 }
 
 //Stop timer, handled by FiringTimer, to stop firing as soon as player releases mouse button
 void AWeapon::StopFire()
 {
 	GetWorldTimerManager().ClearTimer(FiringTimer);
+}
+
+void AWeapon::EnableFire()
+{
+	bCanFire = true;
+	GetWorldTimerManager().ClearTimer(SpamTimer);
 }
 
 //Mechanics for firing a weapon:

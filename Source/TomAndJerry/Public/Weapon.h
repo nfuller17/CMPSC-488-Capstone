@@ -22,7 +22,9 @@ public:
 	virtual void FirePrimary();
 	void BeginFire();
 	void StopFire();
+	void EnableFire();
 	FTimerHandle FiringTimer;
+	FTimerHandle SpamTimer;		//Independent timer to prevent spamming mouse button and bypassing fire rate
 
 protected:
 	// Called when the game starts or when spawned
@@ -49,4 +51,5 @@ private:
 		float Damage;
 	UPROPERTY(EditDefaultsOnly)
 		float FireRate;		//Time, in seconds, between each shot
+	bool bCanFire = true;
 };
