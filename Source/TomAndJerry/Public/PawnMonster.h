@@ -24,6 +24,8 @@ public:
 
 	virtual void SetHealth(uint32 NewHealth) { Health = NewHealth; }
 
+	void FireProjectile();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -31,6 +33,7 @@ protected:
 		float Health;
 	UPROPERTY(EditAnywhere)
 		float HealthMax;
+
 
 private:
 	UPROPERTY(EditAnywhere, Category="Combat")

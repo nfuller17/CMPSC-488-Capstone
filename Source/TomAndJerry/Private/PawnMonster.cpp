@@ -32,3 +32,7 @@ void APawnMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
+void APawnMonster::FireProjectile()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Monster projecitle fired."));
+}
