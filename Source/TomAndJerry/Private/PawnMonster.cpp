@@ -57,15 +57,12 @@ void APawnMonster::FireProjectile()
 	if (MonsterController == nullptr)
 		return;
 	APawn* TargetPawn = Cast<APawn>(MonsterController->GetFocusActor());
-	UE_LOG(LogTemp, Warning, TEXT("A"));
 	if (TargetPawn == nullptr)
 		return;
 	FVector SpawnLocation = MonsterController->GetPawn()->GetActorLocation();
 	SpawnLocation += FVector(0, 50, 0);		//Not sure which is "Forward"
 	FRotator SpawnRotation = FVector(TargetPawn->GetActorLocation() - SpawnLocation).Rotation();
-	
-	AProjectile* Proj = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
-	if (Proj == nullptr)
-		return;
-	Proj->SetOwner(this);
+	FTransform Transform = FTransform(SpawnRotation, SpawnLocation, FVector(1,1,1));
+	AProjectile* Proj = GetWorld()->SpawnActorDeferred<AProjectile>(ProjectileClass, Transform, this, this);
+	Proj->FinishSpawning(Transform);
 }

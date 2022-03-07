@@ -38,15 +38,21 @@ void AProjectile::Tick(float DeltaTime)
 	}
 }
 
-void AProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
+void AProjectile::NotifyActorBeginOverlap(AActor* OtherActor)
 {
-	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
+	Super::NotifyActorBeginOverlap(OtherActor);
 	
-	if (Other)
+	if (OtherActor)
 	{
-		if (Other == GetOwner())
-			return;
-		Explode();
+		APawn* OtherPawn = Cast<APawn>(OtherActor);
+		if (OtherPawn)
+		{
+			if (OtherPawn == Cast<APawn>(GetOwner()))
+			{
+				return;
+			}
+			Explode();
+		}
 	}
 }
 
