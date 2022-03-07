@@ -34,14 +34,19 @@ void AProjectile::Tick(float DeltaTime)
 	
 	if (Root)
 	{
-		Root->MoveComponent(Speed*DeltaTime*(GetActorRotation().Vector()), GetActorRotation(), false, HitActor);
-		if (HitActor)
-		{
-			if (HitActor->GetActor())
-			{
-				Explode();	
-			}
-		}
+		Root->MoveComponent(Speed*DeltaTime*(GetActorRotation().Vector()), GetActorRotation(), false);
+	}
+}
+
+void AProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
+{
+	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
+	
+	if (Other)
+	{
+		if (Other == GetOwner())
+			return;
+		Explode();
 	}
 }
 

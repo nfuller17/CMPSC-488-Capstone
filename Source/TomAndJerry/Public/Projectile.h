@@ -21,6 +21,7 @@ public:
 	AProjectile();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 	virtual void Explode();
 
 protected:
@@ -36,6 +37,5 @@ private:
 		UParticleSystem* Effect;
 	UPROPERTY(EditDefaultsOnly)
 	float Speed;
-	FHitResult* HitActor;
 
 };
