@@ -19,6 +19,6 @@ EBTNodeResult::Type UBTTask_FireProjectile::ExecuteTask(UBehaviorTreeComponent& 
 	APawnMonster* Monster = Cast<APawnMonster>(AIController->GetPawn());
 	if (Monster == nullptr)
 		return EBTNodeResult::Failed;
-	Monster->FireProjectile();
+	Monster->StartFire();
 	return EBTNodeResult::Succeeded;
 }

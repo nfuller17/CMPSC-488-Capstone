@@ -4,6 +4,7 @@
 #include "PawnMonster.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Projectile.h"
+#include "AIController.h"
 
 // Sets default values
 APawnMonster::APawnMonster()
@@ -33,21 +34,38 @@ void APawnMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 }
 
+void APawnMonster::StartFire()
+{
+	if (bCanFire)
+	{
+		GetWorldTimerManager().SetTimer(FiringTimer, this, &APawnMonster::StopFire, FireRate, false, FireRate);	//Do not loop timer, as AI behavior tree will repeatedly call StartFire
+		FireProjectile();
+		bCanFire = false;
+	}
+}
+
+void APawnMonster::StopFire()
+{
+	bCanFire = true;
+	GetWorldTimerManager().ClearTimer(FiringTimer);
+}
+
 void APawnMonster::FireProjectile()
 {
 	//Spawn a projectile, in front of the Monster, facing the direction of the Monster
-	AController* MonsterController = GetController();
+	AAIController* MonsterController = Cast<AAIController>(GetController());
 	if (MonsterController == nullptr)
 		return;
-	FVector SpawnLocation;
-	FRotator SpawnRotation;
-	MonsterController->GetPlayerViewPoint(SpawnLocation, SpawnRotation);
-	
+	APawn* TargetPawn = Cast<APawn>(MonsterController->GetFocusActor());
+	UE_LOG(LogTemp, Warning, TEXT("A"));
+	if (TargetPawn == nullptr)
+		return;
+	FVector SpawnLocation = MonsterController->GetPawn()->GetActorLocation();
 	SpawnLocation += FVector(0, 50, 0);		//Not sure which is "Forward"
+	FRotator SpawnRotation = FVector(TargetPawn->GetActorLocation() - SpawnLocation).Rotation();
 	
 	AProjectile* Proj = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
 	if (Proj == nullptr)
 		return;
 	Proj->SetOwner(this);
-	UE_LOG(LogTemp, Warning, TEXT("Monster projecitle fired."));
 }

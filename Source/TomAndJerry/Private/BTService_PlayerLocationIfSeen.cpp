@@ -18,15 +18,18 @@ void UBTService_PlayerLocationIfSeen::TickNode(UBehaviorTreeComponent& OwnerComp
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
 	if (PlayerPawn == nullptr)
 		return;
-	if (OwnerComp.GetAIOwner() == nullptr)
+	AAIController* AIController = OwnerComp.GetAIOwner();
+	if (AIController == nullptr)
 		return;
-	if (OwnerComp.GetAIOwner()->LineOfSightTo(PlayerPawn))
+	if (AIController->LineOfSightTo(PlayerPawn))
 	{
 		//Update blackboard key
 		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), PlayerPawn->GetActorLocation());
+		AIController->SetFocus(PlayerPawn);
 	}
 	else
 	{
 		OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+		AIController->ClearFocus(EAIFocusPriority::Gameplay);
 	}
 }

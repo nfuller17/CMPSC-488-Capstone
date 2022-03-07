@@ -25,8 +25,11 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void SetHealth(uint32 NewHealth) { Health = NewHealth; }
-
+	
+	void StartFire();
 	void FireProjectile();
+	void StopFire();
+	FTimerHandle FiringTimer;
 
 protected:
 	// Called when the game starts or when spawned
@@ -42,5 +45,7 @@ private:
 		bool bIsMeleeOnly;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AProjectile> ProjectileClass;
-	
+	UPROPERTY(EditAnywhere, Category="Combat")
+		float FireRate;
+	bool bCanFire = true;
 };
