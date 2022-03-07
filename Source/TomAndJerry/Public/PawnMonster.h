@@ -8,6 +8,8 @@
 
 //Base class for AI enemies
 
+class AProjectile;
+
 UCLASS(abstract)
 class TOMANDJERRY_API APawnMonster : public ACharacter
 {
@@ -38,5 +40,7 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, Category="Combat")
 		bool bIsMeleeOnly;
-
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AProjectile> ProjectileClass;
+	
 };
