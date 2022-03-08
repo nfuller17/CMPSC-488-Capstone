@@ -129,8 +129,8 @@ void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 			}
 			//Spawn an instance of the selected Weapon
 			Weapon = GetWorld()->SpawnActor<AWeapon>(wClass);
-			Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
 			Weapon->SetOwner(this);
+			Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
 			return;
 		}
 	}

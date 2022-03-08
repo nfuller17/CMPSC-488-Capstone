@@ -86,8 +86,8 @@ void AWeapon::FirePrimary()
 					AActor* HitActor = Hit.GetActor();
 					if (HitActor)
 					{
-						FPointDamageEvent DamageEvent(Damage, Hit, DirectionFromShot, nullptr);
-						HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
+						FPointDamageEvent DamageEvent(HitscanDamage, Hit, DirectionFromShot, nullptr);
+						HitActor->TakeDamage(HitscanDamage, DamageEvent, OwnerController, this);
 					}
 					
 					//Impact
@@ -99,7 +99,21 @@ void AWeapon::FirePrimary()
 			}
 			else	//Handle Projectile firing
 			{
-				
+				//Spawn projectile at tip of muzzle, facing the direction of player viewpoint
+				FVector SpawnLocation;
+				FRotator SpawnRotation;
+				OwnerController->GetPlayerViewPoint(SpawnLocation, SpawnRotation);	//Parameters pass by value, so CameraDirection contains player controller direction
+				if (Mesh)
+				{
+					SpawnLocation = Mesh->GetBoneLocation(TEXT("Muzzle"));
+				}
+				else
+				{
+					SpawnLocation = OwnerPawn->GetActorLocation();		
+				}
+				FTransform Transform = FTransform(SpawnRotation, SpawnLocation, FVector(1,1,1));
+				AProjectile* Proj = GetWorld()->SpawnActorDeferred<AProjectile>(ProjectileClass, Transform, Cast<AActor>(OwnerPawn), OwnerPawn);
+				Proj->FinishSpawning(Transform);
 			}
 		}
 	}
