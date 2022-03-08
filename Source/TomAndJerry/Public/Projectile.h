@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/SphereComponent.h"
 #include "Projectile.generated.h"
 
 //Projectile is an actor that moves in a fixed direction and speed
@@ -21,6 +22,7 @@ public:
 	AProjectile();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	virtual void Explode();
 
@@ -30,9 +32,9 @@ protected:
 	
 private:
 	UPROPERTY(VisibleAnywhere)
-		USceneComponent* Root;
+		USphereComponent* Root;
 	UPROPERTY(VisibleAnywhere)
-		USkeletalMeshComponent* Mesh;
+		UStaticMeshComponent* Mesh;
 	UPROPERTY(EditAnywhere)
 		UParticleSystem* Effect;
 	UPROPERTY(EditDefaultsOnly)
