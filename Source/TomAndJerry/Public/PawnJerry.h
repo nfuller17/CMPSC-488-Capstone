@@ -28,14 +28,21 @@ public:
 	//Called when Player walks away from a previously overlapping Actor- used to determine when Player steps off a Minor Objective
 	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
 	
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	
 	void AddWeapon(TSubclassOf<AWeapon> WeaponClass);
 	
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	UPROPERTY(EditDefaultsOnly)
+	float HealthMax = 100;
+	UPROPERTY(VisibleAnywhere)
+	float Health;
 
 private:
+	
 	//Pointer to currently held weapon, if any
 	AWeapon* Weapon;
 	

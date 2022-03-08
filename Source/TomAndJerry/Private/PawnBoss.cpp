@@ -8,6 +8,6 @@ float APawnBoss::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	DamageToApply = FMath::Min(Health, DamageToApply);
 	Health -= DamageToApply;
-	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
+	UE_LOG(LogTemp, Warning, TEXT("Boss Health: %f"), Health);
 	return DamageToApply;
 }

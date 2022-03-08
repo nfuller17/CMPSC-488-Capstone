@@ -67,15 +67,31 @@ void AProjectile::NotifyActorBeginOverlap(AActor* OtherActor)
 			{
 				return;
 			}
-			Explode();
+			Explode(OtherPawn);
 		}
 	}
 }
 
 
-void AProjectile::Explode()
+void AProjectile::Explode(AActor* TargetActor)
 {
-	UE_LOG(LogTemp, Warning, TEXT("EXPLODE!"));
+	if (bSplashDamage)
+	{
+		
+	}
+	else
+	{
+		if (TargetActor)
+		{
+			AController* OwnerController = GetInstigatorController();
+			if (OwnerController)
+			{
+				//UE_LOG(LogTemp, Warning, TEXT("Explode - OwnerController exists"));
+				FPointDamageEvent DamageEvent(Damage, FHitResult(), GetActorLocation() - TargetActor->GetActorLocation(), nullptr);
+				TargetActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
+			}
+		}
+	}
 	Destroy();
 }
 

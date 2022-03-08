@@ -64,5 +64,8 @@ void APawnMonster::FireProjectile()
 	FRotator SpawnRotation = FVector(TargetPawn->GetActorLocation() - SpawnLocation).Rotation();
 	FTransform Transform = FTransform(SpawnRotation, SpawnLocation, FVector(1,1,1));
 	AProjectile* Proj = GetWorld()->SpawnActorDeferred<AProjectile>(ProjectileClass, Transform, this, this);
-	Proj->FinishSpawning(Transform);
+	if (Proj)
+	{
+		Proj->FinishSpawning(Transform);		
+	}
 }

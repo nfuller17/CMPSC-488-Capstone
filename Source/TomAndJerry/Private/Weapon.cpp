@@ -103,7 +103,10 @@ void AWeapon::FirePrimary()
 				OwnerController->GetPlayerViewPoint(SpawnLocation, SpawnRotation);	//Parameters pass by value, so location and rotation are updated
 				FTransform Transform = FTransform(SpawnRotation, SpawnLocation, FVector(1,1,1));
 				AProjectile* Proj = GetWorld()->SpawnActorDeferred<AProjectile>(ProjectileClass, Transform, Cast<AActor>(OwnerPawn), OwnerPawn);
-				Proj->FinishSpawning(Transform);
+				if (Proj)
+				{
+					Proj->FinishSpawning(Transform);					
+				}
 			}
 		}
 	}

@@ -12,7 +12,6 @@ APawnJerry::APawnJerry()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -22,7 +21,7 @@ void APawnJerry::BeginPlay()
 	
 	//Hide the weapon mesh that comes with the Wraith mesh
 	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
-	
+	Health = HealthMax;
 }
 
 // Called every frame
@@ -89,6 +88,15 @@ void APawnJerry::NotifyActorEndOverlap(AActor* OtherActor)
 	if (MinorObjective) {
 		MinorObjective->StopActivation();
 	}
+}
+
+float APawnJerry::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float DamageToDo = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	DamageToDo = FMath::Min(Health, DamageToDo);
+	Health -= DamageToDo;
+	UE_LOG(LogTemp, Warning, TEXT("Player health: %d"), Health);
+	return DamageToDo;
 }
 
 //Called by ObjectiveWeapon when a player has completed a Weapon Objective

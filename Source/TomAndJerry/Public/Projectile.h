@@ -24,7 +24,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
-	virtual void Explode();
+	virtual void Explode(AActor* TargetActor = nullptr);
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,6 +38,10 @@ private:
 	UPROPERTY(EditAnywhere)
 		UParticleSystem* Effect;
 	UPROPERTY(EditDefaultsOnly)
+	float Damage;
+	UPROPERTY(EditDefaultsOnly)
 	float Speed;
+	UPROPERTY(EditDefaultsOnly)
+	bool bSplashDamage;
 
 };
