@@ -4,7 +4,6 @@
 #include "Weapon.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "DrawDebugHelpers.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -99,18 +98,9 @@ void AWeapon::FirePrimary()
 			}
 			else	//Handle Projectile firing
 			{
-				//Spawn projectile at tip of muzzle, facing the direction of player viewpoint
 				FVector SpawnLocation;
 				FRotator SpawnRotation;
-				OwnerController->GetPlayerViewPoint(SpawnLocation, SpawnRotation);	//Parameters pass by value, so CameraDirection contains player controller direction
-				if (Mesh)
-				{
-					SpawnLocation = Mesh->GetBoneLocation(TEXT("Muzzle"));
-				}
-				else
-				{
-					SpawnLocation = OwnerPawn->GetActorLocation();		
-				}
+				OwnerController->GetPlayerViewPoint(SpawnLocation, SpawnRotation);	//Parameters pass by value, so location and rotation are updated
 				FTransform Transform = FTransform(SpawnRotation, SpawnLocation, FVector(1,1,1));
 				AProjectile* Proj = GetWorld()->SpawnActorDeferred<AProjectile>(ProjectileClass, Transform, Cast<AActor>(OwnerPawn), OwnerPawn);
 				Proj->FinishSpawning(Transform);

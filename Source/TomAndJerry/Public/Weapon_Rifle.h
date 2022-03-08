@@ -15,7 +15,5 @@ class TOMANDJERRY_API AWeapon_Rifle : public AWeapon
 	GENERATED_BODY()
 	
 public:
-	AWeapon_Rifle();
-	virtual uint8 GetWeaponNumber() override{return WeaponNumber;}
 	virtual void FirePrimary() override;
 };

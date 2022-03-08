@@ -21,7 +21,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	virtual uint8 GetWeaponNumber() PURE_VIRTUAL(AWeapon::GetWeaponNumber, return WeaponNumber;);
+	uint8 GetWeaponNumber(){return WeaponNumber;}
 	virtual void FirePrimary();
 	void BeginFire();
 	void StopFire();
