@@ -95,7 +95,7 @@ float APawnJerry::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	float DamageToDo = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	DamageToDo = FMath::Min(Health, DamageToDo);
 	Health -= DamageToDo;
-	UE_LOG(LogTemp, Warning, TEXT("Player health: %d"), Health);
+	UE_LOG(LogTemp, Warning, TEXT("Player health: %f"), Health);
 	return DamageToDo;
 }
 
