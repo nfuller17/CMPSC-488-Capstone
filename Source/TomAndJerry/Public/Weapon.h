@@ -43,16 +43,22 @@ private:
 		USceneComponent* Root;
 	UPROPERTY(VisibleAnywhere)
 		USkeletalMeshComponent* Mesh;
-	UPROPERTY(EditAnywhere)
+	//How many times should this weapon fire, whether instant hit or projectile, per click
+	UPROPERTY(EditAnywhere, Category="Weapon Properties")
+		uint8 NumFirePerClick = 1;
+	//If NumFirePerClick > 1, how far apart should the weapon fire start its aim
+	UPROPERTY(EditAnywhere, Category="Weapon Properties")
+		float Spread;
+	UPROPERTY(EditAnywhere, Category="Weapon Properties")
 		UParticleSystem* MuzzleFlash;
-	UPROPERTY(EditAnywhere)
-		UParticleSystem* ImpactEffect;
 	UPROPERTY(EditDefaultsOnly, Category="HitScan Properties")
 		bool bIsHitScan;		//Whether or not the weapon will fire a projectile
 	UPROPERTY(EditAnywhere, Category="HitScan Properties")
 		float MaxRange = 1000.f;
 	UPROPERTY(EditAnywhere, Category="HitScan Properties")
 		float HitscanDamage;
+	UPROPERTY(EditAnywhere, Category="Hitscan Properties")
+		UParticleSystem* ImpactEffect;
 	UPROPERTY(EditDefaultsOnly, Category="Projectile Properties")
 		TSubclassOf<AProjectile> ProjectileClass;
 	bool bCanFire = true;
