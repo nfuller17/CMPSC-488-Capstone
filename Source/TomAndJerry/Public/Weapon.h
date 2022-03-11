@@ -33,7 +33,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	//WeaponNumber is a unique identifier for a weapon, used in tandem with input binding on keyboard
-	UPROPERTY(EditDefaultsOnly, Category="Weapon Properties")
+	UPROPERTY(EditDefaultsOnly, Category="Weapon Properties", meta=(ClampMin= "0"))
 		uint8 WeaponNumber;
 
 private:
@@ -43,19 +43,19 @@ private:
 		USceneComponent* Root;
 	UPROPERTY(VisibleAnywhere)
 		USkeletalMeshComponent* Mesh;
-	//How many times should this weapon fire, whether instant hit or projectile, per click
-	UPROPERTY(EditAnywhere, Category="Weapon Properties")
+	//How many times should this weapon fire, whether instant hit or projectile, per click.
+	UPROPERTY(EditAnywhere, Category="Weapon Properties", meta=(ClampMin = "1"))
 		uint8 NumFirePerClick = 1;
-	//If NumFirePerClick > 1, how far apart should the weapon fire start its aim
-	UPROPERTY(EditAnywhere, Category="Weapon Properties")
+	//Aim offset. 0 to aim at player crosshair, 1 to aim with a randomly chosen vector
+	UPROPERTY(EditAnywhere, Category="Weapon Properties", meta=(ClampMin = "0.0"))
 		float Spread;
 	UPROPERTY(EditAnywhere, Category="Weapon Properties")
 		UParticleSystem* MuzzleFlash;
 	UPROPERTY(EditDefaultsOnly, Category="HitScan Properties")
 		bool bIsHitScan;		//Whether or not the weapon will fire a projectile
-	UPROPERTY(EditAnywhere, Category="HitScan Properties")
+	UPROPERTY(EditAnywhere, Category="HitScan Properties", meta=(ClampMin = "0.0"))
 		float MaxRange = 1000.f;
-	UPROPERTY(EditAnywhere, Category="HitScan Properties")
+	UPROPERTY(EditAnywhere, Category="HitScan Properties", meta=(ClampMin = "0.0"))
 		float HitscanDamage;
 	UPROPERTY(EditAnywhere, Category="Hitscan Properties")
 		UParticleSystem* ImpactEffect;
