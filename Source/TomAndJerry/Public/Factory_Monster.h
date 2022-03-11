@@ -18,17 +18,9 @@ class TOMANDJERRY_API AFactory_Monster : public ANavigationObjectBase
 	GENERATED_BODY()
 	
 public:
-	FTimerHandle SpawnTimer;
+	bool SpawnMonster();
 	
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-	virtual void SpawnMonster();
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<APawnMonster>> Monsters;
-	
-private:
-	UPROPERTY(EditAnywhere)
-		float SpawnInterval;
-	
 };

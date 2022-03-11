@@ -13,6 +13,33 @@ void ATomAndJerryGameModeBase::BeginPlay()
 	for (auto Material: TActorRange<AWeaponMaterial>(GetWorld()))
 		MaterialsTotal++;
 	UE_LOG(LogTemp, Warning, TEXT("Game Started. Number of materials to collect: %d."), MaterialsTotal);
+	
+	//Initialize Monster Factory array
+	for (auto Factory: TActorRange<AFactory_Monster>(GetWorld()))
+		MonsterFactories.Emplace(Factory);
+	
+	//Set timer to spawn monsters
+	GetWorldTimerManager().SetTimer(SpawnTimer, this, &ATomAndJerryGameModeBase::SpawnMonster, MonsterSpawnInterval, true, 0);
+}
+
+void ATomAndJerryGameModeBase::SpawnMonster()
+{
+	if (NumMonsters >= MaxMonsters)
+		return;
+	if (MonsterFactories.Num() == 0)
+		return;
+	AFactory_Monster* Factory = MonsterFactories[FMath::RandRange(0, MonsterFactories.Num()-1)];
+	if (Factory == nullptr)
+		return;
+	if (Factory->SpawnMonster())
+		NumMonsters++;
+}
+
+void ATomAndJerryGameModeBase::DecrementNumMonsters()
+{
+	NumMonsters--;
+	if (NumMonsters < 0)
+		NumMonsters = 0;
 }
 
 void ATomAndJerryGameModeBase::AddMaterial(const uint8 Count)
@@ -24,6 +51,7 @@ void ATomAndJerryGameModeBase::AddMaterial(const uint8 Count)
 
 void ATomAndJerryGameModeBase::EndGame(const bool bPlayerWon)
 {
+	GetWorldTimerManager().ClearTimer(SpawnTimer);
 	for (AController* Controller : TActorRange<AController>(GetWorld()))
 	{
 		bool bIsWinner = Controller->IsPlayerController() == bPlayerWon;

@@ -3,18 +3,17 @@
 
 #include "Factory_Monster.h"
 
-void AFactory_Monster::BeginPlay()
+bool AFactory_Monster::SpawnMonster()
 {
-	Super::BeginPlay();
-	GetWorldTimerManager().SetTimer(SpawnTimer, this, &AFactory_Monster::SpawnMonster, SpawnInterval, true, 0);
-}
-
-void AFactory_Monster::SpawnMonster()
-{
+	if (Monsters.Num() <= 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("CAUTION: Monster Factory without an initialized array!"))
+		return false;		
+	}
 	UE_LOG(LogTemp, Warning, TEXT("Spawning monster"));
 	//Pick a random monster from the Monsters array
 	TSubclassOf<APawnMonster> MonsterClass = Monsters[FMath::RandRange(0, Monsters.Num()-1)];
 	if (MonsterClass == nullptr)
-		return;
-	GetWorld()->SpawnActor<APawnMonster>(MonsterClass, GetActorLocation(), GetActorForwardVector().Rotation());
+		return false;
+	return GetWorld()->SpawnActor<APawnMonster>(MonsterClass, GetActorLocation(), GetActorForwardVector().Rotation()) != nullptr;
 }

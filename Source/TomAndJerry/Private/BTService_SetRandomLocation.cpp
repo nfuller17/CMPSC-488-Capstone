@@ -38,7 +38,6 @@ void UBTService_SetRandomLocation::TickNode(UBehaviorTreeComponent& OwnerComp, u
 		//See if we do *not* have line of sight
 		if (!GetWorld()->LineTraceSingleByChannel(Hit, CurrentLocation, NewLocation.Location, ECollisionChannel::ECC_Camera))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("***** NEAR location *****"));
 			OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), NewLocation.Location);
 		}
 		else
@@ -51,7 +50,6 @@ void UBTService_SetRandomLocation::TickNode(UBehaviorTreeComponent& OwnerComp, u
 				{
 					if ((NewLocation.Location - CurrentLocation).Size() >= FarDistanceToRoam-CloseDistanceToRoam )	//New location must be at least beyond the close distance roam radius value
 					{
-						UE_LOG(LogTemp, Warning, TEXT("VALID far location"));
 						OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), NewLocation.Location);
 						bValidLocation = true;
 					}

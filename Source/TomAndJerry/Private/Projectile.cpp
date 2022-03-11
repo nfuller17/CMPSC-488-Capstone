@@ -41,7 +41,9 @@ void AProjectile::Tick(float DeltaTime)
 void AProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
 	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
-	if (Other)
+	Explode(Other);
+	
+	/*if (Other)
 	{
 		Explode();
 	}
@@ -51,6 +53,7 @@ void AProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimiti
 	{
 		Explode();
 	}
+	*/
 }
 
 
@@ -75,11 +78,11 @@ void AProjectile::NotifyActorBeginOverlap(AActor* OtherActor)
 
 void AProjectile::Explode(AActor* TargetActor)
 {
-	if (bSplashDamage)
+	if (bSplashDamage)	//Damage any Pawns within our radius
 	{
 		
 	}
-	else
+	else	//Must land direct hit
 	{
 		if (TargetActor)
 		{
