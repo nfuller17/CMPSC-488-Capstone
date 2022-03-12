@@ -32,6 +32,8 @@ public:
 	
 	void AddWeapon(TSubclassOf<AWeapon> WeaponClass);
 	
+	UFUNCTION(BlueprintPure)
+	bool IsDead() const;
 	float GetHealth() const {return Health;}
 	
 

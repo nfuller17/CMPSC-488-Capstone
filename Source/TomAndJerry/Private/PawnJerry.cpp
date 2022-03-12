@@ -113,6 +113,11 @@ float APawnJerry::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	return DamageToDo;
 }
 
+bool APawnJerry::IsDead() const
+{
+	return Health <= 0;
+}
+
 //Called by ObjectiveWeapon when a player has completed a Weapon Objective
 //Adds the WeaponClass to the WeaponInventory array
 void APawnJerry::AddWeapon(TSubclassOf<AWeapon> WeaponClass)
