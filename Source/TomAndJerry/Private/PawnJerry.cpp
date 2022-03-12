@@ -6,6 +6,7 @@
 #include "ControllerJerry.h"
 #include "MinorObjective.h"
 #include "Weapon.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 APawnJerry::APawnJerry()
@@ -103,6 +104,12 @@ float APawnJerry::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	DamageToDo = FMath::Min(Health, DamageToDo);
 	Health -= DamageToDo;
 	UE_LOG(LogTemp, Warning, TEXT("Player health: %f"), Health);
+	//UNCOMMENT THIS AFTER DONE WITH TESTS!
+	//if (Health <= 0)
+	//{
+	//	DetachFromControllerPendingDestroy();
+	//	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//}
 	return DamageToDo;
 }
 

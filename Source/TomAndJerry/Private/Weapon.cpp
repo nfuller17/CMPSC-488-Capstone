@@ -4,6 +4,7 @@
 #include "Weapon.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "PawnJerry.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -65,6 +66,17 @@ void AWeapon::FirePrimary()
 	APawn* OwnerPawn = Cast<APawn>(GetOwner());
 	if (OwnerPawn)
 	{
+		//Check if we are dead
+		APawnJerry* JerryPawn = Cast<APawnJerry>(OwnerPawn);
+		if (JerryPawn)
+		{
+			//UNCOMMENT THIS AFTER DONE WITH TESTS!
+			//if (JerryPawn->GetHealth() <= 0)
+			//{
+			//	StopFire();
+			//	return;
+			//}			
+		}
 		AController* OwnerController = OwnerPawn->GetController();
 		if (OwnerController)
 		{

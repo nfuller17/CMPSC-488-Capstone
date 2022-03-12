@@ -5,6 +5,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Projectile.h"
 #include "AIController.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 APawnMonster::APawnMonster()
@@ -32,6 +33,17 @@ void APawnMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+float APawnMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float DamageToDo = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	if (IsDead())
+	{
+		DetachFromControllerPendingDestroy();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+	return DamageToDo;
 }
 
 void APawnMonster::StartFire()

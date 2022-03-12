@@ -23,9 +23,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	virtual void SetHealth(uint32 NewHealth) { Health = NewHealth; }
-	
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	void StartFire();
 	void FireProjectile();
 	void StopFire();

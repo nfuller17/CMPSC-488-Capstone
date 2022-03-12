@@ -32,6 +32,8 @@ public:
 	
 	void AddWeapon(TSubclassOf<AWeapon> WeaponClass);
 	
+	float GetHealth() const {return Health;}
+	
 
 protected:
 	// Called when the game starts or when spawned
