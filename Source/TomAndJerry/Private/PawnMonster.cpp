@@ -69,3 +69,8 @@ void APawnMonster::FireProjectile()
 		Proj->FinishSpawning(Transform);		
 	}
 }
+
+bool APawnMonster::IsDead() const
+{
+	return Health <= 0;
+}

@@ -30,6 +30,9 @@ public:
 	void FireProjectile();
 	void StopFire();
 	FTimerHandle FiringTimer;
+	
+	UFUNCTION(BlueprintPure)
+	bool IsDead() const;
 
 protected:
 	// Called when the game starts or when spawned
