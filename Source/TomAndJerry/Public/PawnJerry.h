@@ -57,15 +57,24 @@ private:
 	//Allows the character to move forward(AxisValue = 1.0) or backward(AxisValue = -1.0)
 	//Already framerate independent
 	void MoveForward(float AxisValue);
-
 	//Allows the character to move rightward(AxisValue = 1.0) or leftward(AxisValue = -1.0)
 	//Already framerate independent
 	void Strafe(float AxisValue);
+	void Dodge(const int32 Direction);
+	DECLARE_DELEGATE_OneParam(FDodgeDelegate, const int32);
+	//How quickly in seconds player must successively press a movement key twice to dodge in that direction
+	UPROPERTY(EditAnywhere)
+	float DodgeTime = 0.35;
+	//If after a successful dodge, how long in seconds until player can do another dodge
+	UPROPERTY(EditAnywhere)
+	float TimeBetweenDodges = 2.0;
+	float LastDodgeTime = 0.f;
+	float LastSuccessfulDodgeTime = 0.f;
+	bool bSetLeftDodge, bSetRightDodge, bSetForwardDodge, bSetBackDodge = false;
 	
 	//Weapon
 	void BeginFire();
 	void StopFire();
-	
 	void SelectWeapon(const int32 WeaponNumber);
 	DECLARE_DELEGATE_OneParam(FSelectWeaponDelegate, const int32);
 };

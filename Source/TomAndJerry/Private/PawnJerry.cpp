@@ -52,6 +52,7 @@ void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon9"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 9);
 	PlayerInputComponent->BindAction(TEXT("FirePrimary"), EInputEvent::IE_Pressed, this, &APawnJerry::BeginFire);
 	PlayerInputComponent->BindAction(TEXT("FirePrimary"), EInputEvent::IE_Released, this, &APawnJerry::StopFire);
+	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeRight"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 4);
 }
 
 void APawnJerry::MoveForward(float AxisValue)
@@ -62,6 +63,104 @@ void APawnJerry::MoveForward(float AxisValue)
 void APawnJerry::Strafe(float AxisValue)
 {
 	AddMovementInput(GetActorRightVector() * AxisValue);
+}
+
+void APawnJerry::Dodge(const int32 Direction)
+{
+	if (GetWorld()->GetTimeSeconds() - LastDodgeTime <= DodgeTime)
+	{
+		switch (Direction)
+		{
+			//W - forward
+			case 1:
+				if (!bSetForwardDodge)
+				{
+					bSetForwardDodge = true;
+					bSetLeftDodge = false;
+					bSetBackDodge = false;
+					bSetRightDodge = false;
+				}
+				else	//Previously pressed W. Did player press it quick enough to dodge forward?
+				{
+					if (GetWorld()->GetTimeSeconds() - LastSuccessfulDodgeTime < TimeBetweenDodges)
+						break;
+					//GetActorForwardVector();
+					UE_LOG(LogTemp, Warning, TEXT("Dodge F"));
+					bSetForwardDodge = false;
+					LastSuccessfulDodgeTime = GetWorld()->GetTimeSeconds();
+				}
+				break;
+			//A - left
+			case 2:
+				if (!bSetLeftDodge)
+				{
+					bSetForwardDodge = false;
+					bSetLeftDodge = true;
+					bSetBackDodge = false;
+					bSetRightDodge = false;
+				}
+				else
+				{
+					if (GetWorld()->GetTimeSeconds() - LastSuccessfulDodgeTime < TimeBetweenDodges)
+						break;
+					//-GetActorRightVector();
+					UE_LOG(LogTemp, Warning, TEXT("Dodge L"));
+					bSetLeftDodge = false;
+					LastSuccessfulDodgeTime = GetWorld()->GetTimeSeconds();
+				}
+				break;
+			//S - back
+			case 3:
+				if (!bSetBackDodge)
+				{
+					bSetForwardDodge = false;
+					bSetLeftDodge = false;
+					bSetBackDodge = true;
+					bSetRightDodge = false;
+				}
+				else
+				{
+					if (GetWorld()->GetTimeSeconds() - LastSuccessfulDodgeTime < TimeBetweenDodges)
+						break;
+					//-GetActorForwardVector();
+					UE_LOG(LogTemp, Warning, TEXT("Dodge B"));
+					bSetBackDodge = false;
+					LastSuccessfulDodgeTime = GetWorld()->GetTimeSeconds();
+				}
+				break;
+			case 4:
+				if (!bSetRightDodge)
+				{
+					bSetForwardDodge = false;
+					bSetLeftDodge = false;
+					bSetBackDodge = false;
+					bSetRightDodge = true;
+				}
+				else
+				{
+					if (GetWorld()->GetTimeSeconds() - LastSuccessfulDodgeTime < TimeBetweenDodges)
+						break;
+					//GetActorRightVector();
+					UE_LOG(LogTemp, Warning, TEXT("Dodge R"));
+					bSetRightDodge = false;
+					LastSuccessfulDodgeTime = GetWorld()->GetTimeSeconds();
+				}
+				break;
+			default:
+				bSetForwardDodge = false;
+				bSetLeftDodge = false;
+				bSetBackDodge = false;
+				bSetRightDodge = false;
+		}	
+	}
+	else
+	{
+		bSetForwardDodge = true;
+		bSetLeftDodge = true;
+		bSetBackDodge = true;
+		bSetRightDodge = true;
+	}
+	LastDodgeTime = GetWorld()->GetTimeSeconds();
 }
 
 //Called when player walks over a weapon material or minor objective
