@@ -17,6 +17,8 @@ void ATomAndJerryGameModeBase::BeginPlay()
 	//Initialize Monster Factory array
 	for (auto Factory: TActorRange<AFactory_Monster>(GetWorld()))
 		MonsterFactories.Emplace(Factory);
+	for (auto Factory: TActorRange<AFactory_Boss>(GetWorld()))
+		BossFactories.Emplace(Factory);
 	
 	//Set timer to spawn monsters
 	GetWorldTimerManager().SetTimer(SpawnTimer, this, &ATomAndJerryGameModeBase::SpawnMonster, MonsterSpawnInterval, true, 0);
@@ -35,6 +37,18 @@ void ATomAndJerryGameModeBase::SpawnMonster()
 		NumMonsters++;
 }
 
+void ATomAndJerryGameModeBase::SpawnBoss()
+{
+	AFactory_Boss* Factory = BossFactories[FMath::RandRange(0, BossFactories.Num()-1)];
+	if (Factory == nullptr)
+		return;
+	if (Factory->SpawnBoss())
+	{
+		bBossSpawned = true;
+		UE_LOG(LogTemp, Warning, TEXT("BOSS SPAWNED!"));
+	}
+}
+
 void ATomAndJerryGameModeBase::DecrementNumMonsters()
 {
 	NumMonsters--;
@@ -44,9 +58,9 @@ void ATomAndJerryGameModeBase::DecrementNumMonsters()
 
 void ATomAndJerryGameModeBase::AddMaterial(const uint8 Count)
 {
-	MaterialsCollected += Count;
-	if (MaterialsCollected >= MaterialsTotal)
-		EndGame(true);
+	//If player drops off a material, spawn a boss the first time they do so
+	if (!bBossSpawned)
+		SpawnBoss();
 }
 
 void ATomAndJerryGameModeBase::EndGame(const bool bPlayerWon)

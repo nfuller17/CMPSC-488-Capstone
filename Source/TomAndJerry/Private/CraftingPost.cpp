@@ -32,7 +32,8 @@ void ACraftingPost::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 	APawnJerry* Jerry = Cast<APawnJerry>(OtherActor);
-	if (Jerry) {
+	if (Jerry)
+	{
 		AControllerJerry* JerryController = Cast<AControllerJerry>(Jerry->GetController());
 		if (JerryController)
 		{

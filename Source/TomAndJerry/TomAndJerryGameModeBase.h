@@ -5,9 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "Factory_Monster.h"
+#include "Factory_Boss.h"
 #include "TomAndJerryGameModeBase.generated.h"
 
 class AFactory_Monster;
+class AFactory_Boss;
 
 UCLASS()
 class TOMANDJERRY_API ATomAndJerryGameModeBase : public AGameModeBase
@@ -24,6 +26,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	void SpawnMonster();
+	void SpawnBoss();
 	
 private:
 	uint8	MaterialsCollected = 0;
@@ -36,4 +39,6 @@ private:
 		uint8	MaxMonsters = 10;
 	uint8 NumMonsters = 0;
 	TArray<AFactory_Monster*> MonsterFactories;
+	TArray<AFactory_Boss*> BossFactories;
+	bool bBossSpawned = false;
 };
