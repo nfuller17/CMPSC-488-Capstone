@@ -68,6 +68,12 @@ private:
 	//If after a successful dodge, how long in seconds until player can do another dodge
 	UPROPERTY(EditAnywhere)
 	float TimeBetweenDodges = 2.0;
+	//Magnitude of dodge direction
+	UPROPERTY(EditAnywhere)
+	float DodgeStrength = 1000.0;
+	//How much Z-Axis boost when dodging
+	UPROPERTY(EditAnywhere)
+	float ZAdd = 400;
 	float LastDodgeTime = 0.f;
 	float LastSuccessfulDodgeTime = 0.f;
 	bool bSetLeftDodge, bSetRightDodge, bSetForwardDodge, bSetBackDodge = false;

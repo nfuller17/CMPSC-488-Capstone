@@ -52,6 +52,9 @@ void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon9"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 9);
 	PlayerInputComponent->BindAction(TEXT("FirePrimary"), EInputEvent::IE_Pressed, this, &APawnJerry::BeginFire);
 	PlayerInputComponent->BindAction(TEXT("FirePrimary"), EInputEvent::IE_Released, this, &APawnJerry::StopFire);
+	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeForward"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 1);
+	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeLeft"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 2);
+	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeBackward"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 3);
 	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeRight"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 4);
 }
 
@@ -84,8 +87,9 @@ void APawnJerry::Dodge(const int32 Direction)
 				{
 					if (GetWorld()->GetTimeSeconds() - LastSuccessfulDodgeTime < TimeBetweenDodges)
 						break;
-					//GetActorForwardVector();
-					UE_LOG(LogTemp, Warning, TEXT("Dodge F"));
+					FVector DodgeDirection = (GetActorForwardVector()*DodgeStrength) + FVector(0,0,ZAdd);
+					LaunchCharacter(DodgeDirection, false, false);
+					UE_LOG(LogTemp, Warning, TEXT("Dodge W"));
 					bSetForwardDodge = false;
 					LastSuccessfulDodgeTime = GetWorld()->GetTimeSeconds();
 				}
@@ -103,7 +107,8 @@ void APawnJerry::Dodge(const int32 Direction)
 				{
 					if (GetWorld()->GetTimeSeconds() - LastSuccessfulDodgeTime < TimeBetweenDodges)
 						break;
-					//-GetActorRightVector();
+					FVector DodgeDirection = (-GetActorRightVector()*DodgeStrength) + FVector(0,0,ZAdd);
+					LaunchCharacter(DodgeDirection, false, false);
 					UE_LOG(LogTemp, Warning, TEXT("Dodge L"));
 					bSetLeftDodge = false;
 					LastSuccessfulDodgeTime = GetWorld()->GetTimeSeconds();
@@ -122,7 +127,8 @@ void APawnJerry::Dodge(const int32 Direction)
 				{
 					if (GetWorld()->GetTimeSeconds() - LastSuccessfulDodgeTime < TimeBetweenDodges)
 						break;
-					//-GetActorForwardVector();
+					FVector DodgeDirection = (-GetActorForwardVector()*DodgeStrength) + FVector(0,0,ZAdd);
+					LaunchCharacter(DodgeDirection, false, false);
 					UE_LOG(LogTemp, Warning, TEXT("Dodge B"));
 					bSetBackDodge = false;
 					LastSuccessfulDodgeTime = GetWorld()->GetTimeSeconds();
@@ -140,7 +146,8 @@ void APawnJerry::Dodge(const int32 Direction)
 				{
 					if (GetWorld()->GetTimeSeconds() - LastSuccessfulDodgeTime < TimeBetweenDodges)
 						break;
-					//GetActorRightVector();
+					FVector DodgeDirection = (GetActorRightVector()*DodgeStrength) + FVector(0,0,ZAdd);
+					LaunchCharacter(DodgeDirection, false, false);
 					UE_LOG(LogTemp, Warning, TEXT("Dodge R"));
 					bSetRightDodge = false;
 					LastSuccessfulDodgeTime = GetWorld()->GetTimeSeconds();
