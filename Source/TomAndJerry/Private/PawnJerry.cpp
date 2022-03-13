@@ -71,7 +71,8 @@ void APawnJerry::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 	AWeaponMaterial* WeaponMaterial = Cast<AWeaponMaterial>(OtherActor);
-	if (WeaponMaterial) {
+	if (WeaponMaterial)
+	{
 		//UE_LOG(LogTemp, Warning, TEXT("Player walked over a Weapon Material!"));
 		AControllerJerry* playerController = Cast<AControllerJerry>(GetController());
 		if (playerController) {
@@ -79,7 +80,8 @@ void APawnJerry::NotifyActorBeginOverlap(AActor* OtherActor)
 			WeaponMaterial->Destroy();
 		}
 	}
-	else {	//Not a Weapon Material. Check if we are standing on a Minor Objective
+	else
+	{	//Not a Weapon Material. Check if we are standing on a Minor Objective
 		AMinorObjective* MinorObjective = Cast<AMinorObjective>(OtherActor);
 		if (MinorObjective) {
 			MinorObjective->SetActivatingPawn(this);

@@ -31,19 +31,17 @@ void ACraftingPost::Tick(float DeltaTime)
 void ACraftingPost::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
-	//Check if OtherActor is the player (Jerry)
-	//If Jerry, get the PlayerController
-	//Check the PlayerController for any collected Materials
-	//If there are any collected Materials, notify the Game Mode (TomAndJerryGameModeBase)
 	APawnJerry* Jerry = Cast<APawnJerry>(OtherActor);
 	if (Jerry) {
 		AControllerJerry* JerryController = Cast<AControllerJerry>(Jerry->GetController());
-		if (JerryController) {
+		if (JerryController)
+		{
 			TArray<uint8> Materials = JerryController->GetMaterials();
 			const uint8 NumMaterials = Materials.Num();
 			JerryController->CollectMaterials();
 			ATomAndJerryGameModeBase* TomAndJerryGame = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
-			if (TomAndJerryGame){
+			if (TomAndJerryGame)
+			{
 				TomAndJerryGame->AddMaterial(NumMaterials);
 			}
 			UE_LOG(LogTemp, Warning, TEXT("Collected %d materials from player."), NumMaterials);

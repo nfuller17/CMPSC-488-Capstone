@@ -2,4 +2,13 @@
 
 
 #include "PawnMinion.h"
+#include "../TomAndJerryGameModeBase.h"
 
+void APawnMinion::Died()
+{
+	Super::Died();
+	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (Game)
+		Game->DecrementNumMonsters();
+	GetWorldTimerManager().SetTimer(DestroyTimer, this, &APawnMinion::DestroyHelper, DestroyDelay, false, DestroyDelay);
+}

@@ -29,6 +29,7 @@ public:
 	void FireProjectile();
 	void StopFire();
 	FTimerHandle FiringTimer;
+	FTimerHandle DestroyTimer;
 	
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
@@ -36,17 +37,27 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void Died();
+	//Called in conjunction with DestroyTimer
+	//Needed since callback function expects void type, but Destroy() returns boolean
+	void DestroyHelper(){Destroy();}
 	UPROPERTY(VisibleAnywhere)
 		float Health;
 	UPROPERTY(EditAnywhere)
 		float HealthMax;
+	//How long after dying should this Monster be destroyed
+	UPROPERTY(EditDefaultsOnly, meta=(ClampMin = "0.0"))
+		float DestroyDelay = 5.00;
 
 
 private:
+	//Check to disable projectile firing
 	UPROPERTY(EditAnywhere, Category="Combat")
 		bool bIsMeleeOnly;
-	UPROPERTY(EditAnywhere)
+	//Type of projectile to fire
+	UPROPERTY(EditAnywhere, Category="Combat")
 	TSubclassOf<AProjectile> ProjectileClass;
+	//If projectile enabled, time in seconds between each fire
 	UPROPERTY(EditAnywhere, Category="Combat")
 		float FireRate;
 	bool bCanFire = true;

@@ -2,12 +2,13 @@
 
 
 #include "PawnBoss.h"
+#include "../TomAndJerryGameModeBase.h"
 
-float APawnBoss::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+void APawnBoss::Died()
 {
-	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	DamageToApply = FMath::Min(Health, DamageToApply);
-	Health -= DamageToApply;
-	UE_LOG(LogTemp, Warning, TEXT("Boss Health: %f"), Health);
-	return DamageToApply;
+	Super::Died();
+	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (Game)
+		Game->EndGame(true);
+	GetWorldTimerManager().SetTimer(DestroyTimer, this, &APawnBoss::DestroyHelper, DestroyDelay, false, DestroyDelay);
 }
