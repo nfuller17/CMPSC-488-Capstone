@@ -93,7 +93,10 @@ void AWeapon::FirePrimary()
 				{
 					FVector EndLocation = FireLocation + RealFireRotation * MaxRange;
 					FHitResult Hit;
-					bool bHitActor = GetWorld()->LineTraceSingleByChannel(Hit, FireLocation, EndLocation, ECollisionChannel::ECC_GameTraceChannel2);	//Trace from FireLocation, in direction of FireRotation, end at EndLocation
+					FCollisionQueryParams Params;
+					Params.AddIgnoredActor(this);
+					Params.AddIgnoredActor(OwnerPawn);
+					bool bHitActor = GetWorld()->LineTraceSingleByChannel(Hit, FireLocation, EndLocation, ECollisionChannel::ECC_GameTraceChannel2, Params);	//Trace from FireLocation, in direction of FireRotation, end at EndLocation
 					if (bHitActor)
 					{
 						//Damage Actor
