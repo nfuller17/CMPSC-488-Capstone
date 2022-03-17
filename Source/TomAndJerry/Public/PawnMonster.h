@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Skill.h"
 #include "PawnMonster.generated.h"
 
 //Base class for AI enemies
 
 class AProjectile;
+class ASkill;
 
 UCLASS(abstract)
 class TOMANDJERRY_API APawnMonster : public ACharacter
@@ -23,13 +25,18 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	virtual void SetHealth(uint32 NewHealth) { Health = NewHealth; }
+	void SetHealth(uint32 NewHealth) { Health = NewHealth; }
+	float GetHealth(){return Health;}
+	void AddHealth(const float& Amount);
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	void StartFire();
 	void FireProjectile();
 	void StopFire();
+	void AddEnergy();
+	void DoSkill();
 	FTimerHandle FiringTimer;
 	FTimerHandle DestroyTimer;
+	FTimerHandle EnergyTimer;
 	
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
@@ -48,6 +55,19 @@ protected:
 	//How long after dying should this Monster be destroyed
 	UPROPERTY(EditDefaultsOnly, meta=(ClampMin = "0.0"))
 		float DestroyDelay = 5.00;
+	//The amount of energy required to perform a skill
+	UPROPERTY(EditAnywhere, Category="Skills")
+		uint8 MaxEnergy = 100;
+	uint8 Energy = 0;
+	//Interval in seconds to regenerate energy
+	UPROPERTY(EditAnywhere, Category="Skills")
+		float EnergyRegenRate = 1.0;
+	//Amount on each interval to regenerate energy
+	UPROPERTY(EditAnywhere, Category="Skills")
+		uint8 EnergyRegenAmount = 1;
+	//The allowed skills this Pawn can perform
+	UPROPERTY(EditDefaultsOnly, Category="Skills")
+	TArray<TSubclassOf<ASkill>> Skills;
 
 
 private:

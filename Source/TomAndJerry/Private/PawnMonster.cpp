@@ -19,6 +19,7 @@ void APawnMonster::BeginPlay()
 {
 	Super::BeginPlay();
 	Health = HealthMax;
+	GetWorldTimerManager().SetTimer(EnergyTimer, this, &APawnMonster::AddEnergy, EnergyRegenRate, true, EnergyRegenRate);
 }
 
 // Called every frame
@@ -48,11 +49,18 @@ float APawnMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	}
 	DamageToDo = FMath::Min(Health, DamageToDo);
 	Health -= DamageToDo;
+	UE_LOG(LogTemp, Warning, TEXT("Monster health: %f"), Health);
 	if (IsDead())
 	{
 		Died();
 	}
 	return DamageToDo;
+}
+
+void APawnMonster::AddHealth(const float& Amount)
+{
+	Health += FMath::Min(Amount, HealthMax - Health);
+	UE_LOG(LogTemp, Warning, TEXT("Regenerate: %f"), Health);
 }
 
 void APawnMonster::StartFire()
@@ -91,6 +99,34 @@ void APawnMonster::FireProjectile()
 	}
 }
 
+//Called by the AI Behavior Tree
+//Iterate through Skills array and call Execute until one succeeds
+//If a skill succeeds, decrement the energy by the Skill's cost and break the loop
+void APawnMonster::DoSkill()
+{	
+	for (int x = 0; x < Skills.Num(); x++)
+	{
+		ASkill* Skill = Skills[x]->GetDefaultObject<ASkill>();
+		if (Skill)
+		{
+			Skill->SetOwner(this);
+			if (Skill->Execute())
+			{
+				Energy -= Skill->GetEnergyCost();
+				break;				
+			}
+		}
+	}
+}
+void APawnMonster::AddEnergy()
+{
+	if (Energy >= MaxEnergy)
+		return;
+	Energy += EnergyRegenAmount;
+	if (Energy > MaxEnergy)
+		Energy = MaxEnergy;
+}
+
 bool APawnMonster::IsDead() const
 {
 	return Health <= 0;
@@ -98,6 +134,8 @@ bool APawnMonster::IsDead() const
 
 void APawnMonster::Died()
 {
+	StopFire();
+	GetWorldTimerManager().ClearTimer(EnergyTimer);
 	DetachFromControllerPendingDestroy();
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	//Normally, we want to destroy the Actor here after dying
