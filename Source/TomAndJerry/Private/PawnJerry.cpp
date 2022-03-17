@@ -210,9 +210,9 @@ float APawnJerry::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 {
 	float DamageToDo = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	DamageToDo = FMath::Min(Health, DamageToDo);
-	Health -= DamageToDo;
-	UE_LOG(LogTemp, Warning, TEXT("Player health: %f"), Health);
 	//UNCOMMENT THIS AFTER DONE WITH TESTS!
+	//Health -= DamageToDo;
+	//UE_LOG(LogTemp, Warning, TEXT("Player health: %f"), Health);
 	//if (Health <= 0)
 	//{
 	//	DetachFromControllerPendingDestroy();
