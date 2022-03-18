@@ -10,7 +10,7 @@ void ASkill_Regenerate::BeginPlay()
 	SetLifeSpan(Duration);
 }
 
-bool ASkill_Regenerate::CanExecute(APawnMonster* Monster)
+bool ASkill_Regenerate::CanExecute(const APawnMonster* Monster) const
 {
 	if (!Super::CanExecute(Monster))
 		return false;
@@ -38,5 +38,10 @@ void ASkill_Regenerate::AddHealth()
 	APawnMonster* Monster = Cast<APawnMonster>(GetOwner());
 	if (Monster == nullptr)
 		return;
+	if (Monster->IsDead())
+	{
+		GetWorldTimerManager().ClearTimer(RegenerationTimer);
+		Destroy();
+	}
 	Monster->AddHealth(RegenerationAmount);
 }

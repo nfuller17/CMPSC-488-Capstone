@@ -20,7 +20,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual uint8 GetEnergyCost() const{return EnergyCost;}
-	virtual bool CanExecute(APawnMonster* Monster);
+	virtual bool CanExecute(const APawnMonster* Monster) const;
 	virtual void Execute() PURE_VIRTUAL(ASkill::Execute, return;);
 	virtual void Destroyed() override;
 

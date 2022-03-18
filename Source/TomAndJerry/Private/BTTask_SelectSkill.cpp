@@ -2,17 +2,15 @@
 
 
 #include "BTTask_SelectSkill.h"
-#include "AIController.h"
-#include "PawnMonster.h"
 
 UBTTask_SelectSkill::UBTTask_SelectSkill()
 {
-	NodeName = TEXT("Select Skill");
+	NodeName = TEXT("DEPRECATED - Select Skill");
 }
 
 EBTNodeResult::Type UBTTask_SelectSkill::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	Super::ExecuteTask(OwnerComp, NodeMemory);
+	/*Super::ExecuteTask(OwnerComp, NodeMemory);
 	AAIController* AIController = OwnerComp.GetAIOwner();
 	if (AIController == nullptr)
 		return EBTNodeResult::Failed;
@@ -20,5 +18,6 @@ EBTNodeResult::Type UBTTask_SelectSkill::ExecuteTask(UBehaviorTreeComponent& Own
 	if (Monster == nullptr)
 		return EBTNodeResult::Failed;
 	Monster->DoSkill();
+	*/
 	return EBTNodeResult::Succeeded;
 }

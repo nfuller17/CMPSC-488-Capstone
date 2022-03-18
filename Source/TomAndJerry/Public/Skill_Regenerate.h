@@ -15,7 +15,7 @@ class TOMANDJERRY_API ASkill_Regenerate : public ASkill
 {
 	GENERATED_BODY()
 public:
-	virtual bool CanExecute(APawnMonster* Monster) override;
+	virtual bool CanExecute(const APawnMonster* Monster) const override;
 	virtual void Execute() override;
 	virtual uint8 GetEnergyCost() const override{return EnergyCost;}
 	void AddHealth();

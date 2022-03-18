@@ -26,7 +26,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void SetHealth(uint32 NewHealth) { Health = NewHealth; }
-	float GetHealth(){return Health;}
+	float GetHealth() const{return Health;}
 	void AddHealth(const float& Amount);
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	void StartFire();
@@ -34,7 +34,7 @@ public:
 	void StopFire();
 	uint8 GetEnergy(){return Energy;}
 	void AddEnergy();
-	void DoSkill();
+	void DoSkill(const TSubclassOf<ASkill> SkillClass);
 	void SetSkillIsActive(const bool& IsActive){bSkillIsActive = IsActive;}
 	virtual bool HasSkill(TSubclassOf<ASkill> SkillClass);
 	FTimerHandle FiringTimer;

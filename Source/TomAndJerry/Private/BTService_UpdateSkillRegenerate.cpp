@@ -22,7 +22,6 @@ void UBTService_UpdateSkillRegenerate::TickNode(UBehaviorTreeComponent& OwnerCom
 	APawnMonster* Monster = Cast<APawnMonster>(AIController->GetPawn());
 	if (Monster == nullptr)
 		return;
-	//TSubclassOf<ASkill> RegenSkill = ASkill_Regenerate::StaticClass();
 	if (Monster->HasSkill(ASkill_Regenerate::StaticClass()))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Has regen"))

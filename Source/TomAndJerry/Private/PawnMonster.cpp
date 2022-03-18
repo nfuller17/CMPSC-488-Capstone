@@ -59,6 +59,8 @@ float APawnMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 
 void APawnMonster::AddHealth(const float& Amount)
 {
+	if (IsDead())
+		return;
 	Health += FMath::Min(Amount, HealthMax - Health);
 	UE_LOG(LogTemp, Warning, TEXT("Regenerate: %f"), Health);
 }
@@ -99,36 +101,37 @@ void APawnMonster::FireProjectile()
 	}
 }
 
-//Called by the AI Behavior Tree
-//Iterate through Skills array and call Execute until one succeeds
-//If a skill succeeds, decrement the energy by the Skill's cost and break the loop
-void APawnMonster::DoSkill()
+//Called by the AI Behavior Tree, which has made a check to see if this Pawn has the requested Skill
+//This function will call CanExecute() on the requested Skill, which will return a boolean indiciating whether the correct conditions are in place
+//If CanExecute() returns true, decrement this Pawn's energy by the Skill's cost
+//This function is void, but the calling AI Behavior Tree will always return Succeed
+void APawnMonster::DoSkill(const TSubclassOf<ASkill> RequestedSkill)
 {
 	if (bSkillIsActive)
 		return;
-	for (int x = 0; x < Skills.Num(); x++)
+	for (auto SkillBlueprintClass: Skills)
 	{
-		ASkill* Skill = Skills[x]->GetDefaultObject<ASkill>();
-		if (Skill)
+		ASkill* SkillObject = SkillBlueprintClass->GetDefaultObject<ASkill>();
+		if (SkillObject && SkillObject->IsA(RequestedSkill))
 		{
-			if (Energy >= Skill->GetEnergyCost())
+			if (Energy < SkillObject->GetEnergyCost())
+				return;
+			if (!SkillObject->CanExecute(this))
+				return;
+			ASkill* SkillInstance = GetWorld()->SpawnActor<ASkill>(SkillObject->GetClass());
+			if (SkillInstance != nullptr)
 			{
-				if (Skill->CanExecute(this))
-				{
-					//Spawn Skill actor
-					ASkill* SkillInstance = GetWorld()->SpawnActor<ASkill>(Skills[x]);
-					if (SkillInstance)
-					{
-						SkillInstance->SetOwner(this);
-						SkillInstance->Execute();
-						Energy -= Skill->GetEnergyCost();
-						bSkillIsActive = true;
-						return;
-					}			
-				}
+				SkillInstance->SetOwner(this);
+				SkillInstance->Execute();
+				UE_LOG(LogTemp, Warning, TEXT("Energy before: %d"), Energy);
+				Energy -= SkillInstance->GetEnergyCost();
+				UE_LOG(LogTemp, Warning, TEXT("Energy after: %d"), Energy);
+				bSkillIsActive = true;
+				return;
 			}
 		}
 	}
+
 }
 
 bool APawnMonster::HasSkill(TSubclassOf<ASkill> SkillClass)
@@ -144,6 +147,11 @@ bool APawnMonster::HasSkill(TSubclassOf<ASkill> SkillClass)
 
 void APawnMonster::AddEnergy()
 {
+	if (IsDead())
+	{
+		GetWorldTimerManager().ClearTimer(EnergyTimer);
+		return;
+	}
 	if (Energy >= MaxEnergy)
 		return;
 	Energy += EnergyRegenAmount;
