@@ -130,6 +130,18 @@ void APawnMonster::DoSkill()
 		}
 	}
 }
+
+bool APawnMonster::HasSkill(TSubclassOf<ASkill> SkillClass)
+{
+	for (auto Skill : Skills)
+	{
+		ASkill* SkillObject = Skill->GetDefaultObject<ASkill>();
+		if (SkillObject && SkillObject->IsA(SkillClass))
+			return true;
+	}
+	return false;
+}
+
 void APawnMonster::AddEnergy()
 {
 	if (Energy >= MaxEnergy)

@@ -36,6 +36,7 @@ public:
 	void AddEnergy();
 	void DoSkill();
 	void SetSkillIsActive(const bool& IsActive){bSkillIsActive = IsActive;}
+	virtual bool HasSkill(TSubclassOf<ASkill> SkillClass);
 	FTimerHandle FiringTimer;
 	FTimerHandle DestroyTimer;
 	FTimerHandle EnergyTimer;
