@@ -32,6 +32,7 @@ public:
 	void StartFire();
 	void FireProjectile();
 	void StopFire();
+	uint8 GetEnergy(){return Energy;}
 	void AddEnergy();
 	void DoSkill();
 	FTimerHandle FiringTimer;

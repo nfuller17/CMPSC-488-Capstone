@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Skill.h"
+#include "PawnMonster.h"
 #include "Skill_Regenerate.generated.h"
 
 /**
@@ -14,16 +15,17 @@ class TOMANDJERRY_API ASkill_Regenerate : public ASkill
 {
 	GENERATED_BODY()
 public:
-	virtual bool Execute() override;
-	void StopExecution();
+	virtual bool CanExecute(APawnMonster* Monster) override;
+	virtual void Execute() override;
 	void AddHealth();
+	virtual void Destroyed() override;
 	FTimerHandle RegenerationTimer;
-	FTimerHandle ExecutionTimer;
 protected:
+	virtual void BeginPlay() override;
 	uint8 EnergyCost=80;
 private:
 	float MinHealth=50.0;
 	float RegenerationRate = 1.0;
 	float RegenerationAmount = 5.0;
-	float Duration = 30.0;
+	float Duration = 20.0;
 };

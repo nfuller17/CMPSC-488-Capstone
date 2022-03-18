@@ -2,27 +2,25 @@
 
 
 #include "Skill_Regenerate.h"
-#include "PawnMonster.h"
 
-bool ASkill_Regenerate::Execute()
+void ASkill_Regenerate::BeginPlay()
 {
-	if (GetWorldTimerManager().IsTimerActive(RegenerationTimer))
-		return false;
-	APawnMonster* Monster = Cast<APawnMonster>(GetOwner());
-	if (Monster == nullptr)
+	Super::BeginPlay();
+	SetLifeSpan(Duration);
+}
+
+bool ASkill_Regenerate::CanExecute(APawnMonster* Monster)
+{
+	if (!Super::CanExecute(Monster))
 		return false;
 	if (Monster->GetHealth() > MinHealth)
 		return false;
-	UE_LOG(LogTemp, Warning, TEXT("REGENERATE!"));
-	GetWorldTimerManager().SetTimer(ExecutionTimer, this, &ASkill_Regenerate::StopExecution, Duration, false, Duration);
-	GetWorldTimerManager().SetTimer(RegenerationTimer, this, &ASkill_Regenerate::AddHealth, RegenerationRate, true, 0);
 	return true;
 }
 
-void ASkill_Regenerate::StopExecution()
+void ASkill_Regenerate::Execute()
 {
-	GetWorldTimerManager().ClearTimer(ExecutionTimer);
-	GetWorldTimerManager().ClearTimer(RegenerationTimer);
+	GetWorldTimerManager().SetTimer(RegenerationTimer, this, &ASkill_Regenerate::AddHealth, RegenerationRate, true, 0);	
 }
 
 void ASkill_Regenerate::AddHealth()
@@ -31,4 +29,10 @@ void ASkill_Regenerate::AddHealth()
 	if (Monster == nullptr)
 		return;
 	Monster->AddHealth(RegenerationAmount);
+}
+
+void ASkill_Regenerate::Destroyed()
+{
+	Super::Destroyed();
+	UE_LOG(LogTemp, Warning, TEXT("DESTROY!"));
 }

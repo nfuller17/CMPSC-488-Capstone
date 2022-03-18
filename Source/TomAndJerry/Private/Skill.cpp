@@ -25,3 +25,9 @@ void ASkill::Tick(float DeltaTime)
 
 }
 
+bool ASkill::CanExecute(APawnMonster* Monster)
+{
+	if (Monster == nullptr)
+		return false;
+	return true;
+}

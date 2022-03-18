@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "PawnMonster.h"
 #include "Skill.generated.h"
+
+class APawnMonster;
 
 UCLASS()
 class TOMANDJERRY_API ASkill : public AActor
@@ -16,8 +19,9 @@ public:
 	ASkill();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	uint8 GetEnergyCost(){return EnergyCost;}
-	virtual bool Execute() PURE_VIRTUAL(ASkill::Execute, return false;);
+	uint8 GetEnergyCost() const{return EnergyCost;}
+	virtual bool CanExecute(APawnMonster* Monster);
+	virtual void Execute() PURE_VIRTUAL(ASkill::Execute, return;);
 
 protected:
 	// Called when the game starts or when spawned

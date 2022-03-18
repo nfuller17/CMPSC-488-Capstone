@@ -109,11 +109,23 @@ void APawnMonster::DoSkill()
 		ASkill* Skill = Skills[x]->GetDefaultObject<ASkill>();
 		if (Skill)
 		{
-			Skill->SetOwner(this);
-			if (Skill->Execute())
+			uint8 Cost = Skill->GetEnergyCost();
+			UE_LOG(LogTemp, Warning, TEXT("Energy: %d "), Energy);
+			UE_LOG(LogTemp, Warning, TEXT("Regen Skill cost: %d"), Cost);
+			if (Energy >= Cost)
 			{
-				Energy -= Skill->GetEnergyCost();
-				break;				
+				if (Skill->CanExecute(this))
+				{
+					//Spawn Skill actor
+					ASkill* SkillInstance = GetWorld()->SpawnActor<ASkill>(Skills[x]);
+					if (SkillInstance)
+					{
+						SkillInstance->SetOwner(this);
+						SkillInstance->Execute();
+						Energy -= Skill->GetEnergyCost();
+						return;
+					}			
+				}
 			}
 		}
 	}

@@ -265,9 +265,12 @@ void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 			}
 			//Spawn an instance of the selected Weapon
 			Weapon = GetWorld()->SpawnActor<AWeapon>(wClass);
-			Weapon->SetOwner(this);
-			Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
-			return;
+			if (Weapon)
+			{
+				Weapon->SetOwner(this);
+				Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+				return;	
+			}
 		}
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Player does not have this weapon in inventory."));
