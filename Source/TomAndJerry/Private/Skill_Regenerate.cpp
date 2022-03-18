@@ -2,6 +2,7 @@
 
 
 #include "Skill_Regenerate.h"
+#include "Kismet/GameplayStatics.h"
 
 void ASkill_Regenerate::BeginPlay()
 {
@@ -20,6 +21,15 @@ bool ASkill_Regenerate::CanExecute(APawnMonster* Monster)
 
 void ASkill_Regenerate::Execute()
 {
+	//Do not call Super!
+	
+	//Spawn effect
+	if (Effect && GetOwner())
+	{
+		UGameplayStatics::SpawnEmitterAttached(Effect, GetOwner()->GetRootComponent());
+	}
+	
+	//Set timer
 	GetWorldTimerManager().SetTimer(RegenerationTimer, this, &ASkill_Regenerate::AddHealth, RegenerationRate, true, 0);	
 }
 
@@ -29,10 +39,4 @@ void ASkill_Regenerate::AddHealth()
 	if (Monster == nullptr)
 		return;
 	Monster->AddHealth(RegenerationAmount);
-}
-
-void ASkill_Regenerate::Destroyed()
-{
-	Super::Destroyed();
-	UE_LOG(LogTemp, Warning, TEXT("DESTROY!"));
 }

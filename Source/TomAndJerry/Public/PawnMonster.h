@@ -35,6 +35,7 @@ public:
 	uint8 GetEnergy(){return Energy;}
 	void AddEnergy();
 	void DoSkill();
+	void SetSkillIsActive(const bool& IsActive){bSkillIsActive = IsActive;}
 	FTimerHandle FiringTimer;
 	FTimerHandle DestroyTimer;
 	FTimerHandle EnergyTimer;
@@ -69,6 +70,7 @@ protected:
 	//The allowed skills this Pawn can perform
 	UPROPERTY(EditDefaultsOnly, Category="Skills")
 	TArray<TSubclassOf<ASkill>> Skills;
+	bool bSkillIsActive = false;
 
 
 private:

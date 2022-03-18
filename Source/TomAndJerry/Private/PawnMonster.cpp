@@ -103,16 +103,15 @@ void APawnMonster::FireProjectile()
 //Iterate through Skills array and call Execute until one succeeds
 //If a skill succeeds, decrement the energy by the Skill's cost and break the loop
 void APawnMonster::DoSkill()
-{	
+{
+	if (bSkillIsActive)
+		return;
 	for (int x = 0; x < Skills.Num(); x++)
 	{
 		ASkill* Skill = Skills[x]->GetDefaultObject<ASkill>();
 		if (Skill)
 		{
-			uint8 Cost = Skill->GetEnergyCost();
-			UE_LOG(LogTemp, Warning, TEXT("Energy: %d "), Energy);
-			UE_LOG(LogTemp, Warning, TEXT("Regen Skill cost: %d"), Cost);
-			if (Energy >= Cost)
+			if (Energy >= Skill->GetEnergyCost())
 			{
 				if (Skill->CanExecute(this))
 				{
@@ -123,6 +122,7 @@ void APawnMonster::DoSkill()
 						SkillInstance->SetOwner(this);
 						SkillInstance->Execute();
 						Energy -= Skill->GetEnergyCost();
+						bSkillIsActive = true;
 						return;
 					}			
 				}

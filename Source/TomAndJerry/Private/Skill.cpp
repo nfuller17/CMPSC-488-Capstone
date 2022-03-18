@@ -31,3 +31,15 @@ bool ASkill::CanExecute(APawnMonster* Monster)
 		return false;
 	return true;
 }
+
+void ASkill::Destroyed()
+{
+	Super::Destroyed();
+	if (GetOwner() != nullptr)
+	{
+		APawnMonster* Monster = Cast<APawnMonster>(GetOwner());
+		if (Monster)
+			Monster->SetSkillIsActive(false);
+	}
+	UE_LOG(LogTemp, Warning, TEXT("DESTROY!"));
+}
