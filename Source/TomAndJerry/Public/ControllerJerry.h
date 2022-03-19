@@ -22,7 +22,14 @@ public:
 	UPROPERTY(EditAnywhere)
 	float RestartDelay = 5.f;
 	FTimerHandle RestartTimer;
+	
+protected:
+	virtual void BeginPlay() override;
 
 private:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> HUDClass;
+	UPROPERTY()
+	UUserWidget* HUD;
 	TArray<uint8>	MaterialInventory;
 };

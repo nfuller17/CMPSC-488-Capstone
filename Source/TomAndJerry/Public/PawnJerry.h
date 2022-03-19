@@ -35,6 +35,8 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 	float GetHealth() const {return Health;}
+	UFUNCTION(BlueprintPure)
+	int GetUIHealth() const {return FMath::RoundFromZero(Health);}
 	float GetHealthMax() const {return HealthMax;}
 	
 
@@ -45,6 +47,7 @@ protected:
 	float HealthMax = 100;
 	UPROPERTY(VisibleAnywhere)
 	float Health;
+	virtual void Died();
 
 private:
 	

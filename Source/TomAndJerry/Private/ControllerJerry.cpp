@@ -3,6 +3,18 @@
 
 #include "ControllerJerry.h"
 #include "WeaponMaterial.h"
+#include "Blueprint/UserWidget.h"
+
+void AControllerJerry::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	HUD = CreateWidget(this, HUDClass);
+	if (HUD != nullptr)
+	{
+		HUD->AddToViewport();
+	}
+}
 
 //Called when player walks over a material
 //Adds the material to the MaterialInventory array
@@ -21,6 +33,7 @@ void AControllerJerry::CollectMaterials()
 void AControllerJerry::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)
 {
 	Super::GameHasEnded(EndGameFocus, bIsWinner);
-	UE_LOG(LogTemp, Warning, TEXT("Game Over! Restarting in %d seconds."), RestartDelay);
+	if (HUD)
+		HUD->RemoveFromViewport();
 	GetWorldTimerManager().SetTimer(RestartTimer, this, &APlayerController::RestartLevel, RestartDelay);
 }

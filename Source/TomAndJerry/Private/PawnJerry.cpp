@@ -215,13 +215,12 @@ float APawnJerry::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 		return 0;
 	DamageToDo = FMath::Min(Health, DamageToDo);
 	//UNCOMMENT THIS AFTER DONE WITH TESTS!
-	//Health -= DamageToDo;
+	Health -= DamageToDo;
 	//UE_LOG(LogTemp, Warning, TEXT("Player health: %f"), Health);
-	//if (Health <= 0)
-	//{
-	//	DetachFromControllerPendingDestroy();
-	//	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//}
+	if (Health <= 0)
+	{
+		Died();
+	}
 	return DamageToDo;
 }
 
@@ -294,4 +293,10 @@ void APawnJerry::StopFire()
 {
 	if (Weapon)
 		Weapon->StopFire();
+}
+
+void APawnJerry::Died()
+{
+	DetachFromControllerPendingDestroy();
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
