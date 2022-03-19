@@ -21,6 +21,5 @@ EBTNodeResult::Type UBTTask_DoSkill_DamageBoost::ExecuteTask(UBehaviorTreeCompon
 	if (Monster == nullptr)
 		return EBTNodeResult::Failed;
 	Monster->DoSkill(ASkill_DamageBoost::StaticClass());
-	UE_LOG(LogTemp, Warning, TEXT("Damage Boost!"));
 	return EBTNodeResult::Succeeded;
 }

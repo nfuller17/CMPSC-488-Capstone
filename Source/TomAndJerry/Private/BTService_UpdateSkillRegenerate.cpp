@@ -24,7 +24,6 @@ void UBTService_UpdateSkillRegenerate::TickNode(UBehaviorTreeComponent& OwnerCom
 		return;
 	if (Monster->HasSkill(ASkill_Regenerate::StaticClass()))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Has regen"))
 		OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), true);		
 	}
 	else

@@ -23,7 +23,6 @@ void UBTService_UpdateSkillShield::TickNode(UBehaviorTreeComponent& OwnerComp, u
 		return;
 	if (Monster->HasSkill(ASkill_Shield::StaticClass()))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Has shield"));
 		OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), true);		
 	}
 	else

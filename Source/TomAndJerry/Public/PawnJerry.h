@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "ControllerJerry.h"
 #include "PawnJerry.generated.h"
 
 //Forward class declaration - ie tell Compiler to compile this class first
@@ -38,6 +39,7 @@ public:
 	UFUNCTION(BlueprintPure)
 	int GetUIHealth() const {return FMath::RoundFromZero(Health);}
 	float GetHealthMax() const {return HealthMax;}
+	FTimerHandle DestroyTimer;
 	
 
 protected:
@@ -48,6 +50,8 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	float Health;
 	virtual void Died();
+	virtual void DestroyHelper();
+	virtual void Destroyed() override;
 
 private:
 	

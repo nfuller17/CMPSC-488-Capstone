@@ -8,6 +8,8 @@
 #include "Weapon.h"
 #include "Components/CapsuleComponent.h"
 #include "PawnMonster.h"
+#include "GameFramework/GameModeBase.h"
+#include "../TomAndJerryGameModeBase.h"
 
 // Sets default values
 APawnJerry::APawnJerry()
@@ -71,6 +73,8 @@ void APawnJerry::Strafe(float AxisValue)
 
 void APawnJerry::Dodge(const int32 Direction)
 {
+	if (IsDead())
+		return;
 	if (GetWorld()->GetTimeSeconds() - LastDodgeTime <= DodgeTime)
 	{
 		switch (Direction)
@@ -177,6 +181,8 @@ void APawnJerry::Dodge(const int32 Direction)
 void APawnJerry::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
+	if (IsDead())
+		return;
 	AWeaponMaterial* WeaponMaterial = Cast<AWeaponMaterial>(OtherActor);
 	if (WeaponMaterial)
 	{
@@ -210,6 +216,8 @@ void APawnJerry::NotifyActorEndOverlap(AActor* OtherActor)
 float APawnJerry::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float DamageToDo = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	if (IsDead())
+		return 0;
 	APawnMonster* Monster = Cast<APawnMonster>(DamageCauser);
 	if (Monster != nullptr && Monster->IsPlayerTeam())	//Friendly AI
 		return 0;
@@ -249,6 +257,8 @@ void APawnJerry::AddWeapon(TSubclassOf<AWeapon> WeaponClass)
 //If so, destroy the weapon being currently held and spawn an instance of the desired weapon
 void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 {
+	if (IsDead())
+		return;
 	//Check if the currently held weapon is already selected
 	if (Weapon)
 	{
@@ -283,6 +293,8 @@ void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 //Input binding is used here, as SetupPlayerInputComponent is called before BeginPlay and Weapon will be null
 void APawnJerry::BeginFire()
 {
+	if (IsDead())
+		return;
 	if (Weapon)
 		Weapon->BeginFire();
 }
@@ -297,6 +309,30 @@ void APawnJerry::StopFire()
 
 void APawnJerry::Died()
 {
-	DetachFromControllerPendingDestroy();
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (Weapon != nullptr)
+		Weapon->Destroy();
+	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
+	float SpawnDelay;
+	if (Game != nullptr)
+		SpawnDelay = Game->GetPlayerSpawnDelay();
+	else
+		SpawnDelay = 3.0;
+	GetWorldTimerManager().SetTimer(DestroyTimer, this, &APawnJerry::DestroyHelper, SpawnDelay, false, SpawnDelay);
+}
+
+void APawnJerry::DestroyHelper()
+{
+	GetWorldTimerManager().ClearTimer(DestroyTimer);
+	Destroy();
+}
+
+void APawnJerry::Destroyed()
+{
+	Super::Destroyed();
+	AGameModeBase* Game = GetWorld()->GetAuthGameMode();
+	if (Game != nullptr)
+	{
+		Game->RestartPlayer(GetWorld()->GetFirstPlayerController());
+	}
 }

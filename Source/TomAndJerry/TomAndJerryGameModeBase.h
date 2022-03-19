@@ -22,6 +22,7 @@ public:
 	FTimerHandle SpawnTimer;
 	uint8 GetNumMonsters(){return NumMonsters;}
 	void DecrementNumMonsters();
+	float GetPlayerSpawnDelay() const{return PlayerSpawnDelay;}
 	
 protected:
 	virtual void BeginPlay() override;
@@ -31,6 +32,9 @@ protected:
 private:
 	uint8	MaterialsCollected = 0;
 	uint8	MaterialsTotal = 0;
+	//Spawn delay for player
+	UPROPERTY(EditAnywhere, meta=(ClampMin = "0.0"))
+	float PlayerSpawnDelay = 3.0;
 	//Time in seconds that monsters should spawn
 	UPROPERTY(EditAnywhere, meta=(ClampMin = "0.0") )
 		float	MonsterSpawnInterval = 10.0;

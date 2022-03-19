@@ -23,7 +23,6 @@ void UBTService_UpdateSkillDamageBoost::TickNode(UBehaviorTreeComponent& OwnerCo
 		return;
 	if (Monster->HasSkill(ASkill_DamageBoost::StaticClass()))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Has Damage Bonus"));
 		OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), true);		
 	}
 	else
