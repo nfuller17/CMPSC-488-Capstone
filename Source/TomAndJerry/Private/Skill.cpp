@@ -33,10 +33,6 @@ void ASkill::Tick(float DeltaTime)
 	if (Monster && Monster->IsDead())
 	{
 		Destroy();
-		//if (Effect)
-		//{
-		//	Effect->DeactivateSystem();
-		//}
 	}
 
 }

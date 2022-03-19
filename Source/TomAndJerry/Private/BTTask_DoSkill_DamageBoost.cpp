@@ -1,17 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTTask_DoSkill_Shield.h"
+#include "BTTask_DoSkill_DamageBoost.h"
 #include "AIController.h"
 #include "PawnMonster.h"
-#include "Skill_Shield.h"
+#include "Skill_DamageBoost.h"
 
-UBTTask_DoSkill_Shield::UBTTask_DoSkill_Shield()
+UBTTask_DoSkill_DamageBoost::UBTTask_DoSkill_DamageBoost()
 {
-	NodeName = TEXT("Do Skill - Shield");
+	NodeName = TEXT("Do Skill - Damage Boost");
 }
 
-EBTNodeResult::Type UBTTask_DoSkill_Shield::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UBTTask_DoSkill_DamageBoost::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 	AAIController* AIController = OwnerComp.GetAIOwner();
@@ -20,6 +20,7 @@ EBTNodeResult::Type UBTTask_DoSkill_Shield::ExecuteTask(UBehaviorTreeComponent& 
 	APawnMonster* Monster = Cast<APawnMonster>(AIController->GetPawn());
 	if (Monster == nullptr)
 		return EBTNodeResult::Failed;
-	Monster->DoSkill(ASkill_Shield::StaticClass());
+	Monster->DoSkill(ASkill_DamageBoost::StaticClass());
+	UE_LOG(LogTemp, Warning, TEXT("Damage Boost!"));
 	return EBTNodeResult::Succeeded;
 }

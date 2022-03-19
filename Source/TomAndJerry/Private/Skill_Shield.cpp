@@ -31,7 +31,6 @@ bool ASkill_Shield::CanExecute(const APawnMonster* Monster) const
 void ASkill_Shield::Execute()
 {
 	//Do not call Super!
-	UE_LOG(LogTemp, Warning, TEXT("EXECUTING SHIELD"));
 	
 	APawnMonster* Monster = Cast<APawnMonster>(GetOwner());
 	if (Monster == nullptr)

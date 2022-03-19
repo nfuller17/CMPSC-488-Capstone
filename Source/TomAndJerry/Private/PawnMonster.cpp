@@ -91,6 +91,9 @@ void APawnMonster::FireProjectile()
 	if (Proj)
 	{
 		Proj->SetTeam(false);
+		float AddDamage = Proj->GetDamage();	//Apply any damage bonus, if any
+		AddDamage *= DamageBonus;
+		Proj->SetDamage(AddDamage);
 		Proj->FinishSpawning(Transform);		
 	}
 }

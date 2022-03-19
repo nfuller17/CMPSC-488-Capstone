@@ -35,6 +35,7 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 	float GetHealth() const {return Health;}
+	float GetHealthMax() const {return HealthMax;}
 	
 
 protected:

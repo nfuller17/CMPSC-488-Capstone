@@ -27,6 +27,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void SetHealth(uint32 NewHealth) { Health = NewHealth; }
 	float GetHealth() const{return Health;}
+	float GetHealthMax() const{return HealthMax;}
 	void AddHealth(const float& Amount);
 	void SetTeam(const bool& OnPlayerTeam){PlayerTeam = OnPlayerTeam;}
 	bool IsPlayerTeam() const{return PlayerTeam;}
@@ -41,6 +42,8 @@ public:
 	virtual bool HasSkill(TSubclassOf<ASkill> SkillClass);
 	virtual float GetDamageReduction() const{return DamageReduction;}
 	virtual void SetDamageReduction(const float& _DamageReduction){DamageReduction = _DamageReduction;}
+	virtual float GetDamageBonus() const{return DamageBonus;}
+	virtual void SetDamageBonus(const float& _DamageBonus){DamageBonus = _DamageBonus;}
 	FTimerHandle FiringTimer;
 	FTimerHandle DestroyTimer;
 	FTimerHandle EnergyTimer;
@@ -78,6 +81,7 @@ protected:
 	TArray<TSubclassOf<ASkill>> Skills;
 	bool bSkillIsActive = false;
 	float DamageReduction = 0.0;	//0 for no DamageReduction, 1 for 100% Damage Reduction (0 damage)
+	float DamageBonus = 1.0;		//1 for no DamageBonus, >1 to apply extra damage
 
 
 private:

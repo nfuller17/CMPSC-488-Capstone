@@ -26,6 +26,7 @@ public:
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	virtual void Explode(AActor* TargetActor = nullptr);
 	virtual float GetDamage() const{return Damage;}
+	virtual void SetDamage(const float& _Damage){Damage = _Damage;}
 	virtual bool IsPlayerTeam() const{return PlayerTeam;}
 	virtual void SetTeam(const bool& bPlayerTeam) {PlayerTeam = bPlayerTeam;}
 
