@@ -3,6 +3,8 @@
 
 #include "Projectile.h"
 #include "Kismet/GameplayStatics.h"
+#include "PawnMonster.h"
+#include "PawnJerry.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -42,18 +44,6 @@ void AProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimiti
 {
 	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
 	Explode(Other);
-	
-	/*if (Other)
-	{
-		Explode();
-	}
-	if (bSelfMoved)
-		Explode();
-	if (OtherComp)
-	{
-		Explode();
-	}
-	*/
 }
 
 
@@ -86,13 +76,14 @@ void AProjectile::Explode(AActor* TargetActor)
 	{
 		if (TargetActor)
 		{
+			//Damage the TargetActor
 			AController* OwnerController = GetInstigatorController();
 			if (OwnerController)
 			{
 				//UE_LOG(LogTemp, Warning, TEXT("Explode - OwnerController exists"));
 				FPointDamageEvent DamageEvent(Damage, FHitResult(), GetActorLocation() - TargetActor->GetActorLocation(), nullptr);
 				TargetActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
-			}
+			}				
 		}
 	}
 	Destroy();

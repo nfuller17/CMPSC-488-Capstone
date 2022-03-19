@@ -39,14 +39,7 @@ void APawnMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 float APawnMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float DamageToDo = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	APawnMonster* OtherMonster = Cast<APawnMonster>(DamageCauser);
-	if (OtherMonster)
-	{
-		//Friendly fire from another Monster - ignore damage
-		//However, modify this section when friendly AI is implemented (which may be of type Monster)
-		UE_LOG(LogTemp, Warning, TEXT("Friendly fire!"));
-		return 0;
-	}
+	DamageToDo *= (1.0 - DamageReduction);	//For Shield skill
 	DamageToDo = FMath::Min(Health, DamageToDo);
 	Health -= DamageToDo;
 	UE_LOG(LogTemp, Warning, TEXT("Monster health: %f"), Health);
@@ -97,6 +90,7 @@ void APawnMonster::FireProjectile()
 	AProjectile* Proj = GetWorld()->SpawnActorDeferred<AProjectile>(ProjectileClass, Transform, this, this);
 	if (Proj)
 	{
+		Proj->SetTeam(false);
 		Proj->FinishSpawning(Transform);		
 	}
 }

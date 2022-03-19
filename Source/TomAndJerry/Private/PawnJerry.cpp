@@ -7,6 +7,7 @@
 #include "MinorObjective.h"
 #include "Weapon.h"
 #include "Components/CapsuleComponent.h"
+#include "PawnMonster.h"
 
 // Sets default values
 APawnJerry::APawnJerry()
@@ -209,6 +210,9 @@ void APawnJerry::NotifyActorEndOverlap(AActor* OtherActor)
 float APawnJerry::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float DamageToDo = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	APawnMonster* Monster = Cast<APawnMonster>(DamageCauser);
+	if (Monster != nullptr && Monster->IsPlayerTeam())	//Friendly AI
+		return 0;
 	DamageToDo = FMath::Min(Health, DamageToDo);
 	//UNCOMMENT THIS AFTER DONE WITH TESTS!
 	//Health -= DamageToDo;

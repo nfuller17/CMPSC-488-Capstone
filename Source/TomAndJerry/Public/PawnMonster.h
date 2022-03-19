@@ -28,6 +28,8 @@ public:
 	void SetHealth(uint32 NewHealth) { Health = NewHealth; }
 	float GetHealth() const{return Health;}
 	void AddHealth(const float& Amount);
+	void SetTeam(const bool& OnPlayerTeam){PlayerTeam = OnPlayerTeam;}
+	bool IsPlayerTeam() const{return PlayerTeam;}
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	void StartFire();
 	void FireProjectile();
@@ -37,6 +39,8 @@ public:
 	void DoSkill(const TSubclassOf<ASkill> SkillClass);
 	void SetSkillIsActive(const bool& IsActive){bSkillIsActive = IsActive;}
 	virtual bool HasSkill(TSubclassOf<ASkill> SkillClass);
+	virtual float GetDamageReduction() const{return DamageReduction;}
+	virtual void SetDamageReduction(const float& _DamageReduction){DamageReduction = _DamageReduction;}
 	FTimerHandle FiringTimer;
 	FTimerHandle DestroyTimer;
 	FTimerHandle EnergyTimer;
@@ -51,6 +55,7 @@ protected:
 	//Called in conjunction with DestroyTimer
 	//Needed since callback function expects void type, but Destroy() returns boolean
 	void DestroyHelper(){Destroy();}
+	bool PlayerTeam;
 	UPROPERTY(VisibleAnywhere)
 		float Health;
 	UPROPERTY(EditAnywhere)
@@ -72,6 +77,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Skills")
 	TArray<TSubclassOf<ASkill>> Skills;
 	bool bSkillIsActive = false;
+	float DamageReduction = 0.0;	//0 for no DamageReduction, 1 for 100% Damage Reduction (0 damage)
 
 
 private:

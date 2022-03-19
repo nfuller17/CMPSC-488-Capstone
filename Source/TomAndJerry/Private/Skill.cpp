@@ -41,5 +41,4 @@ void ASkill::Destroyed()
 		if (Monster)
 			Monster->SetSkillIsActive(false);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("DESTROY!"));
 }

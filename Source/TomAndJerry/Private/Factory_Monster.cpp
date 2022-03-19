@@ -15,5 +15,9 @@ bool AFactory_Monster::SpawnMonster()
 	TSubclassOf<APawnMonster> MonsterClass = Monsters[FMath::RandRange(0, Monsters.Num()-1)];
 	if (MonsterClass == nullptr)
 		return false;
-	return GetWorld()->SpawnActor<APawnMonster>(MonsterClass, GetActorLocation(), GetActorForwardVector().Rotation()) != nullptr;
+	APawnMonster* Monster = GetWorld()->SpawnActor<APawnMonster>(MonsterClass, GetActorLocation(), GetActorForwardVector().Rotation());
+	if (Monster == nullptr)
+		return false;
+	Monster->SetTeam(false);
+	return true;
 }

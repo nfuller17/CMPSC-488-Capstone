@@ -10,5 +10,9 @@ bool AFactory_Boss::SpawnBoss()
 	TSubclassOf<APawnBoss> BossClass = Bosses[FMath::RandRange(0, Bosses.Num()-1)];
 	if (BossClass == nullptr)
 		return false;
-	return GetWorld()->SpawnActor<APawnBoss>(BossClass, GetActorLocation(), GetActorForwardVector().Rotation()) != nullptr;
+	APawnBoss* Boss = GetWorld()->SpawnActor<APawnBoss>(BossClass, GetActorLocation(), GetActorForwardVector().Rotation());
+	if (Boss == nullptr)
+		return false;
+	Boss->SetTeam(false);
+	return true;
 }

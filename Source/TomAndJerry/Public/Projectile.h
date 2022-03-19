@@ -25,10 +25,14 @@ public:
 	virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	virtual void Explode(AActor* TargetActor = nullptr);
+	virtual float GetDamage() const{return Damage;}
+	virtual bool IsPlayerTeam() const{return PlayerTeam;}
+	virtual void SetTeam(const bool& bPlayerTeam) {PlayerTeam = bPlayerTeam;}
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	bool PlayerTeam;
 	
 private:
 	UPROPERTY(VisibleAnywhere)

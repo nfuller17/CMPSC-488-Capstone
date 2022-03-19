@@ -124,6 +124,7 @@ void AWeapon::FirePrimary()
 			AProjectile* Proj = GetWorld()->SpawnActorDeferred<AProjectile>(ProjectileClass, Transform, Cast<AActor>(OwnerPawn), OwnerPawn);
 			if (Proj)
 			{
+				Proj->SetTeam(true);	//Weapons always belong to Player, so we always set this Projectile to player team
 				Proj->FinishSpawning(Transform);					
 			}					
 		}				
