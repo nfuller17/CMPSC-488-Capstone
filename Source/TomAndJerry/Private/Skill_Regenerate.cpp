@@ -2,7 +2,6 @@
 
 
 #include "Skill_Regenerate.h"
-#include "Kismet/GameplayStatics.h"
 
 void ASkill_Regenerate::BeginPlay()
 {
@@ -22,12 +21,6 @@ bool ASkill_Regenerate::CanExecute(const APawnMonster* Monster) const
 void ASkill_Regenerate::Execute()
 {
 	//Do not call Super!
-	
-	//Spawn effect
-	if (Effect && GetOwner())
-	{
-		UGameplayStatics::SpawnEmitterAttached(Effect, GetOwner()->GetRootComponent());
-	}
 	
 	//Set timer
 	GetWorldTimerManager().SetTimer(RegenerationTimer, this, &ASkill_Regenerate::AddHealth, RegenerationRate, true, 0);	

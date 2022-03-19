@@ -4,7 +4,6 @@
 #include "Skill_Shield.h"
 #include "EngineUtils.h"
 #include "Projectile.h"
-#include "Kismet/GameplayStatics.h"
 
 void ASkill_Shield::BeginPlay()
 {
@@ -18,15 +17,12 @@ bool ASkill_Shield::CanExecute(const APawnMonster* Monster) const
 		return false;
 	//Check for all projectiles near this Pawn
 	//If a hostile projectile, and its damage can kill us, allow execution of Shield skill
-	for (AProjectile* Projectile : TActorRange<AProjectile>(GetWorld()))
+	for (AProjectile* Projectile : TActorRange<AProjectile>(Monster->GetWorld()))
 	{
-		if (Projectile->GetDamage() >= Monster->GetHealth() )	//This projectile can kill us
+		if (Projectile->IsPlayerTeam() && !Monster->IsPlayerTeam() )	//This projectile is hostile
 		{
-			if (Projectile->IsPlayerTeam() && !Monster->IsPlayerTeam() )	//This projectile is hostile
-			{
-				if ((Projectile->GetActorLocation() - Monster->GetActorLocation()).Size() <= SearchRadius )		//This projectile is within range
-					return true;
-			}
+			if ((Projectile->GetActorLocation() - Monster->GetActorLocation()).Size() <= SearchRadius )		//This projectile is within range
+				return true;
 		}
 	}
 	return false;
@@ -35,12 +31,7 @@ bool ASkill_Shield::CanExecute(const APawnMonster* Monster) const
 void ASkill_Shield::Execute()
 {
 	//Do not call Super!
-	
-	//Spawn effect
-	if (Effect && GetOwner())
-	{
-		UGameplayStatics::SpawnEmitterAttached(Effect, GetOwner()->GetRootComponent());
-	}
+	UE_LOG(LogTemp, Warning, TEXT("EXECUTING SHIELD"));
 	
 	APawnMonster* Monster = Cast<APawnMonster>(GetOwner());
 	if (Monster == nullptr)

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "PawnMonster.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Skill.generated.h"
 
 class APawnMonster;
@@ -27,13 +28,13 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	UPROPERTY(VisibleAnywhere)
+		USceneComponent* Root;
+	UPROPERTY(VisibleAnywhere)
+		UParticleSystemComponent* Effect;
 	//How much Energy this skill costs
 	UPROPERTY(EditAnywhere)
 	uint8 EnergyCost = 0;
-	//The effect to play on the Pawn that casts this skill
-	UPROPERTY(EditAnywhere)
-	UParticleSystem* Effect;
 	
 private:
-
 };

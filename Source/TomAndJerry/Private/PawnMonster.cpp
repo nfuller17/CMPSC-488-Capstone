@@ -116,6 +116,7 @@ void APawnMonster::DoSkill(const TSubclassOf<ASkill> RequestedSkill)
 			if (SkillInstance != nullptr)
 			{
 				SkillInstance->SetOwner(this);
+				SkillInstance->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
 				SkillInstance->Execute();
 				UE_LOG(LogTemp, Warning, TEXT("Energy before: %d"), Energy);
 				Energy -= SkillInstance->GetEnergyCost();

@@ -8,6 +8,12 @@ ASkill::ASkill()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
+	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	SetRootComponent(Root);
+
+	Effect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Effect"));
+	Effect->SetupAttachment(Root);
 
 }
 
@@ -22,6 +28,16 @@ void ASkill::BeginPlay()
 void ASkill::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	APawnMonster* Monster = Cast<APawnMonster>(GetOwner());
+	if (Monster && Monster->IsDead())
+	{
+		Destroy();
+		//if (Effect)
+		//{
+		//	Effect->DeactivateSystem();
+		//}
+	}
 
 }
 
