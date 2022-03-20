@@ -23,6 +23,8 @@ public:
 	void SetAmmoMax(const uint16& Amount){AmmoMax = Amount;}
 	void AddAmmo(const uint16& Amount);
 	void ConsumeAmmo(const uint16& Amount);
+	UFUNCTION(BlueprintPure)
+	float GetAmmoPercent() const{return (float)Ammo/AmmoMax;}
 
 protected:
 	// Called when the game starts
@@ -30,6 +32,7 @@ protected:
 
 private:
 	//Current ammo count
+	UPROPERTY(VisibleAnywhere)
 	uint16 Ammo;
 	//How much ammo to start with. All weapons share the same instance of ammo.
 	UPROPERTY(EditDefaultsOnly, Category="Ammo", meta=(ClampMin= "0"))

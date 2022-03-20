@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "ControllerJerry.h"
+#include "AmmoComponent.h"
 #include "PawnJerry.generated.h"
 
 //Forward class declaration - ie tell Compiler to compile this class first
@@ -40,6 +41,10 @@ public:
 	int GetUIHealth() const {return FMath::RoundFromZero(Health);}
 	float GetHealthMax() const {return HealthMax;}
 	void AddHealth(const float& HealthAdd);
+	UFUNCTION(BlueprintPure)
+	UAmmoComponent* GetAmmoComponent() const {return AmmoComponent;}
+	UFUNCTION(BlueprintPure)
+	bool HasWeapon(const int& WeaponNum) const;
 	FTimerHandle DestroyTimer;
 	
 
@@ -91,6 +96,7 @@ private:
 	void BeginFire();
 	void StopFire();
 	void SelectWeapon(const int32 WeaponNumber);
+	UAmmoComponent* AmmoComponent;
 	DECLARE_DELEGATE_OneParam(FSelectWeaponDelegate, const int32);
 };
 

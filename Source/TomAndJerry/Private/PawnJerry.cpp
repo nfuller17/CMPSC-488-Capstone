@@ -10,7 +10,6 @@
 #include "PawnMonster.h"
 #include "GameFramework/GameModeBase.h"
 #include "../TomAndJerryGameModeBase.h"
-#include "AmmoComponent.h"
 
 // Sets default values
 APawnJerry::APawnJerry()
@@ -26,6 +25,7 @@ void APawnJerry::BeginPlay()
 	
 	//Hide the weapon mesh that comes with the Wraith mesh
 	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
+	AmmoComponent = FindComponentByClass<UAmmoComponent>();
 	Health = HealthMax;
 }
 
@@ -291,7 +291,6 @@ void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 			if (Weapon)
 			{
 				Weapon->SetOwner(this);
-				UAmmoComponent* AmmoComponent = FindComponentByClass<UAmmoComponent>();
 				if (AmmoComponent != nullptr)
 					Weapon->SetAmmoComponent(AmmoComponent);
 				Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
@@ -300,6 +299,16 @@ void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 		}
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Player does not have this weapon in inventory."));
+}
+
+bool APawnJerry::HasWeapon(const int& WeaponNum) const
+{
+	for (auto wClass: WeaponInventory)
+	{
+		if (wClass->GetDefaultObject<AWeapon>()->GetWeaponNumber() == WeaponNum)
+			return true;
+	}
+	return false;
 }
 
 //Called when a player clicks with left mouse
