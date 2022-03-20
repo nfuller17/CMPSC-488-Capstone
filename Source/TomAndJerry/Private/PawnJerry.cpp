@@ -10,6 +10,7 @@
 #include "PawnMonster.h"
 #include "GameFramework/GameModeBase.h"
 #include "../TomAndJerryGameModeBase.h"
+#include "AmmoComponent.h"
 
 // Sets default values
 APawnJerry::APawnJerry()
@@ -232,6 +233,15 @@ float APawnJerry::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	return DamageToDo;
 }
 
+void APawnJerry::AddHealth(const float& HealthAdd)
+{
+	if (Health >= HealthMax)
+		return;
+	Health += HealthAdd;
+	if (Health > HealthMax)
+		Health = HealthMax;
+}
+
 bool APawnJerry::IsDead() const
 {
 	return Health <= 0;
@@ -281,6 +291,9 @@ void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 			if (Weapon)
 			{
 				Weapon->SetOwner(this);
+				UAmmoComponent* AmmoComponent = FindComponentByClass<UAmmoComponent>();
+				if (AmmoComponent != nullptr)
+					Weapon->SetAmmoComponent(AmmoComponent);
 				Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
 				return;	
 			}

@@ -71,7 +71,7 @@ void AWeapon::FirePrimary()
 	if (JerryPawn == nullptr)
 		return;
 
-	if (JerryPawn->GetHealth() <= 0)
+	if (JerryPawn->IsDead())
 	{
 		StopFire();
 		return;
@@ -79,6 +79,15 @@ void AWeapon::FirePrimary()
 	AController* OwnerController = OwnerPawn->GetController();
 	if (OwnerController == nullptr)
 		return;
+	
+	if (AmmoComponent != nullptr)
+	{
+		if (AmmoPerFire > AmmoComponent->GetAmmoAmount())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Out of Ammo!"));
+			return;	
+		}
+	}
 	
 	FVector FireLocation;
 	FRotator FireRotation;
@@ -128,6 +137,11 @@ void AWeapon::FirePrimary()
 				Proj->FinishSpawning(Transform);					
 			}					
 		}				
+	}
+	
+	if (AmmoComponent != nullptr)
+	{
+		AmmoComponent->ConsumeAmmo(AmmoPerFire);
 	}
 	
 	

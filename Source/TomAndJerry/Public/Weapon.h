@@ -6,6 +6,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Projectile.h"
+#include "AmmoComponent.h"
 #include "Weapon.generated.h"
 
 class AProjectile;
@@ -26,6 +27,7 @@ public:
 	void BeginFire();
 	void StopFire();
 	void EnableFire();
+	void SetAmmoComponent(UAmmoComponent* _AmmoComponent){AmmoComponent = _AmmoComponent;}
 	FTimerHandle FiringTimer;
 	FTimerHandle SpamTimer;		//Independent timer to prevent spamming mouse button and bypassing fire rate
 
@@ -35,6 +37,11 @@ protected:
 	//WeaponNumber is a unique identifier for a weapon, used in tandem with input binding on keyboard
 	UPROPERTY(EditDefaultsOnly, Category="Weapon Properties", meta=(ClampMin= "0"))
 		uint8 WeaponNumber;
+	//Ammo cost of this weapon, per fire. Different across weapons
+	UPROPERTY(EditDefaultsOnly, Category="Ammo", meta=(ClampMin= "0"))
+	uint16 AmmoPerFire = 1;
+	
+	
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category="Weapon Properties")
@@ -62,4 +69,5 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category="Projectile Properties")
 		TSubclassOf<AProjectile> ProjectileClass;
 	bool bCanFire = true;
+	UAmmoComponent* AmmoComponent;
 };

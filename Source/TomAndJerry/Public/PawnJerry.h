@@ -39,6 +39,7 @@ public:
 	UFUNCTION(BlueprintPure)
 	int GetUIHealth() const {return FMath::RoundFromZero(Health);}
 	float GetHealthMax() const {return HealthMax;}
+	void AddHealth(const float& HealthAdd);
 	FTimerHandle DestroyTimer;
 	
 
