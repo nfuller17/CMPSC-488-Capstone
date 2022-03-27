@@ -21,7 +21,7 @@ protected:
 	bool CanSeeTarget(APawn* OwnerPawn, APawn* TargetPawn, float& Distance);
 private:
 	//Angle from Forward vector for field of vision for AI
-	const float AngleOfSight = 55.0;
+	const float AngleOfSight = 100.0;
 	const float MaxSightDistance = 7000.0;
 	const float ProtectPlayerFromMonsterRadius = 3000.0;
 };
