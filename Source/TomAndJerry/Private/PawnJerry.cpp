@@ -219,13 +219,17 @@ float APawnJerry::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	float DamageToDo = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	if (IsDead())
 		return 0;
-	APawnMonster* Monster = Cast<APawnMonster>(DamageCauser);
-	if (Monster != nullptr && Monster->IsPlayerTeam())	//Friendly AI
-		return 0;
+	//Check friendly fire
+	//Checking EventInstigator not null is particularly important since AI controllers can be destroyed before we take damage, e.g. projectiles traveling
+	if (EventInstigator != nullptr)
+	{
+		APawnMonster* Monster = Cast<APawnMonster>(EventInstigator->GetPawn());
+		if (Monster != nullptr && Monster->IsPlayerTeam())	//Friendly AI
+			return 0.0;
+	}
+
 	DamageToDo = FMath::Min(Health, DamageToDo);
-	//UNCOMMENT THIS AFTER DONE WITH TESTS!
 	Health -= DamageToDo;
-	//UE_LOG(LogTemp, Warning, TEXT("Player health: %f"), Health);
 	if (Health <= 0)
 	{
 		Died();

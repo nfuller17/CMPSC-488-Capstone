@@ -13,5 +13,6 @@ UCLASS()
 class TOMANDJERRY_API APawnAlly : public APawnMonster
 {
 	GENERATED_BODY()
-	
+protected:
+	virtual void Died() override;
 };

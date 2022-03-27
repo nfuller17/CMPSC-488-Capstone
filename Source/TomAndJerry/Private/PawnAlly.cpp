@@ -3,3 +3,8 @@
 
 #include "PawnAlly.h"
 
+void APawnAlly::Died()
+{
+	Super::Died();
+	GetWorldTimerManager().SetTimer(DestroyTimer, this, &APawnAlly::DestroyHelper, DestroyDelay, false, DestroyDelay);
+}

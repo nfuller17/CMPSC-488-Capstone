@@ -12,8 +12,6 @@ UCLASS()
 class TOMANDJERRY_API APawnMinion : public APawnMonster
 {
 	GENERATED_BODY()
-public:
-	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 protected:
 	virtual void Died() override;
 };
