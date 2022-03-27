@@ -23,5 +23,6 @@ private:
 	//Angle from Forward vector for field of vision for AI
 	const float AngleOfSight = 100.0;
 	const float MaxSightDistance = 7000.0;
-	const float ProtectPlayerFromMonsterRadius = 3000.0;
+	const float ProtectPlayerFromMonsterRadius = 3000.0;	//For friendly AI to switch focus to hostile AI if friendly currently following player and hostile is nearby
+	const float ChangeFocusToPlayerRadius = 3000.0;			//For hostile AI to switch focus to player if currently fighting friendly AI and player is nearby
 };

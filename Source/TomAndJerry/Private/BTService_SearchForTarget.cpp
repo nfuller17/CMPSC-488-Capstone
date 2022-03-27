@@ -21,7 +21,7 @@ void UBTService_SearchForTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	AAIController* AIController = OwnerComp.GetAIOwner();
 	if (AIController == nullptr)
-		return ;
+		return;
 	APawnMonster* PawnOwner = Cast<APawnMonster>(AIController->GetPawn());
 	if (PawnOwner == nullptr)
 		return;
@@ -30,12 +30,12 @@ void UBTService_SearchForTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 	AActor* FocusActor = AIController->GetFocusActor();
 	if (FocusActor != nullptr)
 	{
-		if (!AIController->LineOfSightTo(FocusActor))
+		if (!AIController->LineOfSightTo(FocusActor))	//No direct line of sight
 		{
 			AIController->ClearFocus(EAIFocusPriority::Gameplay);
 			OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
 		}
-		else if ((PawnOwner->GetActorLocation() - FocusActor->GetActorLocation()).Size() > MaxSightDistance)
+		else if ((PawnOwner->GetActorLocation() - FocusActor->GetActorLocation()).Size() > MaxSightDistance)	//Out of distance
 		{
 			AIController->ClearFocus(EAIFocusPriority::Gameplay);
 			OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
@@ -44,7 +44,7 @@ void UBTService_SearchForTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 		{
 			APawnJerry* Player = Cast<APawnJerry>(FocusActor);
 			APawnMonster* Monster = Cast<APawnMonster>(FocusActor);
-			if (Monster != nullptr && Monster->IsDead() || Player != nullptr && Player->IsDead())
+			if (Monster != nullptr && Monster->IsDead() || Player != nullptr && Player->IsDead())	//Focus actor is dead
 			{
 				AIController->ClearFocus(EAIFocusPriority::Gameplay);
 				OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
@@ -72,6 +72,23 @@ void UBTService_SearchForTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 					OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), Target->GetActorLocation());
 					return;
 				}
+			}
+		}
+	}
+
+	//Another special case - if this AI is not friendly to player, and if it is currently targeting an AI that is friendly to player
+	//If player is nearby, switch focus from the friendly AI to player
+	if (FocusActor != nullptr && !bOnPlayerTeam && Cast<APawnMonster>(FocusActor) != nullptr)
+	{
+		APawn* Player = PawnOwner->GetWorld()->GetFirstPlayerController()->GetPawn();
+		if (Player != nullptr)
+		{
+			//Is Player in range of this AI?
+			if ((Player->GetActorLocation() - PawnOwner->GetActorLocation()).Size() <= ChangeFocusToPlayerRadius)
+			{
+				AIController->SetFocus(Player);
+				OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), Player->GetActorLocation());
+				return;
 			}
 		}
 	}
