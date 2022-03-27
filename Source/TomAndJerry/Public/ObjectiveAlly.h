@@ -5,11 +5,11 @@
 #include "CoreMinimal.h"
 #include "MinorObjective.h"
 #include "PawnAlly.h"
+#include "Factory_Ally.h"
 #include "ObjectiveAlly.generated.h"
 
-/**
- * 
- */
+class AFactory_Ally;
+
 UCLASS()
 class TOMANDJERRY_API AObjectiveAlly : public AMinorObjective
 {
@@ -18,12 +18,10 @@ class TOMANDJERRY_API AObjectiveAlly : public AMinorObjective
 public:
 	// Called when player successfully completes Minor Objective. Set as virtual so child classes can override to provide their own rewards (weapons, allies, health, etc.)
 	virtual void Complete() override;
+	void SetFactory(AFactory_Ally* _Factory) { Factory = _Factory; }
 
 private:
 	UPROPERTY(EditAnywhere)
 		TArray<TSubclassOf<APawnAlly>> Allies;
-	//Max distance ally can spawn from this objective
-	UPROPERTY(EditAnywhere)
-		float SpawnRadius = 100.f;
-	
+	AFactory_Ally* Factory;
 };

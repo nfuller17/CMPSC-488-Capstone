@@ -9,10 +9,21 @@ void AObjectiveAlly::Complete()
 	if (ActivatingPawn != nullptr)
 	{
 		//Spawn a random ally from Allies list
-		APawnAlly* Ally = GetWorld()->SpawnActor<APawnAlly>(Allies[FMath::RandRange(0, Allies.Num() - 1)], ActivatingPawn->GetActorLocation() + FVector(100, 0, 0), GetActorForwardVector().Rotation());
+		if (Allies.Num() == 0)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("ARRAY FOR OBJECTIVE ALLY NOT SET!"))
+			return;
+		}
+		APawnAlly* Ally = GetWorld()->SpawnActor<APawnAlly>(Allies[FMath::RandRange(0, Allies.Num() - 1)], ActivatingPawn->GetActorLocation() + FVector(200, 0, 0), GetActorForwardVector().Rotation());
 		if (Ally != nullptr)
 		{
 			Ally->SetTeam(true);
 		}
 	}
+	if (Factory != nullptr)
+	{
+		Factory->RestartTimer();
+		Factory->SetAllyObjective(nullptr);
+	}
+	Destroy();
 }
