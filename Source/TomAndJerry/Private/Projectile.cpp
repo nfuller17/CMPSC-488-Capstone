@@ -80,7 +80,6 @@ void AProjectile::Explode(AActor* TargetActor)
 			AController* OwnerController = GetInstigatorController();
 			if (OwnerController)
 			{
-				//UE_LOG(LogTemp, Warning, TEXT("Explode - OwnerController exists"));
 				FPointDamageEvent DamageEvent(Damage, FHitResult(), GetActorLocation() - TargetActor->GetActorLocation(), nullptr);
 				TargetActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
 			}				

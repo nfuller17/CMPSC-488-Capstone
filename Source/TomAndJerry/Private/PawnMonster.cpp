@@ -39,6 +39,30 @@ void APawnMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 float APawnMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float DamageToDo = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	//Check for Friendly fire
+	if (EventInstigator != nullptr)		//Important to check not null in the event Instigator dies before TakeDamage is called, such as in projectiles
+	{
+		if (PlayerTeam)	//This monster is on player team - ignore damage caused by other friendly AI and by player
+		{
+			APawnMonster* Monster = Cast<APawnMonster>(EventInstigator->GetPawn());
+			if (Monster != nullptr && Monster->PlayerTeam)
+			{
+				return 0.0;
+			}
+			if (Cast<APlayerController>(EventInstigator) != nullptr)
+			{
+				return 0.0;
+			}
+		}
+		else //On hostile monster team - ignore damage caused by other hostile monsters
+		{
+			APawnMonster* Monster = Cast<APawnMonster>(EventInstigator->GetPawn());
+			if (Monster != nullptr && !Monster->PlayerTeam)
+			{
+				return 0.0;
+			}
+		}
+	}
 	DamageToDo *= (1.0 - DamageReduction);	//For Shield skill
 	DamageToDo = FMath::Min(Health, DamageToDo);
 	Health -= DamageToDo;
