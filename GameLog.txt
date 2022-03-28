@@ -1,0 +1,47 @@
+*********************************************************** TO DO ***********************************************************
+- AI:
+	- Implement melee on AI
+	- Implement dodging and strafing on AI
+		* Allow AI vision to detect for projectiles that are traveling toward the AI's general direction
+	- If AI takes damage, have AI turn in the direction from where it was hit. AI vision can then take care of the rest to detect for an enemy
+	- Improve AI roaming
+		* Currently, AI roams map by picking a random point within a radius. However, this is not human-like, and AI could end up moving back and forth between spots
+		* Suggested algorithm: Pick a random point, and only go there if it is within AI's view (i.e. use Vision to pick new point to roam)
+	- Add skill branch/nodes to behavior tree for Friendly AI
+	- Add sprint skill (mostly for melee AI when implemented)
+	- Add thermal sensor skill
+- Spectator mode
+	- Player controller should be fixed on AI for conference demonstration
+	- If in spectator mode, spawn friendly AI outright so there is some action.. should friendly AI attempt to collect materials?
+	- If possible, left click = view another AI, right click = allow player camera to roam map?
+	- Player can enter spectator mode from main menu perhaps?
+- Create Super weapon
+	- Have boss be immune to normal weapons
+	- What to do if player dies with Super weapon?
+- Implement lives on player
+	- End the game in lose state if number of lives = 0
+- Re-design HUD
+	- Have health be a progress bar instead of a number
+	- Have ammo be a number instead of a progress bar
+	- Icons for different weapons?
+	- Add a HUD element to indicate how many materials there are to collect, e.g. 2 / 5, or a transparent icon if not collected and opaque icon if collected
+	- Add a HUD element to indicate how many lives the player has
+- Implement splash damage on projectiles
+- Fix projectile collision with world geometry (if shot at a certain angle, projectile will move along with geometry)
+	- Check ordering of Actor components in blueprint - collision componenent should probably come first
+- Fix player pawn falling through map after dying (maybe wait a few seconds after death to turn collision off)
+- Fix dodging - player should dodge if and only if same key is pressed twice in rapid succession, i.e. pressing W then D should not make the player dodge right (but it currently does)
+- Fix melee weapons - ray trace should start from player pawn or weapon, and not from camera (since this is no longer first-person)
+- Sound effects for weapons, projectiles, impacts, maybe footsteps.. game music?
+- Fix animations when characters are airborne - turn off walking animation, play airborne animation
+- Gameplay balance
+- Improve OOP design (if time permits - and this could lead to unseen errors)
+	- Two broad classes, PawnJerry and Monster, share several attributes that can be combined into one class, e.g. Health, Team, TakeDamage, Death, etc.
+	- Would make some code look much cleaner
+	
+*********************************************************** FINISHED ***********************************************************
+3/21 - 3/28
+	- Friendly AI
+	- AI "Vision"
+	- Main Menu
+	- Fixed friendly fire
