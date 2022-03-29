@@ -76,104 +76,35 @@ void APawnJerry::Dodge(const int32 Direction)
 {
 	if (IsDead())
 		return;
-	if (GetWorld()->GetTimeSeconds() - LastDodgeTime <= DodgeTime)
-	{
-		switch (Direction)
-		{
-			//W - forward
-			case 1:
-				if (!bSetForwardDodge)
-				{
-					bSetForwardDodge = true;
-					bSetLeftDodge = false;
-					bSetBackDodge = false;
-					bSetRightDodge = false;
-				}
-				else	//Previously pressed W. Did player press it quick enough to dodge forward?
-				{
-					if (GetWorld()->GetTimeSeconds() - LastSuccessfulDodgeTime < TimeBetweenDodges)
-						break;
-					FVector DodgeDirection = (GetActorForwardVector()*DodgeStrength) + FVector(0,0,ZAdd);
-					LaunchCharacter(DodgeDirection, false, false);
+	if (GetWorld()->GetTimeSeconds() - LastDodgeTime >= TimeBetweenDodges) {	// Checks to see if enough time has passed to perform a dodge
+		if (GetWorld()->GetTimeSeconds() - LastDirInputTime <= DoublePressTime) {	// Checks to see if two direction inputs occur in rapid succession
+			if (Direction == prevDir) {		// If the previous input direction is the same as the current one...
+				LastDodgeTime = GetWorld()->GetTimeSeconds();
+				FVector DodgeDirection;
+				switch (Direction) {
+				case 1:	// W - forward
+					DodgeDirection = (GetActorForwardVector() * DodgeStrength) + FVector(0, 0, ZAdd);
 					UE_LOG(LogTemp, Warning, TEXT("Dodge W"));
-					bSetForwardDodge = false;
-					LastSuccessfulDodgeTime = GetWorld()->GetTimeSeconds();
+					break;
+				case 2: // A - left
+					DodgeDirection = (-GetActorRightVector() * DodgeStrength) + FVector(0, 0, ZAdd);
+					UE_LOG(LogTemp, Warning, TEXT("Dodge A"));
+					break;
+				case 3: // S - backwards
+					DodgeDirection = (-GetActorForwardVector() * DodgeStrength) + FVector(0, 0, ZAdd);
+					UE_LOG(LogTemp, Warning, TEXT("Dodge S"));
+					break;
+				case 4:	// D - right
+					DodgeDirection = (GetActorRightVector() * DodgeStrength) + FVector(0, 0, ZAdd);
+					UE_LOG(LogTemp, Warning, TEXT("Dodge D"));
+					break;
 				}
-				break;
-			//A - left
-			case 2:
-				if (!bSetLeftDodge)
-				{
-					bSetForwardDodge = false;
-					bSetLeftDodge = true;
-					bSetBackDodge = false;
-					bSetRightDodge = false;
-				}
-				else
-				{
-					if (GetWorld()->GetTimeSeconds() - LastSuccessfulDodgeTime < TimeBetweenDodges)
-						break;
-					FVector DodgeDirection = (-GetActorRightVector()*DodgeStrength) + FVector(0,0,ZAdd);
-					LaunchCharacter(DodgeDirection, false, false);
-					UE_LOG(LogTemp, Warning, TEXT("Dodge L"));
-					bSetLeftDodge = false;
-					LastSuccessfulDodgeTime = GetWorld()->GetTimeSeconds();
-				}
-				break;
-			//S - back
-			case 3:
-				if (!bSetBackDodge)
-				{
-					bSetForwardDodge = false;
-					bSetLeftDodge = false;
-					bSetBackDodge = true;
-					bSetRightDodge = false;
-				}
-				else
-				{
-					if (GetWorld()->GetTimeSeconds() - LastSuccessfulDodgeTime < TimeBetweenDodges)
-						break;
-					FVector DodgeDirection = (-GetActorForwardVector()*DodgeStrength) + FVector(0,0,ZAdd);
-					LaunchCharacter(DodgeDirection, false, false);
-					UE_LOG(LogTemp, Warning, TEXT("Dodge B"));
-					bSetBackDodge = false;
-					LastSuccessfulDodgeTime = GetWorld()->GetTimeSeconds();
-				}
-				break;
-			case 4:
-				if (!bSetRightDodge)
-				{
-					bSetForwardDodge = false;
-					bSetLeftDodge = false;
-					bSetBackDodge = false;
-					bSetRightDodge = true;
-				}
-				else
-				{
-					if (GetWorld()->GetTimeSeconds() - LastSuccessfulDodgeTime < TimeBetweenDodges)
-						break;
-					FVector DodgeDirection = (GetActorRightVector()*DodgeStrength) + FVector(0,0,ZAdd);
-					LaunchCharacter(DodgeDirection, false, false);
-					UE_LOG(LogTemp, Warning, TEXT("Dodge R"));
-					bSetRightDodge = false;
-					LastSuccessfulDodgeTime = GetWorld()->GetTimeSeconds();
-				}
-				break;
-			default:
-				bSetForwardDodge = false;
-				bSetLeftDodge = false;
-				bSetBackDodge = false;
-				bSetRightDodge = false;
-		}	
+				LaunchCharacter(DodgeDirection, false, false);
+			}
+		}
 	}
-	else
-	{
-		bSetForwardDodge = true;
-		bSetLeftDodge = true;
-		bSetBackDodge = true;
-		bSetRightDodge = true;
-	}
-	LastDodgeTime = GetWorld()->GetTimeSeconds();
+	prevDir = Direction;	// Stores the current inputted direction
+	LastDirInputTime = GetWorld()->GetTimeSeconds();
 }
 
 //Called when player walks over a weapon material or minor objective

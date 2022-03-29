@@ -82,6 +82,8 @@ private:
 	//If after a successful dodge, how long in seconds until player can do another dodge
 	UPROPERTY(EditAnywhere)
 	float TimeBetweenDodges = 2.0;
+	//Time required between two key presses to constitute the input as a double key press
+	float DoublePressTime = 0.2;
 	//Magnitude of dodge direction
 	UPROPERTY(EditAnywhere)
 	float DodgeStrength = 1000.0;
@@ -89,8 +91,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	float ZAdd = 400;
 	float LastDodgeTime = 0.f;
-	float LastSuccessfulDodgeTime = 0.f;
-	bool bSetLeftDodge, bSetRightDodge, bSetForwardDodge, bSetBackDodge = false;
+	float LastDirInputTime = 0.f;
+	int32 prevDir = 0;
 	
 	//Weapon
 	void BeginFire();
