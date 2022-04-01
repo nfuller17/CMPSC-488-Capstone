@@ -145,10 +145,10 @@ void UBTService_SearchForTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 	}
 }
 
-bool UBTService_SearchForTarget::CanSeeTarget(APawn* OwnerPawn, APawn* TargetPawn, float& Distance)
+bool UBTService_SearchForTarget::CanSeeTarget(APawn* OwnerPawn, AActor* TargetActor, float& Distance)
 {
 	//Get vector from this AI to target
-	FVector DirectionToTarget = (TargetPawn->GetActorLocation() - OwnerPawn->GetActorLocation());
+	FVector DirectionToTarget = (TargetActor->GetActorLocation() - OwnerPawn->GetActorLocation());
 	Distance = DirectionToTarget.Size();
 
 	//Is Target within range?
@@ -166,16 +166,13 @@ bool UBTService_SearchForTarget::CanSeeTarget(APawn* OwnerPawn, APawn* TargetPaw
 
 	//Normalize the vector
 	DirectionToTarget = DirectionToTarget.GetSafeNormal(1.0);
-	UE_LOG(LogTemp, Warning, TEXT("Size of Direction is: %f"), DirectionToTarget.Size());
 
 	//Get Dot Product
 	float Dot = FVector::DotProduct(ForwardVector, DirectionToTarget);
-	UE_LOG(LogTemp, Warning, TEXT("Dot is: %f"), Dot);
 
-	//Get radians between this AI's forward vector and the vector to target
-	float Radians = UKismetMathLibrary::Acos(Dot);
-	float Angle = Radians * (180 / PI);
+	//Get angle between this AI's forward vector and the vector to target
+	float Angle = UKismetMathLibrary::Acos(Dot) * (180 / PI);
 
-	//If Angle < AngleOfSight, then TargetPawn is in this AI's field of vision
+	//If Angle < AngleOfSight, then TargetActor is in this AI's field of vision
 	return Angle < AngleOfSight;
 }

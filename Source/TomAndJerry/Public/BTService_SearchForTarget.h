@@ -16,9 +16,9 @@ class TOMANDJERRY_API UBTService_SearchForTarget : public UBTService_BlackboardB
 	
 public:
 	UBTService_SearchForTarget();
+	bool CanSeeTarget(APawn* OwnerPawn, AActor* TargetActor, float& Distance);
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
-	bool CanSeeTarget(APawn* OwnerPawn, APawn* TargetPawn, float& Distance);
 private:
 	//Angle from Forward vector for field of vision for AI
 	const float AngleOfSight = 100.0;
