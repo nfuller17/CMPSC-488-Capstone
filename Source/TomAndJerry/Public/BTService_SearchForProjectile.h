@@ -23,4 +23,6 @@ protected:
 private:
 	const float ProjectileDetectionRadius = 1500.0;
 	const float AngleOfSight = 100.0;
+	const float DodgeStrength = 1000.0;
+	const float ZAdd = 400;
 };

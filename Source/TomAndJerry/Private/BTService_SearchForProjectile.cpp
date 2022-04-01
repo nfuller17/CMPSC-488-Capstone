@@ -46,7 +46,11 @@ void UBTService_SearchForProjectile::TickNode(UBehaviorTreeComponent& OwnerComp,
 			if (CanSeeTarget(PawnOwner, Proj, Distance) && ProjectileWillCollide(PawnOwner, Proj))
 			{
 				//There's at least one projectile that can hit us, dodge!
-				UE_LOG(LogTemp, Warning, TEXT("AI DODGE!"));
+				FVector DodgeDirection = PawnOwner->GetActorRightVector();
+				if (FMath::FRandRange(0.0, 1.0) <= 0.49)
+					DodgeDirection = -DodgeDirection;
+				FVector DodgeVector = (DodgeDirection * DodgeStrength) + FVector(0, 0, ZAdd);
+				PawnOwner->LaunchCharacter(DodgeVector, false, false);
 				return;
 			}
 		}
