@@ -27,8 +27,6 @@ void UBTService_SearchForProjectile::TickNode(UBehaviorTreeComponent& OwnerComp,
 		return;
 
 	bool bOnPlayerTeam = PawnOwner->IsPlayerTeam();
-	AProjectile* TargetProj = nullptr;
-	float ClosestDistance = ProjectileDetectionRadius;
 
 	//Search for projectiles that we can dodge
 	for (auto Proj : TActorRange<AProjectile>(AIController->GetWorld()))
@@ -43,16 +41,13 @@ void UBTService_SearchForProjectile::TickNode(UBehaviorTreeComponent& OwnerComp,
 		if (bOnPlayerTeam && Monster != nullptr && !Monster->IsPlayerTeam() ||
 			!bOnPlayerTeam && (Player != nullptr || Monster != nullptr && Monster->IsPlayerTeam()))
 		{
-			//Can we see this projectile? Don't want to dodge a projectile coming from behind
 			float Distance = 0.0;
-			if (CanSeeTarget(PawnOwner, Proj, Distance) && ProjectileWillCollide(PawnOwner, Proj, DeltaSeconds))
+			//Can we see this projectile, and will this projectile potentially hit us?
+			if (CanSeeTarget(PawnOwner, Proj, Distance) && ProjectileWillCollide(PawnOwner, Proj))
 			{
-				//Get the projectile closest to us
-				if (Distance < ClosestDistance)
-				{
-					ClosestDistance = Distance;
-					TargetProj = Proj;
-				}
+				//There's at least one projectile that can hit us, dodge!
+				UE_LOG(LogTemp, Warning, TEXT("AI DODGE!"));
+				return;
 			}
 		}
 	}
@@ -91,7 +86,7 @@ bool UBTService_SearchForProjectile::CanSeeTarget(APawn* OwnerPawn, AActor* Targ
 }
 
 //Determine whether the projectile will collide with AI pawn (or will be in close range)
-bool UBTService_SearchForProjectile::ProjectileWillCollide(APawn* OwnerPawn, AProjectile* Proj, const float& DeltaSeconds)
+bool UBTService_SearchForProjectile::ProjectileWillCollide(APawn* OwnerPawn, AActor* Proj)
 {
 	//Get time when x-component of OwnerPawn and Proj will be the same
 	float xSeconds = (OwnerPawn->GetActorLocation().X - Proj->GetActorLocation().X) / (Proj->GetVelocity().X - OwnerPawn->GetActorLocation().X);
@@ -109,15 +104,15 @@ bool UBTService_SearchForProjectile::ProjectileWillCollide(APawn* OwnerPawn, APr
 
 	//Actor location returns a point that is probably in the center of the character capsule component
 	//We want to return true if the projectile will hit any point on the capsule component
-	float xLowerBound = xSeconds - 1.0;
-	float xUpperBound = xSeconds + 1.0;
+	float xLowerBound = xSeconds - 2.0;
+	float xUpperBound = xSeconds + 2.0;
 	if (ySeconds < xLowerBound || ySeconds > xUpperBound || zSeconds < xLowerBound || zSeconds > xUpperBound)
 		return false;
-	float yLowerBound = ySeconds - 1.0;
-	float yUpperBound = ySeconds + 1.0;
+	float yLowerBound = ySeconds - 2.0;
+	float yUpperBound = ySeconds + 2.0;
 	if (xSeconds < yLowerBound || xSeconds > yUpperBound || zSeconds < yLowerBound || zSeconds > yUpperBound)
 		return false;
-	float zLowerBound = zSeconds - 1.0;
-	float zUpperBound = zSeconds + 1.0;
+	float zLowerBound = zSeconds - 2.0;
+	float zUpperBound = zSeconds + 2.0;
 	return xSeconds >= zLowerBound && xSeconds <= zUpperBound && ySeconds >= zLowerBound && ySeconds <= zUpperBound;
 }

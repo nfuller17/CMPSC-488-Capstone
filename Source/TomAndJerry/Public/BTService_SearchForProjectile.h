@@ -17,7 +17,7 @@ class TOMANDJERRY_API UBTService_SearchForProjectile : public UBTService_Blackbo
 public:
 	UBTService_SearchForProjectile();
 	bool CanSeeTarget(APawn* OwnerPawn, AActor* TargetActor, float& Distance);
-	bool ProjectileWillCollide(APawn* OwnerPawn, AProjectile* Proj, const float& DeltaSeconds);
+	bool ProjectileWillCollide(APawn* OwnerPawn, AActor* Proj);
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 private:
