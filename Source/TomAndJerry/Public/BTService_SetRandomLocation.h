@@ -18,8 +18,10 @@ public:
 
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
-	
+	bool CanSeeTarget(APawn* OwnerPawn, const FVector& TargetLocation);
+
 private:
-	float CloseDistanceToRoam = 3000.f;	//Check for a random location within this radius, valid if we do *not* have a line of sight to this point
-	float FarDistanceToRoam = 6000.f;	//Otherwise, check for a random location within this larger radius
+	float DistanceToRoam = 7000.f;
+	float MinimumDistance = 3000.f;
+	float AngleOfSight = 60.f;
 };

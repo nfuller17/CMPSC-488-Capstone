@@ -3,6 +3,7 @@
 
 #include "BTService_SetRandomLocation.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "AIController.h"
 #include "NavigationSystem.h"
 
@@ -15,47 +16,70 @@ UBTService_SetRandomLocation::UBTService_SetRandomLocation()
 void UBTService_SetRandomLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
-	
+
 	//AI should try and roam the map
 	//Choose a random location that is far enough, or a location that is out of sight
-	
+
 	AAIController* AI = OwnerComp.GetAIOwner();
 	if (AI == nullptr)
 		return;
-	if (AI->GetPawn() == nullptr)
+	APawn* AIPawn = AI->GetPawn();
+	if (AIPawn == nullptr)
 		return;
-	FVector CurrentLocation = AI->GetPawn()->GetActorLocation();
+	FVector CurrentLocation = AIPawn->GetActorLocation();
 	FNavLocation NewLocation = FNavLocation();
-	
+
 	//First, see if we can find a valid point nearby us
 	//Move there if the AI does not have a line of sight to it (i.e. in a building, behind a wall, etc.)
 	UNavigationSystemV1* Navigation = Cast<UNavigationSystemV1>(GetWorld()->GetNavigationSystem());
 	if (Navigation == nullptr)
 		return;
-	if (Navigation->GetRandomReachablePointInRadius(CurrentLocation, CloseDistanceToRoam, NewLocation))
+
+	uint8 SafeCount = 0;
+	while (true)
 	{
-		FHitResult Hit;
-		//See if we do *not* have line of sight
-		if (!GetWorld()->LineTraceSingleByChannel(Hit, CurrentLocation, NewLocation.Location, ECollisionChannel::ECC_Camera))
+		if (Navigation->GetRandomReachablePointInRadius(CurrentLocation, DistanceToRoam, NewLocation))
 		{
-			OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), NewLocation.Location);
-		}
-		else
-		//We do not have line of sight.. find a far location
-		{
-			bool bValidLocation = false;
-			while (!bValidLocation)
+			if ((CurrentLocation - NewLocation.Location).Size() < MinimumDistance)
+				continue;
+			//Check if AI can see this location
+			if (CanSeeTarget(AIPawn, NewLocation.Location))
 			{
-				if (Navigation->GetRandomReachablePointInRadius(CurrentLocation, FarDistanceToRoam, NewLocation))
-				{
-					if ((NewLocation.Location - CurrentLocation).Size() >= FarDistanceToRoam-CloseDistanceToRoam )	//New location must be at least beyond the close distance roam radius value
-					{
-						OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), NewLocation.Location);
-						bValidLocation = true;
-					}
-				}
+				OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), NewLocation.Location);
+				UE_LOG(LogTemp, Warning, TEXT("Move ahead!"));
+				return;
+			}
+			SafeCount++;
+			if (SafeCount >= 10)	//Perhaps AI is facing a wall, cannot move ahead!
+			{
+				OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), NewLocation.Location);
+				UE_LOG(LogTemp, Warning, TEXT("Move random..."));
+				return;
 			}
 		}
 	}
-	//Otherwise, find a point in a larger radius
+}
+
+bool UBTService_SetRandomLocation::CanSeeTarget(APawn* OwnerPawn, const FVector& TargetLocation)
+{
+	//Get normalized vector from this current location to target location
+	FVector DirectionToTarget = (TargetLocation - OwnerPawn->GetActorLocation()).GetSafeNormal(1.0);
+
+	//Get OwnerPawn's viewpoint
+	FVector Location;
+	FRotator Rotation;
+	if (OwnerPawn->GetController() != nullptr)
+		OwnerPawn->GetController()->GetPlayerViewPoint(Location, Rotation);
+
+	//Turn OwnerPawn's rotation into normalized vector
+	FVector ForwardVector = Rotation.Vector().GetSafeNormal(1.0);
+
+	//Get Dot Product
+	float Dot = FVector::DotProduct(ForwardVector, DirectionToTarget);
+
+	//Get angle between this AI's forward vector and the vector to target
+	float Angle = UKismetMathLibrary::Acos(Dot) * (180 / PI);
+
+	//If Angle < AngleOfSight, then TargetActor is in this AI's field of vision
+	return Angle < AngleOfSight;
 }
