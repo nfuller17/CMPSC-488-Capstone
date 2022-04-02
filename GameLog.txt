@@ -1,12 +1,7 @@
 *********************************************************** TO DO ***********************************************************
 - AI:
 	- Implement melee on AI
-	- Implement dodging and strafing on AI
-		* Allow AI vision to detect for projectiles that are traveling toward the AI's general direction
 	- If AI takes damage, have AI turn in the direction from where it was hit. AI vision can then take care of the rest to detect for an enemy
-	- Improve AI roaming
-		* Currently, AI roams map by picking a random point within a radius. However, this is not human-like, and AI could end up moving back and forth between spots
-		* Suggested algorithm: Pick a random point, and only go there if it is within AI's view (i.e. use Vision to pick new point to roam)
 	- Add skill branch/nodes to behavior tree for Friendly AI
 	- Add sprint skill (mostly for melee AI when implemented)
 	- Add thermal sensor skill
@@ -40,6 +35,9 @@
 	- Would make some code look much cleaner
 	
 *********************************************************** FINISHED ***********************************************************
+3/28 - 4/4
+	- Implemented dodging on AI
+	- "Improved" AI roaming (i.e. will generally pick a location within its view)
 3/21 - 3/28
 	- Friendly AI
 	- AI "Vision"
