@@ -46,14 +46,12 @@ void UBTService_SetRandomLocation::TickNode(UBehaviorTreeComponent& OwnerComp, u
 			if (CanSeeTarget(AIPawn, NewLocation.Location))
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), NewLocation.Location);
-				UE_LOG(LogTemp, Warning, TEXT("Move ahead!"));
 				return;
 			}
 			SafeCount++;
 			if (SafeCount >= 10)	//Perhaps AI is facing a wall, cannot move ahead!
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), NewLocation.Location);
-				UE_LOG(LogTemp, Warning, TEXT("Move random..."));
 				return;
 			}
 		}

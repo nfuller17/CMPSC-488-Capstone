@@ -35,6 +35,7 @@ public:
 	void StartFire();
 	void FireProjectile();
 	void StopFire();
+	void MeleeAttack();
 	uint8 GetEnergy(){return Energy;}
 	void AddEnergy();
 	void DoSkill(const TSubclassOf<ASkill> SkillClass);
@@ -44,6 +45,7 @@ public:
 	virtual void SetDamageReduction(const float& _DamageReduction){DamageReduction = _DamageReduction;}
 	virtual float GetDamageBonus() const{return DamageBonus;}
 	virtual void SetDamageBonus(const float& _DamageBonus){DamageBonus = _DamageBonus;}
+	bool IsMelee() const { return bIsMeleeOnly; }
 	FTimerHandle FiringTimer;
 	FTimerHandle DestroyTimer;
 	FTimerHandle EnergyTimer;

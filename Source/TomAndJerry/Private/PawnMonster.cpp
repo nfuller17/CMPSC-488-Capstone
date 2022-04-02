@@ -84,6 +84,8 @@ void APawnMonster::AddHealth(const float& Amount)
 
 void APawnMonster::StartFire()
 {
+	if (bIsMeleeOnly)
+		return;
 	if (bCanFire)
 	{
 		GetWorldTimerManager().SetTimer(FiringTimer, this, &APawnMonster::StopFire, FireRate, false, FireRate);	//Do not loop timer, as AI behavior tree will repeatedly call StartFire
@@ -122,6 +124,11 @@ void APawnMonster::FireProjectile()
 	}
 }
 
+void APawnMonster::MeleeAttack()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Melee Attack!"));
+}
+
 //Called by the AI Behavior Tree, which has made a check to see if this Pawn has the requested Skill
 //This function will call CanExecute() on the requested Skill, which will return a boolean indiciating whether the correct conditions are in place
 //If CanExecute() returns true, decrement this Pawn's energy by the Skill's cost
@@ -145,9 +152,7 @@ void APawnMonster::DoSkill(const TSubclassOf<ASkill> RequestedSkill)
 				SkillInstance->SetOwner(this);
 				SkillInstance->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
 				SkillInstance->Execute();
-				UE_LOG(LogTemp, Warning, TEXT("Energy before: %d"), Energy);
 				Energy -= SkillInstance->GetEnergyCost();
-				UE_LOG(LogTemp, Warning, TEXT("Energy after: %d"), Energy);
 				bSkillIsActive = true;
 				return;
 			}
