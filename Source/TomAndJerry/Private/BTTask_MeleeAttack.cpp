@@ -19,6 +19,9 @@ EBTNodeResult::Type UBTTask_MeleeAttack::ExecuteTask(UBehaviorTreeComponent& Own
 	APawnMonster* Monster = Cast<APawnMonster>(AIController->GetPawn());
 	if (Monster == nullptr)
 		return EBTNodeResult::Failed;
-	Monster->MeleeAttack();
+	AActor* Target = AIController->GetFocusActor();
+	if (Target == nullptr)
+		return EBTNodeResult::Failed;
+	Monster->StartMelee(Target);
 	return EBTNodeResult::Succeeded;
 }

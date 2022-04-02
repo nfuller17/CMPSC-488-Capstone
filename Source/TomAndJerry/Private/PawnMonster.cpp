@@ -124,9 +124,28 @@ void APawnMonster::FireProjectile()
 	}
 }
 
-void APawnMonster::MeleeAttack()
+void APawnMonster::StartMelee(AActor* Victim)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Melee Attack!"));
+	if (bCanMelee)
+	{
+		GetWorldTimerManager().SetTimer(MeleeTimer, this, &APawnMonster::StopMelee, MeleeAttackRate, false, MeleeAttackRate);	//Do not loop timer, as AI behavior tree will repeatedly call StartMelee
+		MeleeAttack(Victim);
+		bCanMelee = false;
+	}
+}
+
+void APawnMonster::StopMelee()
+{
+	bCanMelee = true;
+	GetWorldTimerManager().ClearTimer(MeleeTimer);
+}
+
+void APawnMonster::MeleeAttack(AActor* Victim)
+{
+	if (Victim == nullptr)
+		return;
+	FPointDamageEvent DamageEvent(MeleeDamage, FHitResult(), GetActorLocation() - Victim->GetActorLocation(), nullptr);
+	Victim->TakeDamage(MeleeDamage, DamageEvent, GetController(), this);
 }
 
 //Called by the AI Behavior Tree, which has made a check to see if this Pawn has the requested Skill

@@ -35,7 +35,9 @@ public:
 	void StartFire();
 	void FireProjectile();
 	void StopFire();
-	void MeleeAttack();
+	void StartMelee(AActor* Victim);
+	void MeleeAttack(AActor* Victim);
+	void StopMelee();
 	uint8 GetEnergy(){return Energy;}
 	void AddEnergy();
 	void DoSkill(const TSubclassOf<ASkill> SkillClass);
@@ -47,6 +49,7 @@ public:
 	virtual void SetDamageBonus(const float& _DamageBonus){DamageBonus = _DamageBonus;}
 	bool IsMelee() const { return bIsMeleeOnly; }
 	FTimerHandle FiringTimer;
+	FTimerHandle MeleeTimer;
 	FTimerHandle DestroyTimer;
 	FTimerHandle EnergyTimer;
 	
@@ -90,11 +93,18 @@ private:
 	//Check to disable projectile firing
 	UPROPERTY(EditAnywhere, Category="Combat")
 		bool bIsMeleeOnly;
+	//Melee damage amount
+	UPROPERTY(EditAnywhere, Category="Combat")
+	float MeleeDamage = 10.0;
+	//How quickly in seconds this Pawn can attack a target with melee
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float MeleeAttackRate = 1.0;
 	//Type of projectile to fire
 	UPROPERTY(EditAnywhere, Category="Combat")
 	TSubclassOf<AProjectile> ProjectileClass;
 	//If projectile enabled, time in seconds between each fire
 	UPROPERTY(EditAnywhere, Category="Combat")
 		float FireRate;
-	bool bCanFire = true;
+	bool bCanFire = true;	//Used with timer
+	bool bCanMelee = true;	//Used with timer
 };
