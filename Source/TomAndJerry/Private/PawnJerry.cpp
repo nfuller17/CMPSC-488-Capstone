@@ -60,6 +60,7 @@ void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeLeft"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 2);
 	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeBackward"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 3);
 	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeRight"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 4);
+	PlayerInputComponent->BindAction(TEXT("SpectateNext"), EInputEvent::IE_Pressed, this, &APawnJerry::ViewNextPlayer);
 }
 
 void APawnJerry::MoveForward(float AxisValue)
@@ -276,6 +277,14 @@ void APawnJerry::Died()
 	else
 		SpawnDelay = 3.0;
 	GetWorldTimerManager().SetTimer(DestroyTimer, this, &APawnJerry::DestroyHelper, SpawnDelay, false, SpawnDelay);
+}
+
+void APawnJerry::ViewNextPlayer()
+{
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (PC == nullptr)
+		return;
+	PC->BeginSpectatingState();
 }
 
 void APawnJerry::DestroyHelper()

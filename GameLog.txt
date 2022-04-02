@@ -1,6 +1,5 @@
 *********************************************************** TO DO ***********************************************************
 - AI:
-	- Implement melee on AI
 	- If AI takes damage, have AI turn in the direction from where it was hit. AI vision can then take care of the rest to detect for an enemy
 	- Add skill branch/nodes to behavior tree for Friendly AI
 	- Add sprint skill (mostly for melee AI when implemented)
@@ -38,6 +37,7 @@
 3/28 - 4/4
 	- Implemented dodging on AI
 	- "Improved" AI roaming (i.e. will generally pick a location within its view)
+	- Implemented melee on AI
 3/21 - 3/28
 	- Friendly AI
 	- AI "Vision"
