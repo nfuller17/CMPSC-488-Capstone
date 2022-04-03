@@ -3,6 +3,7 @@
 
 #include "PawnMonster.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "../TomAndJerryGameModeBase.h"
 #include "Projectile.h"
 #include "AIController.h"
 #include "Components/CapsuleComponent.h"
@@ -216,6 +217,11 @@ void APawnMonster::Died()
 	GetWorldTimerManager().ClearTimer(EnergyTimer);
 	DetachFromControllerPendingDestroy();
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (Game != nullptr && Game->GetSpectateMode())
+	{
+		Game->SpectateList.RemoveSingle(this);
+	}
 	//Normally, we want to destroy the Actor here after dying
 	//However, this is a virtual method that is overridden in derived classes
 	//Calling Destroy here could be dangerous if it finishes first before the derived class can finish its implementation of this function

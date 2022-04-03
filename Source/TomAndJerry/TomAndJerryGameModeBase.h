@@ -23,6 +23,10 @@ public:
 	uint8 GetNumMonsters(){return NumMonsters;}
 	void DecrementNumMonsters();
 	float GetPlayerSpawnDelay() const{return PlayerSpawnDelay;}
+	UFUNCTION(BlueprintCallable)
+	void SetSpectateMode(const bool& _SpectateMode) { SpectateMode = _SpectateMode; }
+	bool GetSpectateMode() const { return SpectateMode; }
+	TArray<APawn*> SpectateList;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -45,4 +49,5 @@ private:
 	TArray<AFactory_Monster*> MonsterFactories;
 	TArray<AFactory_Boss*> BossFactories;
 	bool bBossSpawned = false;
+	bool SpectateMode = false;
 };

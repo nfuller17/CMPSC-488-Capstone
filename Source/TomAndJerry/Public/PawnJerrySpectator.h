@@ -19,5 +19,12 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void MoveForward(float Val) override;
 	void MoveRight(float Val) override;
+
+protected:
+	virtual void BeginPlay() override;
 	
+protected:
+	void SpectateNextTarget();
+private:
+	AActor* CurrentViewTarget;
 };
