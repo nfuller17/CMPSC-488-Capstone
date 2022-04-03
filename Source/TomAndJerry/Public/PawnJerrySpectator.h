@@ -22,9 +22,9 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	
-protected:
 	void SpectateNextTarget();
+	void FreeSpectate();
+
 private:
-	AActor* CurrentViewTarget;
+	//AActor* CurrentViewTarget;
 };

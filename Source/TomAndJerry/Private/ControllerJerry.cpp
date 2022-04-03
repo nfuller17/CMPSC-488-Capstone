@@ -34,8 +34,27 @@ void AControllerJerry::Spectate(const bool& bSpectate)
 {
 	if (bSpectate)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Spectate"));
 		BeginSpectatingState();
+		ASpectatorPawn* SpecPawn = SpawnSpectatorPawn();
+		if (SpecPawn == nullptr)
+			return;
+		if (HUD)
+			HUD->RemoveFromViewport();
+		APawn* JerryPawn = GetPawn();
+		if (JerryPawn != nullptr)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Destroy old pawn!"));
+			JerryPawn->Destroy();
+		}
+		Possess(SpecPawn);
 	}
+}
+
+ASpectatorPawn* AControllerJerry::SpawnSpectatorPawn()
+{
+	Super::SpawnSpectatorPawn();
+	return GetWorld()->SpawnActor<ASpectatorPawn>(JerrySpectatorPawn);
 }
 
 void AControllerJerry::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)

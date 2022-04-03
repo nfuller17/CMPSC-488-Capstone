@@ -291,5 +291,6 @@ void APawnJerry::Destroyed()
 	if (Game != nullptr)
 	{
 		Game->RestartPlayer(GetWorld()->GetFirstPlayerController());
+		UE_LOG(LogTemp, Warning, TEXT("Restarting player!"));
 	}
 }

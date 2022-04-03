@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "GameFramework/SpectatorPawn.h"
 #include "ControllerJerry.generated.h"
 
 //Forward class declaration - ie tell Compiler to compile this class first
 class AWeaponMaterial;
+class ASpectatorPawn;
 
 UCLASS()
 class TOMANDJERRY_API AControllerJerry : public APlayerController
@@ -27,11 +29,14 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
+	virtual ASpectatorPawn* SpawnSpectatorPawn() override;
 
 private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UUserWidget> HUDClass;
 	UPROPERTY()
 	UUserWidget* HUD;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class ASpectatorPawn> JerrySpectatorPawn;
 	TArray<uint8>	MaterialInventory;
 };

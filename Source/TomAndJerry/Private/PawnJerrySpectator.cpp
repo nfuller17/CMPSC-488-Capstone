@@ -7,7 +7,6 @@
 void APawnJerrySpectator::BeginPlay()
 {
 	Super::BeginPlay();
-	CurrentViewTarget = this;
 }
 
 void APawnJerrySpectator::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -18,6 +17,7 @@ void APawnJerrySpectator::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAxis(TEXT("Strafe"), this, &APawnJerrySpectator::MoveRight);
 	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAction(TEXT("SpectateNextTarget"), EInputEvent::IE_Pressed, this, &APawnJerrySpectator::SpectateNextTarget);
+	PlayerInputComponent->BindAction(TEXT("FreeSpectate"), EInputEvent::IE_Pressed, this, &APawnJerrySpectator::FreeSpectate);
 }
 
 void APawnJerrySpectator::MoveForward(float Val)
@@ -44,42 +44,34 @@ void APawnJerrySpectator::SpectateNextTarget()
 	{
 		for (int x = 0; Game != nullptr && Game->SpectateList.Num() > 0 && x < Game->SpectateList.Num(); x++)
 		{
-			if (CurrentViewTarget != nullptr)
+			if (PC->GetViewTarget() == this)
 			{
-				if (CurrentViewTarget == this)
+				PC->SetViewTarget(Game->SpectateList[x]);
+				return;
+			}
+			else if (PC->GetViewTarget() == Game->SpectateList[x])
+			{
+				//Get next one in list
+				if (x + 1 < Game->SpectateList.Num())
 				{
-					PC->SetViewTarget(Game->SpectateList[x]);
-					CurrentViewTarget = Game->SpectateList[x];
+					PC->SetViewTarget(Game->SpectateList[x + 1]);
 					return;
 				}
-				else if (CurrentViewTarget == Game->SpectateList[x])
+				else if (x == Game->SpectateList.Num() - 1)	//At last in list, go to beginning
 				{
-					//Get next one in list
-					if (x + 1 < Game->SpectateList.Num())
-					{
-						PC->SetViewTarget(Game->SpectateList[x + 1]);
-						CurrentViewTarget = Game->SpectateList[x + 1];
-						return;
-					}
-					else if (x == Game->SpectateList.Num() - 1)	//At last in list, go to beginning
-					{
-						PC->SetViewTarget(Game->SpectateList[0]);
-						CurrentViewTarget = Game->SpectateList[0];
-						return;
-					}
+					PC->SetViewTarget(Game->SpectateList[0]);
+					return;
 				}
 			}
 		}
 	}
-	/*APawn* CurrentViewTarget = Cast<APawn>(PC->GetViewTarget());
-	for (auto Target : TActorRange<APawn>(GetWorld()))
-	{
-		if (CurrentViewTarget != nullptr && CurrentViewTarget == Target)
-		{
-			continue;
-		}
-		PC->AutoManageActiveCameraTarget(Target);
+}
+
+void APawnJerrySpectator::FreeSpectate()
+{
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (PC == nullptr)
 		return;
-	}
-	*/
+	PC->SetViewTarget(this);
+
 }
