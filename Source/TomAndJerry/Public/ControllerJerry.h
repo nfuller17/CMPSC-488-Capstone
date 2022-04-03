@@ -21,6 +21,8 @@ public:
 	virtual void GameHasEnded(class AActor* EndGameFocus = nullptr, bool bIsWinner = false) override;
 	UPROPERTY(EditAnywhere)
 	float RestartDelay = 5.f;
+	UFUNCTION(BlueprintCallable)
+	void Spectate(const bool& bSpectate);
 	FTimerHandle RestartTimer;
 	
 protected:

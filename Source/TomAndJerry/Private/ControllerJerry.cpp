@@ -30,6 +30,14 @@ void AControllerJerry::CollectMaterials()
 	MaterialInventory.Empty();
 }
 
+void AControllerJerry::Spectate(const bool& bSpectate)
+{
+	if (bSpectate)
+	{
+		BeginSpectatingState();
+	}
+}
+
 void AControllerJerry::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)
 {
 	Super::GameHasEnded(EndGameFocus, bIsWinner);

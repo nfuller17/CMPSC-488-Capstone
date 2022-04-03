@@ -100,8 +100,5 @@ private:
 	void SelectWeapon(const int32 WeaponNumber);
 	UAmmoComponent* AmmoComponent;
 	DECLARE_DELEGATE_OneParam(FSelectWeaponDelegate, const int32);
-
-	//Spectate
-	void ViewNextPlayer();
 };
 
