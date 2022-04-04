@@ -56,6 +56,8 @@ void ATomAndJerryGameModeBase::DecrementNumMonsters()
 		NumMonsters = 0;
 }
 
+void ATomAndJerryGameModeBase::IncrementMCollected(const uint8 numMaterials) { MaterialsCollected += numMaterials; }
+
 void ATomAndJerryGameModeBase::AddMaterial(const uint8 Count)
 {
 	//If player drops off a material, spawn a boss the first time they do so

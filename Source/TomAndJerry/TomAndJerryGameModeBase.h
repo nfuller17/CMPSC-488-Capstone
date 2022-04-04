@@ -26,6 +26,7 @@ public:
 	UFUNCTION(BlueprintPure)
 		uint8 GetTotalMaterials() { return MaterialsTotal;  }
 	void DecrementNumMonsters();
+	void IncrementMCollected(const uint8 numMaterials);
 	float GetPlayerSpawnDelay() const{return PlayerSpawnDelay;}
 	UFUNCTION(BlueprintCallable)
 	void SetSpectateMode(const bool& _SpectateMode) { SpectateMode = _SpectateMode; }

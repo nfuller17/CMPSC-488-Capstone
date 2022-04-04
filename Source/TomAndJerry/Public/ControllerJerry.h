@@ -19,6 +19,8 @@ class TOMANDJERRY_API AControllerJerry : public APlayerController
 public:
 	void AddWeaponMaterial(uint8 WeaponMaterialNumber);
 	TArray<uint8> GetMaterials() { return MaterialInventory; }
+	UFUNCTION(BlueprintPure)
+		uint8 GetNumMaterialsInv() { return MaterialInventory.Num(); }
 	void CollectMaterials();
 	virtual void GameHasEnded(class AActor* EndGameFocus = nullptr, bool bIsWinner = false) override;
 	UPROPERTY(EditAnywhere)
