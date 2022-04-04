@@ -21,6 +21,10 @@ public:
 	void EndGame(const bool bPlayerWon);
 	FTimerHandle SpawnTimer;
 	uint8 GetNumMonsters(){return NumMonsters;}
+	UFUNCTION(BlueprintPure)
+		uint8 GetMaterialsCollected() { return MaterialsCollected; }
+	UFUNCTION(BlueprintPure)
+		uint8 GetTotalMaterials() { return MaterialsTotal;  }
 	void DecrementNumMonsters();
 	float GetPlayerSpawnDelay() const{return PlayerSpawnDelay;}
 	UFUNCTION(BlueprintCallable)
