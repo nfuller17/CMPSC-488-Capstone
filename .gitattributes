@@ -1,3 +1,2 @@
-TomJerryMap_BuildData.uasset filter=lfs diff=lfs merge=lfs -text
-TomJerryMap_BuiltData.uasset filter=lfs diff=lfs merge=lfs -text
+
 Content/TomJerryMap_BuiltData.uasset filter=lfs diff=lfs merge=lfs -text
