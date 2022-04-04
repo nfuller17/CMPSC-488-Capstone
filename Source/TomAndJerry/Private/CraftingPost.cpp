@@ -44,6 +44,7 @@ void ACraftingPost::NotifyActorBeginOverlap(AActor* OtherActor)
 			if (TomAndJerryGame)
 			{
 				TomAndJerryGame->AddMaterial(NumMaterials);
+				TomAndJerryGame->IncrementMCollected(NumMaterials);
 			}
 			UE_LOG(LogTemp, Warning, TEXT("Collected %d materials from player."), NumMaterials);
 		}
