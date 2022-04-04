@@ -49,7 +49,7 @@ private:
 		float	MonsterSpawnInterval = 10.0;
 	//How many enemy monsters can be present in the game at once
 	UPROPERTY(EditAnywhere, meta=(ClampMin = "0"))
-		uint8	MaxMonsters = 10;
+		uint8	MaxMonsters = 50;
 	uint8 NumMonsters = 0;
 	TArray<AFactory_Monster*> MonsterFactories;
 	TArray<AFactory_Boss*> BossFactories;
