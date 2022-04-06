@@ -4,11 +4,10 @@
 	- Add skill branch/nodes to behavior tree for Friendly AI
 	- Add sprint skill (mostly for melee AI when implemented)
 	- Add thermal sensor skill
+- In game Menu:
+	- Pressing ESCAPE key brings up a menu that allows the player to return to main menu
 - Spectator mode
-	- Player controller should be fixed on AI for conference demonstration
 	- If in spectator mode, spawn friendly AI outright so there is some action.. should friendly AI attempt to collect materials?
-	- If possible, left click = view another AI, right click = allow player camera to roam map?
-	- Player can enter spectator mode from main menu perhaps?
 - Create Super weapon
 	- Have boss be immune to normal weapons
 	- What to do if player dies with Super weapon?
@@ -18,13 +17,11 @@
 	- Have health be a progress bar instead of a number
 	- Have ammo be a number instead of a progress bar
 	- Icons for different weapons?
-	- Add a HUD element to indicate how many materials there are to collect, e.g. 2 / 5, or a transparent icon if not collected and opaque icon if collected
 	- Add a HUD element to indicate how many lives the player has
 - Implement splash damage on projectiles
 - Fix projectile collision with world geometry (if shot at a certain angle, projectile will move along with geometry)
 	- Check ordering of Actor components in blueprint - collision componenent should probably come first
 - Fix player pawn falling through map after dying (maybe wait a few seconds after death to turn collision off)
-- Fix dodging - player should dodge if and only if same key is pressed twice in rapid succession, i.e. pressing W then D should not make the player dodge right (but it currently does)
 - Fix melee weapons - ray trace should start from player pawn or weapon, and not from camera (since this is no longer first-person)
 - Sound effects for weapons, projectiles, impacts, maybe footsteps.. game music?
 - Fix animations when characters are airborne - turn off walking animation, play airborne animation
@@ -38,6 +35,9 @@
 	- Implemented dodging on AI
 	- "Improved" AI roaming (i.e. will generally pick a location within its view)
 	- Implemented melee on AI
+	- Created spectate mode
+	- Fixed dodging
+	- Added HUD element for tracking materials
 3/21 - 3/28
 	- Friendly AI
 	- AI "Vision"
