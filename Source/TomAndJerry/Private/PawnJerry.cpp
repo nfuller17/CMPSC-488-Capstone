@@ -36,6 +36,12 @@ void APawnJerry::Tick(float DeltaTime)
 
 }
 
+void APawnJerry::DestroyOnSpectate(const bool& SpectateMode)
+{
+	if (SpectateMode)
+		Destroy();
+}
+
 // Called to bind functionality to input
 void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

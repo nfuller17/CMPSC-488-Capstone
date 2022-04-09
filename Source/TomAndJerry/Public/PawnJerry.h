@@ -46,6 +46,8 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool HasWeapon(const int& WeaponNum) const;
 	FTimerHandle DestroyTimer;
+	UFUNCTION(BlueprintCallable)
+	void DestroyOnSpectate(const bool& SpectateMode);
 	
 
 protected:
