@@ -2,9 +2,13 @@
 
 
 #include "PawnAlly.h"
+#include "../TomAndJerryGameModeBase.h"
 
 void APawnAlly::Died()
 {
 	Super::Died();
+	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (Game)
+		Game->DecrementNumAlliesForSpectate();
 	GetWorldTimerManager().SetTimer(DestroyTimer, this, &APawnAlly::DestroyHelper, DestroyDelay, false, DestroyDelay);
 }

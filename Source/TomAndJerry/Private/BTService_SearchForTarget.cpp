@@ -9,6 +9,7 @@
 #include "GameFramework/Pawn.h"
 #include "PawnMonster.h"
 #include "PawnJerry.h"
+#include "PawnJerrySpectator.h"
 #include "AIController.h"
 
 UBTService_SearchForTarget::UBTService_SearchForTarget()
@@ -30,7 +31,14 @@ void UBTService_SearchForTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 	AActor* FocusActor = AIController->GetFocusActor();
 	if (FocusActor != nullptr)
 	{
-		if (!AIController->LineOfSightTo(FocusActor))	//No direct line of sight
+		//For some reason, friendly AI will lock on to spectators on starting a game.. let's fix that
+		APawnJerrySpectator* Spectator = Cast<APawnJerrySpectator>(FocusActor);
+		if (Spectator != nullptr)
+		{
+			AIController->ClearFocus(EAIFocusPriority::Gameplay);
+			OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+		}
+		else if (!AIController->LineOfSightTo(FocusActor))	//No direct line of sight
 		{
 			AIController->ClearFocus(EAIFocusPriority::Gameplay);
 			OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());

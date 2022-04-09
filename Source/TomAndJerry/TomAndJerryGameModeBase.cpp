@@ -24,6 +24,18 @@ void ATomAndJerryGameModeBase::BeginPlay()
 	GetWorldTimerManager().SetTimer(SpawnTimer, this, &ATomAndJerryGameModeBase::SpawnMonster, MonsterSpawnInterval, true, 0);
 }
 
+void ATomAndJerryGameModeBase::SpawnAlliesIfSpectating(const bool& _SpectateMode)
+{
+	if (_SpectateMode)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Spectate mode set for game mode base!"));
+		for (auto Factory : TActorRange<AFactory_Ally_SpectateMode>(GetWorld()))
+			AllyFactories.Emplace(Factory);
+		//Set timer to spawn monsters
+		GetWorldTimerManager().SetTimer(AllySpawnTimer, this, &ATomAndJerryGameModeBase::SpawnAlly, AllySpawnInterval, true, 0);
+	}
+}
+
 void ATomAndJerryGameModeBase::SpawnMonster()
 {
 	if (NumMonsters >= MaxMonsters)
@@ -45,8 +57,26 @@ void ATomAndJerryGameModeBase::SpawnBoss()
 	if (Factory->SpawnBoss())
 	{
 		bBossSpawned = true;
-		UE_LOG(LogTemp, Warning, TEXT("BOSS SPAWNED!"));
 	}
+}
+
+//Only for spawning friendly AI in spectate mode
+//For player spawning friendly AI, check out Factory_Ally
+void ATomAndJerryGameModeBase::SpawnAlly()
+{
+	if (!SpectateMode) {	//Safety check
+		GetWorldTimerManager().ClearTimer(AllySpawnTimer);
+		return;
+	}
+	if (NumAlliesForSpectate >= MaxAlliesForSpectate)
+		return;
+	if (AllyFactories.Num() == 0)
+		return;
+	AFactory_Ally_SpectateMode* Factory = AllyFactories[FMath::RandRange(0, AllyFactories.Num() - 1)];
+	if (Factory == nullptr)
+		return;
+	if (Factory->SpawnAlly())
+		NumAlliesForSpectate++;
 }
 
 void ATomAndJerryGameModeBase::DecrementNumMonsters()
@@ -54,6 +84,13 @@ void ATomAndJerryGameModeBase::DecrementNumMonsters()
 	NumMonsters--;
 	if (NumMonsters < 0)
 		NumMonsters = 0;
+}
+
+void ATomAndJerryGameModeBase::DecrementNumAlliesForSpectate()
+{
+	NumAlliesForSpectate--;
+	if (NumAlliesForSpectate < 0)
+		NumAlliesForSpectate = 0;
 }
 
 void ATomAndJerryGameModeBase::IncrementMCollected(const uint8 numMaterials) { MaterialsCollected += numMaterials; }
