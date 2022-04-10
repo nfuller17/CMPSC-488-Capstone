@@ -12,7 +12,11 @@ void AProjectile_Singularity::BeginPlay()
 void AProjectile_Singularity::SpawnSingularity()
 {
 	//Spawn singularity
-
+	ASingularity* SingularityInstance = GetWorld()->SpawnActor<ASingularity>(Singularity, GetActorLocation(), GetActorRotation());
+	if (SingularityInstance != nullptr)
+	{
+		SingularityInstance->SetOwner(GetOwner());
+	}
 	//Destroy
 	Destroy();
 }

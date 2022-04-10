@@ -67,6 +67,7 @@ void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon7"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 7);
 	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon8"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 8);
 	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon9"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 9);
+	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon0"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 0);
 	PlayerInputComponent->BindAction(TEXT("FirePrimary"), EInputEvent::IE_Pressed, this, &APawnJerry::BeginFire);
 	PlayerInputComponent->BindAction(TEXT("FirePrimary"), EInputEvent::IE_Released, this, &APawnJerry::StopFire);
 	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeForward"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 1);

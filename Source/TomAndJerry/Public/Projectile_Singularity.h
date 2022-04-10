@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Projectile.h"
+#include "Singularity.h"
 #include "Projectile_Singularity.generated.h"
 
 //Child class of Projectile to special Singularity Cannon behavior
@@ -24,5 +25,8 @@ private:
 	//Time in seconds to spawn the Singularity after this projectile is spawned
 	UPROPERTY(EditAnywhere)
 	float SingularitySpawnTime = 3.00;
+	//The singularity to spawn
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ASingularity> Singularity;
 	
 };

@@ -53,6 +53,11 @@ void ATomAndJerryGameModeBase::SpawnMonster()
 
 void ATomAndJerryGameModeBase::SpawnBoss()
 {
+	if (BossFactories.Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("CAUTION: BOSS FACTORY ARRAY IN TOMANDJERRYGAMEMODEBASE IS EMPTY"));
+		return;
+	}
 	AFactory_Boss* Factory = BossFactories[FMath::RandRange(0, BossFactories.Num()-1)];
 	if (Factory == nullptr)
 		return;
@@ -119,17 +124,18 @@ void ATomAndJerryGameModeBase::DepositMaterial(const uint8& Count, APawnJerry* P
 //Or when player respawns after dying with a super holding
 void ATomAndJerryGameModeBase::SpawnSuperWeapon(APawnJerry* Player)
 {
+	if (SuperWeapons.Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("CAUTION - SUPER WEAPONS ARRAY IN TOMANDJERRYGAMEMODEBASE IS EMPTY!"));
+		return;
+	}
+	if (Player == nullptr)
+		return;
 	//Select a random super weapon
 	TSubclassOf<AWeapon> SuperWeaponClass = SuperWeapons[FMath::RandRange(0, SuperWeapons.Num() - 1)];
 
-	//Spawn an instance of it
-	AWeapon* SuperWeapon = GetWorld()->SpawnActor<AWeapon>(SuperWeaponClass);
-
-	//Attach to player
-	SuperWeapon->SetOwner(Player);
-	if (Player->GetAmmoComponent() != nullptr)
-		SuperWeapon->SetAmmoComponent(Player->GetAmmoComponent());
-	SuperWeapon->AttachToComponent(Player->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+	//Add super weapon to player inventory
+	Player->AddWeapon(SuperWeaponClass);
 }
 
 void ATomAndJerryGameModeBase::EndGame(const bool bPlayerWon)
