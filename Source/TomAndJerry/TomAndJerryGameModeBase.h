@@ -7,6 +7,8 @@
 #include "Factory_Monster.h"
 #include "Factory_Boss.h"
 #include "Factory_Ally_SpectateMode.h"
+#include "Weapon.h"
+#include "PawnJerry.h"
 #include "TomAndJerryGameModeBase.generated.h"
 
 class AFactory_Monster;
@@ -19,7 +21,7 @@ class TOMANDJERRY_API ATomAndJerryGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 	
 public:
-	void DepositMaterial(const uint8& Count);
+	void DepositMaterial(const uint8& Count, APawnJerry* Player);
 	void EndGame(const bool bPlayerWon);
 	FTimerHandle SpawnTimer;
 	FTimerHandle AllySpawnTimer;
@@ -38,6 +40,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SpawnAlliesIfSpectating(const bool& _SpectateMode);
 	TArray<APawn*> SpectateList;
+	void SpawnSuperWeapon(APawnJerry* Player);
+	bool HasSuperWeapon() const { return ReceivedSuperWeapon; }
 	
 protected:
 	virtual void BeginPlay() override;
@@ -71,4 +75,8 @@ private:
 	TArray<AFactory_Ally_SpectateMode*> AllyFactories;
 	bool bBossSpawned = false;
 	bool SpectateMode = false;
+	//Super weapons that can be spawned for the player to defeat the boss
+	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<AWeapon>> SuperWeapons;
+	bool ReceivedSuperWeapon = false;
 };

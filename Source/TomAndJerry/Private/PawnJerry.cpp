@@ -27,6 +27,13 @@ void APawnJerry::BeginPlay()
 	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
 	AmmoComponent = FindComponentByClass<UAmmoComponent>();
 	Health = HealthMax;
+
+	//If we respawned after dying and we had a super weapon, re-create our super weapon
+	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (Game != nullptr && Game->HasSuperWeapon())
+	{
+		Game->SpawnSuperWeapon(this);
+	}
 }
 
 // Called every frame

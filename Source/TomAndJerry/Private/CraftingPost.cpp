@@ -41,7 +41,7 @@ void ACraftingPost::NotifyActorBeginOverlap(AActor* OtherActor)
 		ATomAndJerryGameModeBase* TomAndJerryGame = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
 		if (TomAndJerryGame)
 		{
-			TomAndJerryGame->DepositMaterial(NumMaterials);
+			TomAndJerryGame->DepositMaterial(NumMaterials, Jerry);
 		}
 		UE_LOG(LogTemp, Warning, TEXT("Collected %d materials from player."), NumMaterials);
 	}

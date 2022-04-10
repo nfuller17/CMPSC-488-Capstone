@@ -95,7 +95,7 @@ void ATomAndJerryGameModeBase::DecrementNumAlliesForSpectate()
 		NumAlliesForSpectate = 0;
 }
 
-void ATomAndJerryGameModeBase::DepositMaterial(const uint8& Count)
+void ATomAndJerryGameModeBase::DepositMaterial(const uint8& Count, APawnJerry* Player)
 {
 	if (Count <= 0)
 		return;
@@ -107,10 +107,29 @@ void ATomAndJerryGameModeBase::DepositMaterial(const uint8& Count)
 		SpawnBoss();
 
 	//Spawn a super weapon when all materials have been collected
-	if (MaterialsCollected >= MaterialsTotal)
+	if (MaterialsCollected >= MaterialsTotal && Player != nullptr && !ReceivedSuperWeapon)
 	{
-		//Spawn weapon, give to player
+		SpawnSuperWeapon(Player);
+		//If pawn dies, this boolean can be used so they respawn with the super weapon instead of having to  re-collect materials again
+		ReceivedSuperWeapon = true;
 	}
+}
+
+//Called either DepositMaterial the first time player deposits material,
+//Or when player respawns after dying with a super holding
+void ATomAndJerryGameModeBase::SpawnSuperWeapon(APawnJerry* Player)
+{
+	//Select a random super weapon
+	TSubclassOf<AWeapon> SuperWeaponClass = SuperWeapons[FMath::RandRange(0, SuperWeapons.Num() - 1)];
+
+	//Spawn an instance of it
+	AWeapon* SuperWeapon = GetWorld()->SpawnActor<AWeapon>(SuperWeaponClass);
+
+	//Attach to player
+	SuperWeapon->SetOwner(Player);
+	if (Player->GetAmmoComponent() != nullptr)
+		SuperWeapon->SetAmmoComponent(Player->GetAmmoComponent());
+	SuperWeapon->AttachToComponent(Player->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
 }
 
 void ATomAndJerryGameModeBase::EndGame(const bool bPlayerWon)
