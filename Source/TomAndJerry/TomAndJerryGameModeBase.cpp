@@ -110,7 +110,15 @@ void ATomAndJerryGameModeBase::DepositMaterial(const uint8& Count, APawnJerry* P
 	//If player drops off a material, spawn a boss the first time they do so
 	if (!bBossSpawned)
 		SpawnBoss();
+	// ----------- For Test ---------------------
+	// ----------- Remove after finished --------
+	if (Player != nullptr && !ReceivedSuperWeapon)
+	{
+		SpawnSuperWeapon(Player);
+		ReceivedSuperWeapon = true;
+	}
 
+	/*
 	//Spawn a super weapon when all materials have been collected
 	if (MaterialsCollected >= MaterialsTotal && Player != nullptr && !ReceivedSuperWeapon)
 	{
@@ -118,6 +126,7 @@ void ATomAndJerryGameModeBase::DepositMaterial(const uint8& Count, APawnJerry* P
 		//If pawn dies, this boolean can be used so they respawn with the super weapon instead of having to  re-collect materials again
 		ReceivedSuperWeapon = true;
 	}
+	*/
 }
 
 //Called either DepositMaterial the first time player deposits material,

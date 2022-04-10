@@ -28,7 +28,7 @@ private:
 	float PullStrength = 5000.0;
 	//Distance from which victims will start to get pulled toward Singularity
 	UPROPERTY(EditAnywhere)
-	float PullRadius = 1500.0;
+	float PullRadius = 2500;
 	//Victim takes this amount of damage when it passes through singularity
 	UPROPERTY(EditAnywhere)
 	float Damage = 5000.0;

@@ -3,6 +3,7 @@
 
 #include "Singularity.h"
 #include "EngineUtils.h"
+#include "Kismet/GameplayStatics.h"
 #include "PawnMonster.h"
 
 // Sets default values
@@ -17,14 +18,16 @@ ASingularity::ASingularity()
 void ASingularity::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	if (Effect != nullptr)
+	{
+		UGameplayStatics::SpawnEmitterAttached(Effect, GetRootComponent());
+	}
 }
 
 // Called every frame
 void ASingularity::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	for (APawnMonster* Monster : TActorRange<APawnMonster>(GetWorld()))
 	{
 		if (!Monster->IsPlayerTeam() && !Monster->IsDead())
@@ -33,7 +36,7 @@ void ASingularity::Tick(float DeltaTime)
 			float Distance = Direction.Size();
 			if (Distance <= PullRadius)
 			{
-				FVector Attraction = Direction * (PullStrength * FMath::Square((1 - Distance) / PullRadius));
+				FVector Attraction = Direction.GetSafeNormal(1.0) * (PullStrength * FMath::Square((1 - Distance) / PullRadius));
 				Monster->LaunchCharacter(Attraction, false, false);
 			}
 		}
@@ -43,10 +46,11 @@ void ASingularity::Tick(float DeltaTime)
 void ASingularity::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
-
+	UE_LOG(LogTemp, Warning, TEXT("HELLO?"));
 	APawnMonster* Monster = Cast<APawnMonster>(OtherActor);
 	if (Monster != nullptr && !Monster->IsPlayerTeam() && !Monster->IsDead() && GetOwner() != nullptr)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Damaging monster from black hole"));
 		AController* OwnerController = GetInstigatorController();
 		FPointDamageEvent DamageEvent(Damage, FHitResult(), GetActorLocation() - Monster->GetActorLocation(), nullptr);
 		Monster->TakeDamage(Damage, DamageEvent, OwnerController, this);
