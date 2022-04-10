@@ -34,20 +34,17 @@ void ACraftingPost::NotifyActorBeginOverlap(AActor* OtherActor)
 	APawnJerry* Jerry = Cast<APawnJerry>(OtherActor);
 	if (Jerry)
 	{
-		AControllerJerry* JerryController = Cast<AControllerJerry>(Jerry->GetController());
-		if (JerryController)
+		// AControllerJerry* JerryController = Cast<AControllerJerry>(Jerry->GetController());
+		TArray<uint8> Materials = Jerry->GetMaterials();
+		const uint8 NumMaterials = Materials.Num();
+		Jerry->CollectMaterials();
+		ATomAndJerryGameModeBase* TomAndJerryGame = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (TomAndJerryGame)
 		{
-			TArray<uint8> Materials = JerryController->GetMaterials();
-			const uint8 NumMaterials = Materials.Num();
-			JerryController->CollectMaterials();
-			ATomAndJerryGameModeBase* TomAndJerryGame = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
-			if (TomAndJerryGame)
-			{
-				TomAndJerryGame->AddMaterial(NumMaterials);
-				TomAndJerryGame->IncrementMCollected(NumMaterials);
-			}
-			UE_LOG(LogTemp, Warning, TEXT("Collected %d materials from player."), NumMaterials);
+			TomAndJerryGame->AddMaterial(NumMaterials);
+			TomAndJerryGame->IncrementMCollected(NumMaterials);
 		}
+		UE_LOG(LogTemp, Warning, TEXT("Collected %d materials from player."), NumMaterials);
 	}
 }
 

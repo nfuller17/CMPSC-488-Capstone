@@ -125,11 +125,8 @@ void APawnJerry::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (WeaponMaterial)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("Player walked over a Weapon Material!"));
-		AControllerJerry* playerController = Cast<AControllerJerry>(GetController());
-		if (playerController) {
-			playerController->AddWeaponMaterial(WeaponMaterial->GetMaterialID());
-			WeaponMaterial->Destroy();
-		}
+		AddWeaponMaterial(WeaponMaterial->GetMaterialID());
+		WeaponMaterial->Destroy();
 	}
 	else
 	{	//Not a Weapon Material. Check if we are standing on a Minor Objective
@@ -268,6 +265,20 @@ void APawnJerry::StopFire()
 {
 	if (Weapon)
 		Weapon->StopFire();
+}
+
+//Called when player walks over a material
+//Adds the material to the MaterialInventory array
+void APawnJerry::AddWeaponMaterial(uint8 WeaponMaterialNumber)
+{
+	MaterialInventory.Emplace(WeaponMaterialNumber);
+	UE_LOG(LogTemp, Warning, TEXT("Added Material %d to Inventory!"), WeaponMaterialNumber);
+}
+
+//Called by CraftingPost when player walks into crafting location
+void APawnJerry::CollectMaterials()
+{
+	MaterialInventory.Empty();
 }
 
 void APawnJerry::Died()

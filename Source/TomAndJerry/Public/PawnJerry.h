@@ -34,6 +34,12 @@ public:
 	
 	void AddWeapon(TSubclassOf<AWeapon> WeaponClass);
 	
+	void AddWeaponMaterial(uint8 WeaponMaterialNumber);
+	TArray<uint8> GetMaterials() { return MaterialInventory; }
+	UFUNCTION(BlueprintPure)
+		uint8 GetNumMaterialsInv() { return MaterialInventory.Num(); }
+	void CollectMaterials();
+
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 	float GetHealth() const {return Health;}
@@ -95,6 +101,8 @@ private:
 	float LastDodgeTime = 0.f;
 	float LastDirInputTime = 0.f;
 	int32 prevDir = 0;
+	
+	TArray<uint8>	MaterialInventory;
 	
 	//Weapon
 	void BeginFire();
