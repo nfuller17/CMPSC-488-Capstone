@@ -10,6 +10,8 @@ void ATomAndJerryGameModeBase::BeginPlay()
 	Super::BeginPlay();
 	
 	//Get a count of how many materials there are in the level
+	//NICK !! - Change this to iterate over all weapon material factories instead. There should be a one-to-one relationship between factory and material, so this should work.
+	//P.S. - hi
 	for (auto Material: TActorRange<AWeaponMaterial>(GetWorld()))
 		MaterialsTotal++;
 	UE_LOG(LogTemp, Warning, TEXT("Game Started. Number of materials to collect: %d."), MaterialsTotal);
@@ -93,13 +95,22 @@ void ATomAndJerryGameModeBase::DecrementNumAlliesForSpectate()
 		NumAlliesForSpectate = 0;
 }
 
-void ATomAndJerryGameModeBase::IncrementMCollected(const uint8 numMaterials) { MaterialsCollected += numMaterials; }
-
-void ATomAndJerryGameModeBase::AddMaterial(const uint8 Count)
+void ATomAndJerryGameModeBase::DepositMaterial(const uint8& Count)
 {
+	if (Count <= 0)
+		return;
+
+	MaterialsCollected += Count;
+
 	//If player drops off a material, spawn a boss the first time they do so
 	if (!bBossSpawned)
 		SpawnBoss();
+
+	//Spawn a super weapon when all materials have been collected
+	if (MaterialsCollected >= MaterialsTotal)
+	{
+		//Spawn weapon, give to player
+	}
 }
 
 void ATomAndJerryGameModeBase::EndGame(const bool bPlayerWon)

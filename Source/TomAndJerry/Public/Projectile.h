@@ -29,6 +29,7 @@ public:
 	virtual void SetDamage(const float& _Damage){Damage = _Damage;}
 	virtual bool IsPlayerTeam() const{return PlayerTeam;}
 	virtual void SetTeam(const bool& bPlayerTeam) {PlayerTeam = bPlayerTeam;}
+	void SetCanDamageBoss(const bool& _CanDamageBoss) { CanDamageBoss = _CanDamageBoss; }
 
 protected:
 	// Called when the game starts or when spawned
@@ -36,6 +37,7 @@ protected:
 	bool PlayerTeam;
 	
 private:
+	bool CanDamageBoss = false;
 	UPROPERTY(VisibleAnywhere)
 		USphereComponent* Root;
 	UPROPERTY(VisibleAnywhere)

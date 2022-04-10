@@ -44,6 +44,9 @@ protected:
 	
 
 private:
+	//If true, this weapon can damage the boss. Otherwise, does not damage the boss.
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon Properties")
+		bool IsSuperWeapon = false;
 	UPROPERTY(EditDefaultsOnly, Category="Weapon Properties")
 		float FireRate;		//Time, in seconds, between each shot
 	UPROPERTY(VisibleAnywhere)

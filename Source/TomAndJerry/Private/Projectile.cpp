@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "PawnMonster.h"
 #include "PawnJerry.h"
+#include "PawnBoss.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -80,8 +81,12 @@ void AProjectile::Explode(AActor* TargetActor)
 			AController* OwnerController = GetInstigatorController();
 			if (OwnerController)
 			{
-				FPointDamageEvent DamageEvent(Damage, FHitResult(), GetActorLocation() - TargetActor->GetActorLocation(), nullptr);
-				TargetActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
+				APawnBoss* Boss = Cast<APawnBoss>(TargetActor);
+				if (Boss == nullptr || Boss != nullptr && CanDamageBoss)
+				{
+					FPointDamageEvent DamageEvent(Damage, FHitResult(), GetActorLocation() - TargetActor->GetActorLocation(), nullptr);
+					TargetActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
+				}
 			}				
 		}
 	}

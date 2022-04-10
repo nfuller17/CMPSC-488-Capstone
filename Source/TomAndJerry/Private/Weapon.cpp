@@ -5,6 +5,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "PawnJerry.h"
+#include "PawnBoss.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -113,8 +114,12 @@ void AWeapon::FirePrimary()
 				AActor* HitActor = Hit.GetActor();
 				if (HitActor)
 				{
-					FPointDamageEvent DamageEvent(HitscanDamage, Hit, DirectionFromShot, nullptr);
-					HitActor->TakeDamage(HitscanDamage, DamageEvent, OwnerController, this);
+					APawnBoss* Boss = Cast<APawnBoss>(HitActor);
+					if (Boss == nullptr || Boss != nullptr && IsSuperWeapon)
+					{
+						FPointDamageEvent DamageEvent(HitscanDamage, Hit, DirectionFromShot, nullptr);
+						HitActor->TakeDamage(HitscanDamage, DamageEvent, OwnerController, this);
+					}
 				}
 				
 				//Impact
@@ -134,6 +139,8 @@ void AWeapon::FirePrimary()
 			if (Proj)
 			{
 				Proj->SetTeam(true);	//Weapons always belong to Player, so we always set this Projectile to player team
+				if (IsSuperWeapon)
+					Proj->SetCanDamageBoss(true);
 				Proj->FinishSpawning(Transform);					
 			}					
 		}				

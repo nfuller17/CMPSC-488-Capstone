@@ -19,7 +19,7 @@ class TOMANDJERRY_API ATomAndJerryGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 	
 public:
-	void AddMaterial(const uint8 Count);
+	void DepositMaterial(const uint8& Count);
 	void EndGame(const bool bPlayerWon);
 	FTimerHandle SpawnTimer;
 	FTimerHandle AllySpawnTimer;
@@ -30,7 +30,6 @@ public:
 		uint8 GetTotalMaterials() { return MaterialsTotal;  }
 	void DecrementNumMonsters();
 	void DecrementNumAlliesForSpectate();
-	void IncrementMCollected(const uint8 numMaterials);
 	void DecrementNumLives() { NumLives--; }
 	float GetPlayerSpawnDelay() const{return PlayerSpawnDelay;}
 	UFUNCTION(BlueprintCallable)
