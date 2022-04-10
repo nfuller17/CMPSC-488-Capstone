@@ -31,6 +31,7 @@ public:
 	void DecrementNumMonsters();
 	void DecrementNumAlliesForSpectate();
 	void IncrementMCollected(const uint8 numMaterials);
+	void DecrementNumLives() { NumLives--; }
 	float GetPlayerSpawnDelay() const{return PlayerSpawnDelay;}
 	UFUNCTION(BlueprintCallable)
 	void SetSpectateMode(const bool& _SpectateMode) { SpectateMode = _SpectateMode; }
@@ -48,6 +49,7 @@ protected:
 private:
 	uint8	MaterialsCollected = 0;
 	uint8	MaterialsTotal = 0;
+	uint8   NumLives = 3;
 	//Spawn delay for player
 	UPROPERTY(EditAnywhere, meta=(ClampMin = "0.0"))
 	float PlayerSpawnDelay = 3.0;

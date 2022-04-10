@@ -34,8 +34,9 @@ public:
 	
 	void AddWeapon(TSubclassOf<AWeapon> WeaponClass);
 	
-	void AddWeaponMaterial(uint8 WeaponMaterialNumber);
+	void AddWeaponMaterial(uint8 WeaponMaterialNumber, FVector WeaponLocation, UStaticMesh* SMesh);
 	TArray<uint8> GetMaterials() { return MaterialInventory; }
+	TArray<FVector> GetMaterialLocs() { return MaterialLocs; }
 	UFUNCTION(BlueprintPure)
 		uint8 GetNumMaterialsInv() { return MaterialInventory.Num(); }
 	void CollectMaterials();
@@ -103,6 +104,8 @@ private:
 	int32 prevDir = 0;
 	
 	TArray<uint8>	MaterialInventory;
+	TArray<FVector>	MaterialLocs;
+	TArray<UStaticMesh*> SMeshes;
 	
 	//Weapon
 	void BeginFire();
