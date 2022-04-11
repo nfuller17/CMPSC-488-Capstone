@@ -98,19 +98,15 @@ void APawnJerry::Dodge(const int32 Direction)
 				switch (Direction) {
 				case 1:	// W - forward
 					DodgeDirection = (GetActorForwardVector() * DodgeStrength) + FVector(0, 0, ZAdd);
-					UE_LOG(LogTemp, Warning, TEXT("Dodge W"));
 					break;
 				case 2: // A - left
 					DodgeDirection = (-GetActorRightVector() * DodgeStrength) + FVector(0, 0, ZAdd);
-					UE_LOG(LogTemp, Warning, TEXT("Dodge A"));
 					break;
 				case 3: // S - backwards
 					DodgeDirection = (-GetActorForwardVector() * DodgeStrength) + FVector(0, 0, ZAdd);
-					UE_LOG(LogTemp, Warning, TEXT("Dodge S"));
 					break;
 				case 4:	// D - right
 					DodgeDirection = (GetActorRightVector() * DodgeStrength) + FVector(0, 0, ZAdd);
-					UE_LOG(LogTemp, Warning, TEXT("Dodge D"));
 					break;
 				}
 				LaunchCharacter(DodgeDirection, false, false);
@@ -133,7 +129,7 @@ void APawnJerry::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (WeaponMaterial)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("Player walked over a Weapon Material!"));
-		AddWeaponMaterial(WeaponMaterial->GetMaterialID(), WeaponMaterial->GetMaterialLoc(), WeaponMaterial->GetStaticM());
+		AddWeaponMaterial(WeaponMaterial->GetFactory());
 		WeaponMaterial->Destroy();
 	}
 	else
@@ -277,31 +273,35 @@ void APawnJerry::StopFire()
 
 //Called when player walks over a material
 //Adds the material to the MaterialInventory array
-void APawnJerry::AddWeaponMaterial(uint8 WeaponMaterialNumber, FVector MaterialLocation, UStaticMesh* SMesh)
+void APawnJerry::AddWeaponMaterial(AFactory_Material* MaterialFactory)
 {
-	MaterialInventory.Emplace(WeaponMaterialNumber);
-	MaterialLocs.Emplace(MaterialLocation);
-	SMeshes.Emplace(SMesh);
-	UE_LOG(LogTemp, Warning, TEXT("Added Material %d to Inventory!"), WeaponMaterialNumber);
+	if (MaterialFactory != nullptr)
+	{
+		MaterialInventory.Emplace(MaterialFactory);
+		//UE_LOG(LogTemp, Warning, TEXT("Added Material %d to Inventory!"), WeaponMaterialNumber);
+	}
 }
 
 //Called by CraftingPost when player walks into crafting location
 void APawnJerry::CollectMaterials()
 {
 	MaterialInventory.Empty();
-	MaterialLocs.Empty();
-	SMeshes.Empty();
 }
 
 void APawnJerry::Died()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Player died!"));
-	//UE_LOG(LogTemp, Warning, TEXT("%d"), MaterialLocs.Num());
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	if (Weapon != nullptr)
 		Weapon->Destroy();
 	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
 	Game->DecrementNumLives();
+
+	//Iterate over Materials array, and call Spawn on the factories
+	for (auto Factory : MaterialInventory)
+	{
+		Factory->SpawnMaterial();
+	}
 
 	// TODO: Temporary code. If NumLives is 0, display a game over screen and exit back to the main menu.
 	//		 For right now, the game is just restarted.
@@ -315,32 +315,6 @@ void APawnJerry::Died()
 	else
 		SpawnDelay = 3.0;
 	GetWorldTimerManager().SetTimer(DestroyTimer, this, &APawnJerry::DestroyHelper, SpawnDelay, false, SpawnDelay);
-	
-	// Respawns all non-depositted materials when the player dies
-	for (int i = 0; i < MaterialLocs.Num(); i++) {
-		
-		AWeaponMaterial* Mat = GetWorld()->SpawnActor<AWeaponMaterial>(AWeaponMaterial::StaticClass(), MaterialLocs[i], GetActorForwardVector().Rotation());
-		
-		FVector tmp = MaterialLocs[i];
-		UE_LOG(LogTemp, Warning, TEXT("%f"), tmp.X);
-		UE_LOG(LogTemp, Warning, TEXT("%f"), tmp.Y);
-		UE_LOG(LogTemp, Warning, TEXT("%f"), tmp.Z);
-
-		if (Mat == nullptr) {
-			UE_LOG(LogTemp, Warning, TEXT("Material %d could not be respawned"), MaterialInventory[i]);
-		}
-		else {
-			UE_LOG(LogTemp, Warning, TEXT("Material %d respawned!"), MaterialInventory[i]);
-		}
-
-		//UStaticMeshComponent* MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("temp"));
-		//MeshComponent->SetStaticMesh(SMeshes[i]);
-		//MeshComponent->SetupAttachment(Mat->GetRootComponent);
-
-		Mat->SetMaterialID(MaterialInventory[i]);
-		Mat->SetMaterialLoc(MaterialLocs[i]);
-		Mat->StoreStaticMesh(SMeshes[i]);
-	}
 }
 
 void APawnJerry::DestroyHelper()

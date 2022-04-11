@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "ControllerJerry.h"
 #include "AmmoComponent.h"
+#include "Factory_Material.h"
 #include "PawnJerry.generated.h"
 
 //Forward class declaration - ie tell Compiler to compile this class first
@@ -34,9 +35,8 @@ public:
 	
 	void AddWeapon(TSubclassOf<AWeapon> WeaponClass);
 	
-	void AddWeaponMaterial(uint8 WeaponMaterialNumber, FVector WeaponLocation, UStaticMesh* SMesh);
-	TArray<uint8> GetMaterials() { return MaterialInventory; }
-	TArray<FVector> GetMaterialLocs() { return MaterialLocs; }
+	void AddWeaponMaterial(AFactory_Material* MaterialFactory);
+	TArray<AFactory_Material*> GetMaterials() { return MaterialInventory; }
 	UFUNCTION(BlueprintPure)
 		uint8 GetNumMaterialsInv() { return MaterialInventory.Num(); }
 	void CollectMaterials();
@@ -103,9 +103,7 @@ private:
 	float LastDirInputTime = 0.f;
 	int32 prevDir = 0;
 	
-	TArray<uint8>	MaterialInventory;
-	TArray<FVector>	MaterialLocs;
-	TArray<UStaticMesh*> SMeshes;
+	TArray<AFactory_Material*>	MaterialInventory;
 	
 	//Weapon
 	void BeginFire();

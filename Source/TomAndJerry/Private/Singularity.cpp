@@ -46,11 +46,9 @@ void ASingularity::Tick(float DeltaTime)
 void ASingularity::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
-	UE_LOG(LogTemp, Warning, TEXT("HELLO?"));
 	APawnMonster* Monster = Cast<APawnMonster>(OtherActor);
 	if (Monster != nullptr && !Monster->IsPlayerTeam() && !Monster->IsDead() && GetOwner() != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Damaging monster from black hole"));
 		AController* OwnerController = GetInstigatorController();
 		FPointDamageEvent DamageEvent(Damage, FHitResult(), GetActorLocation() - Monster->GetActorLocation(), nullptr);
 		Monster->TakeDamage(Damage, DamageEvent, OwnerController, this);

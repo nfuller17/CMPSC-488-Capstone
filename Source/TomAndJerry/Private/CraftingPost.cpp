@@ -35,8 +35,7 @@ void ACraftingPost::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (Jerry)
 	{
 		// AControllerJerry* JerryController = Cast<AControllerJerry>(Jerry->GetController());
-		TArray<uint8> Materials = Jerry->GetMaterials();
-		const uint8 NumMaterials = Materials.Num();
+		const uint8 NumMaterials = Jerry->GetMaterials().Num();
 		Jerry->CollectMaterials();
 		ATomAndJerryGameModeBase* TomAndJerryGame = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
 		if (TomAndJerryGame)

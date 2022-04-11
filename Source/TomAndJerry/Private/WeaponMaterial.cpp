@@ -12,22 +12,11 @@ AWeaponMaterial::AWeaponMaterial()
 
 void AWeaponMaterial::SetMaterialID(uint8 mID) { MaterialID = mID; }
 
-void AWeaponMaterial::SetMaterialLoc(FVector loc) { MapLoc = loc; }
-
-void AWeaponMaterial::StoreStaticMesh(UStaticMesh* SMesh) { StaticMesh = SMesh;  }
-
 
 // Called when the game starts or when spawned
 void AWeaponMaterial::BeginPlay()
 {
 	Super::BeginPlay();
-
-	MapLoc = GetActorLocation();
-
-	TArray<UStaticMeshComponent*> comps;
-	GetComponents<UStaticMeshComponent>(comps);
-	UStaticMeshComponent* comp = comps[0];
-	StaticMesh = comp->GetStaticMesh();
 }
 
 // Called every frame
