@@ -42,6 +42,8 @@ public:
 	TArray<APawn*> SpectateList;
 	void SpawnSuperWeapon(APawnJerry* Player);
 	bool HasSuperWeapon() const { return ReceivedSuperWeapon; }
+	UFUNCTION(BlueprintPure)
+		uint8 GetNumLives() { return NumLives; }
 	
 protected:
 	virtual void BeginPlay() override;
