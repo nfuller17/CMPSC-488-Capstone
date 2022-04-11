@@ -45,6 +45,8 @@ protected:
 
 private:
 	//If true, this weapon can damage the boss. Otherwise, does not damage the boss.
+	UPROPERTY(EditAnywhere);
+		USoundBase* firingSound;
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon Properties")
 		bool IsSuperWeapon = false;
 	UPROPERTY(EditDefaultsOnly, Category="Weapon Properties")

@@ -146,6 +146,10 @@ void AWeapon::FirePrimary()
 		}				
 	}
 	
+
+	UGameplayStatics::SpawnSoundAttached(firingSound, Mesh, TEXT("Muzzle"));
+
+
 	if (AmmoComponent != nullptr)
 	{
 		AmmoComponent->ConsumeAmmo(AmmoPerFire);
