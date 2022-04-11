@@ -61,7 +61,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	UPROPERTY(EditDefaultsOnly)
-	float HealthMax = 100;
+	float HealthMax = 500;
 	UPROPERTY(VisibleAnywhere)
 	float Health;
 	virtual void Died();

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "GameFramework/GameMode.h"
 #include "Factory_Monster.h"
 #include "Factory_Boss.h"
 #include "Factory_Ally_SpectateMode.h"
@@ -33,6 +34,9 @@ public:
 	void DecrementNumMonsters();
 	void DecrementNumAlliesForSpectate();
 	void DecrementNumLives() { NumLives--; }
+	
+	void Restart(APawnJerry* Jerry);
+	
 	float GetPlayerSpawnDelay() const{return PlayerSpawnDelay;}
 	UFUNCTION(BlueprintCallable)
 	void SetSpectateMode(const bool& _SpectateMode) { SpectateMode = _SpectateMode; }

@@ -301,6 +301,14 @@ void APawnJerry::Died()
 	if (Weapon != nullptr)
 		Weapon->Destroy();
 	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
+	Game->DecrementNumLives();
+
+	// TODO: Temporary code. If NumLives is 0, display a game over screen and exit back to the main menu.
+	//		 For right now, the game is just restarted.
+	if (Game->GetNumLives() == 0) {
+		Game->Restart(this);
+	}
+
 	float SpawnDelay;
 	if (Game != nullptr)
 		SpawnDelay = Game->GetPlayerSpawnDelay();

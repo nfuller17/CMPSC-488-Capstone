@@ -4,6 +4,7 @@
 #include "TomAndJerryGameModeBase.h"
 #include "EngineUtils.h"
 #include "WeaponMaterial.h"
+#include "Kismet/GameplayStatics.h"
 
 void ATomAndJerryGameModeBase::BeginPlay()
 {
@@ -98,6 +99,14 @@ void ATomAndJerryGameModeBase::DecrementNumAlliesForSpectate()
 	NumAlliesForSpectate--;
 	if (NumAlliesForSpectate < 0)
 		NumAlliesForSpectate = 0;
+}
+
+void ATomAndJerryGameModeBase::Restart(APawnJerry* Jerry)
+{
+	// AGameMode* Game = Cast<AGameMode>this;
+	// Game->RestartGame(); 
+	APlayerController* JController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	JController->ConsoleCommand("RestartLevel");
 }
 
 void ATomAndJerryGameModeBase::DepositMaterial(const uint8& Count, APawnJerry* Player)
