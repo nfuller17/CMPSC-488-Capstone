@@ -2,6 +2,7 @@
 
 
 #include "PawnJerrySpectator.h"
+#include "ControllerJerry.h"
 #include "../TomAndJerryGameModeBase.h"
 
 void APawnJerrySpectator::BeginPlay()

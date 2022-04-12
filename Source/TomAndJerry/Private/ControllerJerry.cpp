@@ -9,29 +9,19 @@
 void AControllerJerry::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	HUD = CreateWidget(this, HUDClass);
-	if (HUD != nullptr)
-	{
-		HUD->AddToViewport();
-	}
 }
 
 void AControllerJerry::Spectate(const bool& bSpectate)
 {
 	if (bSpectate)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Spectate"));
 		BeginSpectatingState();
 		ASpectatorPawn* SpecPawn = SpawnSpectatorPawn();
 		if (SpecPawn == nullptr)
 			return;
-		if (HUD)
-			HUD->RemoveFromViewport();
 		APawn* JerryPawn = GetPawn();
 		if (JerryPawn != nullptr)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Destroy old pawn!"));
 			JerryPawn->Destroy();
 		}
 		Possess(SpecPawn);
@@ -57,10 +47,24 @@ void AControllerJerry::OpenMenu()
 	}
 }
 
+void AControllerJerry::CreateHUD()
+{
+	if (HUD != nullptr)	//HUD already exists
+		return;
+	HUD = CreateWidget(this, HUDClass);
+	if (HUD != nullptr)
+		HUD->AddToViewport();
+}
+
+void AControllerJerry::DestroyHUD()
+{
+	if (HUD != nullptr)
+		HUD->RemoveFromViewport();
+}
+
 void AControllerJerry::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)
 {
 	Super::GameHasEnded(EndGameFocus, bIsWinner);
-	if (HUD)
-		HUD->RemoveFromViewport();
+	DestroyHUD();
 	GetWorldTimerManager().SetTimer(RestartTimer, this, &APlayerController::RestartLevel, RestartDelay);
 }

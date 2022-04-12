@@ -20,10 +20,16 @@ public:
 	virtual void GameHasEnded(class AActor* EndGameFocus = nullptr, bool bIsWinner = false) override;
 	UPROPERTY(EditAnywhere)
 	float RestartDelay = 5.f;
+	UFUNCTION(BlueprintPure)
+	UUserWidget* GetHUDWidget() const { return HUD; }
 	UFUNCTION(BlueprintCallable)
 	void Spectate(const bool& bSpectate);
 	FTimerHandle RestartTimer;
 	void OpenMenu();
+	UFUNCTION(BlueprintCallable)
+	void CreateHUD();
+	UFUNCTION(BlueprintCallable)
+	void DestroyHUD();
 	
 protected:
 	virtual void BeginPlay() override;
