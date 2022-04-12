@@ -118,7 +118,11 @@ void UBTService_SearchForTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 			continue;
 
 		APawnMonster* TargetMonster = Cast<APawnMonster>(Target);
+		if (TargetMonster != nullptr && TargetMonster->IsDead())
+			continue;
 		APawnJerry* Player = Cast<APawnJerry>(Target);
+		if (Player != nullptr && Player->IsDead())
+			continue;
 		float Distance = 0.0;
 
 		if ((bOnPlayerTeam && TargetMonster != nullptr && !TargetMonster->IsPlayerTeam())		//On player team - check for Bosses or Minions
@@ -141,7 +145,6 @@ void UBTService_SearchForTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 
 	if (SelectedTarget != nullptr) 		//Found a target for this AI
 	{
-		UE_LOG(LogTemp, Warning, TEXT("FOCUS SET!"));
 		AIController->SetFocus(SelectedTarget);
 		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), SelectedTarget->GetActorLocation());
 	}
