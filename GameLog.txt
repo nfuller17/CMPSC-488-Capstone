@@ -2,13 +2,10 @@
 - AI:
 	- If AI takes damage, have AI turn in the direction from where it was hit. AI vision can then take care of the rest to detect for an enemy (if enough time)
 	- Add skill branch/nodes to behavior tree for Friendly AI (if enough time)
-- In game Menu:
-	- Pressing ESCAPE key brings up a menu that allows the player to return to main menu
 - Re-design HUD
 	- Have health be a progress bar instead of a number
 	- Have ammo be a number instead of a progress bar
 	- Icons for different weapons?
-	- Add a HUD element to indicate how many lives the player has
 - Implement splash damage on projectiles
 - Fix projectile collision with world geometry (if shot at a certain angle, projectile will move along with geometry)
 	- Check ordering of Actor components in blueprint - collision componenent should probably come first
@@ -22,10 +19,14 @@
 - Gameplay balance
 	
 *********************************************************** FINISHED ***********************************************************
+4/11 - 4/18
+	- Created in-game menu
+	- Removed HUD displaying on main menu and spectate mode
 4/4 - 4/11
 	- Spawned friendly AI in spectator mode (currently, friendly AI does not seek out materials.. may not have enough time to implement this)
 	- Created super weapon to defeat boss - normal weapons do not affect boss
 	- Implemented lives on player
+	- Added a HUD element to indicate how many lives the player has
 	- Implemented sound effects on weapons
 3/28 - 4/4
 	- Implemented dodging on AI
