@@ -23,6 +23,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Spectate(const bool& bSpectate);
 	FTimerHandle RestartTimer;
+	void OpenMenu();
 	
 protected:
 	virtual void BeginPlay() override;
@@ -33,6 +34,10 @@ private:
 	TSubclassOf<class UUserWidget> HUDClass;
 	UPROPERTY()
 	UUserWidget* HUD;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> InGameMenuClass;
+	UPROPERTY()
+	UUserWidget* InGameMenu;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class ASpectatorPawn> JerrySpectatorPawn;
 };

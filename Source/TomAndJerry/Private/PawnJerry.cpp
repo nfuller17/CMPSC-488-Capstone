@@ -74,6 +74,7 @@ void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeLeft"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 2);
 	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeBackward"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 3);
 	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeRight"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 4);
+	PlayerInputComponent->BindAction(TEXT("OpenMenu"), EInputEvent::IE_Pressed, this, &APawnJerry::OpenMenu);
 }
 
 void APawnJerry::MoveForward(float AxisValue)
@@ -286,6 +287,13 @@ void APawnJerry::AddWeaponMaterial(AFactory_Material* MaterialFactory)
 void APawnJerry::CollectMaterials()
 {
 	MaterialInventory.Empty();
+}
+
+void APawnJerry::OpenMenu()
+{
+	AControllerJerry* PC = Cast<AControllerJerry>(GetController());
+	if (PC != nullptr)
+		PC->OpenMenu();
 }
 
 void APawnJerry::Died()

@@ -55,6 +55,7 @@ public:
 	FTimerHandle DestroyTimer;
 	UFUNCTION(BlueprintCallable)
 	void DestroyOnSpectate(const bool& SpectateMode);
+	void OpenMenu();
 	
 
 protected:
