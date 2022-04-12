@@ -18,6 +18,7 @@ void APawnJerrySpectator::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAction(TEXT("SpectateNextTarget"), EInputEvent::IE_Pressed, this, &APawnJerrySpectator::SpectateNextTarget);
 	PlayerInputComponent->BindAction(TEXT("FreeSpectate"), EInputEvent::IE_Pressed, this, &APawnJerrySpectator::FreeSpectate);
+	PlayerInputComponent->BindAction(TEXT("OpenMenu"), EInputEvent::IE_Pressed, this, &APawnJerrySpectator::OpenMenu);
 }
 
 void APawnJerrySpectator::MoveForward(float Val)
@@ -65,6 +66,13 @@ void APawnJerrySpectator::SpectateNextTarget()
 			}
 		}
 	}
+}
+
+void APawnJerrySpectator::OpenMenu()
+{
+	AControllerJerry* PC = Cast<AControllerJerry>(GetController());
+	if (PC != nullptr)
+		PC->OpenMenu();
 }
 
 void APawnJerrySpectator::FreeSpectate()
