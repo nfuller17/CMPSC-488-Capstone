@@ -1,22 +1,24 @@
 *********************************************************** TO DO ***********************************************************
-- AI:
-	- If AI takes damage, have AI turn in the direction from where it was hit. AI vision can then take care of the rest to detect for an enemy (if enough time)
-	- Add skill branch/nodes to behavior tree for Friendly AI (if enough time)
+- Add some graphics, such as material icons, to instructions menu
+- Fix dodging on AI - maybe make them strafe instead of launching them
 - Re-design HUD
 	- Have health be a progress bar instead of a number
 	- Have ammo be a number instead of a progress bar
-	- Icons for different weapons?
+	- Light up the weapon slot for the current weapon the player is carrying
+- New player model for boss
 - Implement splash damage on projectiles
-- Fix projectile collision with world geometry (if shot at a certain angle, projectile will move along with geometry)
-	- Check ordering of Actor components in blueprint - collision componenent should probably come first
-	- Do this if enough time
 - Fix player pawn falling through map after dying (maybe wait a few seconds after death to turn collision off)
-- Fix minions/boss mesh not falling upon death
-	- As an alternative, instead of playing a death animation, play a visual effect like a flash to simulate death
+- Remove death animations from minions/allies, and instead play a visiual effect when they die
 - Fix melee weapons - ray trace should start from player pawn or weapon, and not from camera (since this is no longer first-person)
 - Sound effects for minions, boss
 - Fix animations when characters are airborne - turn off walking animation, play airborne animation
 - Gameplay balance
+- Fix projectile collision with world geometry (if shot at a certain angle, projectile will move along with geometry)
+	- Check ordering of Actor components in blueprint - collision componenent should probably come first
+	- Do this if enough time
+- AI:
+	- If AI takes damage, have AI turn in the direction from where it was hit. AI vision can then take care of the rest to detect for an enemy (if enough time)
+	- Add skill branch/nodes to behavior tree for Friendly AI (if enough time)
 	
 *********************************************************** FINISHED ***********************************************************
 4/11 - 4/18
