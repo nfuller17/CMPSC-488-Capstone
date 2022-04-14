@@ -89,61 +89,43 @@ void AWeapon::FirePrimary()
 			return;	
 		}
 	}
-	
-	FVector FireLocation;
-	FRotator FireRotation;
-	OwnerController->GetPlayerViewPoint(FireLocation, FireRotation);	//Parameters are passed by reference, so FireLocation and FireRotation will contain values of player view point
-	
-	for (int x = 0; x < NumFirePerClick; x++)
+
+	FVector StartLocation;
+	FRotator Direction;
+	OwnerController->GetPlayerViewPoint(StartLocation, Direction);
+
+	if (bIsMelee)
 	{
-		//Randomize rotation if we have spread
-		FVector RealFireRotation = FireRotation.Vector() + FMath::VRand() * FMath::FRandRange(0.f, 1.0) * Spread;
-		//Handle hit scan firing
-		if (bIsHitScan)
+		//Start a ray trace from weapon location, in direction of player aim
+		StartLocation = GetActorLocation();		//Reset StartLocation to weapon's location, not camera's
+		Trace(StartLocation, Direction.Vector(), OwnerPawn);
+	}
+	else
+	{
+		for (int x = 0; x < NumFirePerClick; x++)
 		{
-			FVector EndLocation = FireLocation + RealFireRotation * MaxRange;
-			FHitResult Hit;
-			FCollisionQueryParams Params;
-			Params.AddIgnoredActor(this);
-			Params.AddIgnoredActor(OwnerPawn);
-			bool bHitActor = GetWorld()->LineTraceSingleByChannel(Hit, FireLocation, EndLocation, ECollisionChannel::ECC_GameTraceChannel2, Params);	//Trace from FireLocation, in direction of FireRotation, end at EndLocation
-			if (bHitActor)
+			//Randomize rotation if we have spread
+			FVector RealFireRotation = Direction.Vector() + FMath::VRand() * FMath::FRandRange(0.f, 1.0) * Spread;
+			if (bIsHitScan)
 			{
-				//Damage Actor
-				FVector DirectionFromShot = -RealFireRotation;
-				AActor* HitActor = Hit.GetActor();
-				if (HitActor)
+				Trace(StartLocation, RealFireRotation, OwnerPawn);
+			}
+			else	//Handle Projectile firing
+			{
+				if (Mesh == nullptr)
+					return;
+				FVector SpawnLocation = Mesh->GetBoneLocation("Ammo", EBoneSpaces::WorldSpace);
+				FTransform Transform = FTransform(RealFireRotation.Rotation(), SpawnLocation, FVector(1, 1, 1));
+				AProjectile* Proj = GetWorld()->SpawnActorDeferred<AProjectile>(ProjectileClass, Transform, Cast<AActor>(OwnerPawn), OwnerPawn);
+				if (Proj)
 				{
-					APawnBoss* Boss = Cast<APawnBoss>(HitActor);
-					if (Boss == nullptr || Boss != nullptr && IsSuperWeapon)
-					{
-						FPointDamageEvent DamageEvent(HitscanDamage, Hit, DirectionFromShot, nullptr);
-						HitActor->TakeDamage(HitscanDamage, DamageEvent, OwnerController, this);
-					}
+					Proj->SetTeam(true);	//Weapons always belong to Player, so we always set this Projectile to player team
+					if (IsSuperWeapon)
+						Proj->SetCanDamageBoss(true);
+					Proj->FinishSpawning(Transform);
 				}
-				
-				//Impact
-				if (ImpactEffect)
-				{
-					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.Location, DirectionFromShot.Rotation());
-				}
-			}						
+			}
 		}
-		else	//Handle Projectile firing
-		{
-			if (Mesh == nullptr)
-				return;
-			FVector SpawnLocation =  Mesh->GetBoneLocation("Ammo", EBoneSpaces::WorldSpace);
-			FTransform Transform = FTransform(RealFireRotation.Rotation(), SpawnLocation, FVector(1,1,1));
-			AProjectile* Proj = GetWorld()->SpawnActorDeferred<AProjectile>(ProjectileClass, Transform, Cast<AActor>(OwnerPawn), OwnerPawn);
-			if (Proj)
-			{
-				Proj->SetTeam(true);	//Weapons always belong to Player, so we always set this Projectile to player team
-				if (IsSuperWeapon)
-					Proj->SetCanDamageBoss(true);
-				Proj->FinishSpawning(Transform);					
-			}					
-		}				
 	}
 	
 
@@ -158,5 +140,36 @@ void AWeapon::FirePrimary()
 	
 	//Spawn muzzle flash
 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("Muzzle"));
+}
+
+void AWeapon::Trace(const FVector& StartLocation, const FVector& Direction, APawn* OwnerPawn)
+{
+	FVector EndLocation = StartLocation + Direction * MaxRange;
+	FHitResult Hit;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(OwnerPawn);
+	bool bHitActor = GetWorld()->LineTraceSingleByChannel(Hit, StartLocation, EndLocation, ECollisionChannel::ECC_GameTraceChannel2, Params);	//Trace from FireLocation, in direction of FireRotation, end at EndLocation
+	if (bHitActor)
+	{
+		//Damage Actor
+		FVector DirectionFromShot = -Direction;
+		AActor* HitActor = Hit.GetActor();
+		if (HitActor)
+		{
+			APawnBoss* Boss = Cast<APawnBoss>(HitActor);
+			if (Boss == nullptr || Boss != nullptr && IsSuperWeapon)
+			{
+				FPointDamageEvent DamageEvent(HitscanDamage, Hit, DirectionFromShot, nullptr);
+				HitActor->TakeDamage(HitscanDamage, DamageEvent, OwnerPawn->GetController(), this);
+			}
+		}
+
+		//Impact
+		if (ImpactEffect)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.Location, DirectionFromShot.Rotation());
+		}
+	}
 }
 

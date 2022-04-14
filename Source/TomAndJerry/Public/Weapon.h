@@ -27,6 +27,7 @@ public:
 	void BeginFire();
 	void StopFire();
 	void EnableFire();
+	void Trace(const FVector& StartLocation, const FVector& Direction, APawn* OwnerPawn);
 	void SetAmmoComponent(UAmmoComponent* _AmmoComponent){AmmoComponent = _AmmoComponent;}
 	FTimerHandle FiringTimer;
 	FTimerHandle SpamTimer;		//Independent timer to prevent spamming mouse button and bypassing fire rate
@@ -63,8 +64,12 @@ private:
 		float Spread;
 	UPROPERTY(EditAnywhere, Category="Weapon Properties")
 		UParticleSystem* MuzzleFlash;
+	//Whether or not this weapon is Melee. If true, hitscan and projectile are disabled. Use MaxRange to set this Melee's hit distance
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+		bool bIsMelee;
+	//Whether or not this weapon is hitscan. If true, projectile is disabled.
 	UPROPERTY(EditDefaultsOnly, Category="HitScan Properties")
-		bool bIsHitScan;		//Whether or not the weapon will fire a projectile
+		bool bIsHitScan;
 	UPROPERTY(EditAnywhere, Category="HitScan Properties", meta=(ClampMin = "0.0"))
 		float MaxRange = 1000.f;
 	UPROPERTY(EditAnywhere, Category="HitScan Properties", meta=(ClampMin = "0.0"))
