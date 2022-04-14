@@ -56,6 +56,8 @@ public:
 	bool HasWeapon(const int& WeaponNum) const;
 	UFUNCTION(BlueprintPure)
 	int GetSelectedWeapon() const;
+	UFUNCTION(BlueprintPure)
+	bool IsFiringMelee() const;
 	FTimerHandle DestroyTimer;
 	UFUNCTION(BlueprintCallable)
 	void DestroyOnSpectate(const bool& SpectateMode);

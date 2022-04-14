@@ -279,6 +279,13 @@ void APawnJerry::StopFire()
 		Weapon->StopFire();
 }
 
+bool APawnJerry::IsFiringMelee() const
+{
+	if (Weapon == nullptr)
+		return false;
+	return Weapon->IsMelee() && Weapon->IsFiring();
+}
+
 //Called when player walks over a material
 //Adds the material to the MaterialInventory array
 void APawnJerry::AddWeaponMaterial(AFactory_Material* MaterialFactory)

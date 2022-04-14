@@ -50,6 +50,11 @@ void AWeapon::StopFire()
 	GetWorldTimerManager().ClearTimer(FiringTimer);
 }
 
+bool AWeapon::IsFiring() const
+{
+	return GetWorldTimerManager().IsTimerActive(FiringTimer);
+}
+
 void AWeapon::EnableFire()
 {
 	bCanFire = true;

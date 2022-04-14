@@ -31,6 +31,8 @@ public:
 	void SetAmmoComponent(UAmmoComponent* _AmmoComponent){AmmoComponent = _AmmoComponent;}
 	FTimerHandle FiringTimer;
 	FTimerHandle SpamTimer;		//Independent timer to prevent spamming mouse button and bypassing fire rate
+	bool IsMelee() const { return bIsMelee; }
+	bool IsFiring() const;
 
 protected:
 	// Called when the game starts or when spawned
