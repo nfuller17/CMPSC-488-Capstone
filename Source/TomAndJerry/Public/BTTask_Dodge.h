@@ -3,26 +3,26 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BehaviorTree/Services/BTService_BlackboardBase.h"
+#include "BehaviorTree/BTTaskNode.h"
 #include "Projectile.h"
-#include "BTService_SearchForProjectile.generated.h"
+#include "BTTask_Dodge.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TOMANDJERRY_API UBTService_SearchForProjectile : public UBTService_BlackboardBase
+class TOMANDJERRY_API UBTTask_Dodge : public UBTTaskNode
 {
 	GENERATED_BODY()
 public:
-	UBTService_SearchForProjectile();
+	UBTTask_Dodge();
 	bool CanSeeTarget(APawn* OwnerPawn, AActor* TargetActor);
 	bool ProjectileWillCollide(APawn* OwnerPawn, AActor* Proj);
 protected:
-	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 private:
 	const float ProjectileDetectionRadius = 3500.0;
-	const float ProjectileDodgeRadius = 500.0;	//Dodge projectile if it will be within this radius
+	const float ProjectileDodgeRadius = 800.0;	//Dodge projectile if it will be within this radius
 	const float AngleOfSight = 100.0;
 	const float DodgeStrength = 1000.0;
 	const float ZAdd = 400;

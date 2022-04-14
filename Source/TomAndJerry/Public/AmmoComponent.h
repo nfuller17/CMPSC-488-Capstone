@@ -25,6 +25,8 @@ public:
 	void ConsumeAmmo(const uint16& Amount);
 	UFUNCTION(BlueprintPure)
 	float GetAmmoPercent() const{return (float)Ammo/AmmoMax;}
+	UFUNCTION(BlueprintPure)
+	int GetAmmo() const { return Ammo; }
 
 protected:
 	// Called when the game starts

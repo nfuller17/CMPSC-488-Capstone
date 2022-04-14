@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BTService_SearchForProjectile.h"
+#include "BTTask_Dodge.h"
 #include "EngineUtils.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -9,22 +9,22 @@
 #include "PawnMonster.h"
 #include "PawnJerry.h"
 
-UBTService_SearchForProjectile::UBTService_SearchForProjectile()
+UBTTask_Dodge::UBTTask_Dodge()
 {
-	NodeName = TEXT("Search for Projectiles");
+	NodeName = TEXT("Dodge Projectile");
 }
 
-void UBTService_SearchForProjectile::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+EBTNodeResult::Type UBTTask_Dodge::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
+	Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	AAIController* AIController = OwnerComp.GetAIOwner();
 	if (AIController == nullptr)
-		return;
+		return EBTNodeResult::Failed;
 
 	APawnMonster* PawnOwner = Cast<APawnMonster>(AIController->GetPawn());
 	if (PawnOwner == nullptr)
-		return;
+		return EBTNodeResult::Failed;
 
 	bool bOnPlayerTeam = PawnOwner->IsPlayerTeam();
 
@@ -52,14 +52,14 @@ void UBTService_SearchForProjectile::TickNode(UBehaviorTreeComponent& OwnerComp,
 					DodgeDirection = -DodgeDirection;
 				FVector DodgeVector = (DodgeDirection * DodgeStrength) + FVector(0, 0, ZAdd);
 				PawnOwner->LaunchCharacter(DodgeVector, true, true);
-				OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), true);
-				return;
+				return EBTNodeResult::Succeeded;
 			}
 		}
 	}
+	return EBTNodeResult::Succeeded;
 }
 
-bool UBTService_SearchForProjectile::CanSeeTarget(APawn* OwnerPawn, AActor* TargetActor)
+bool UBTTask_Dodge::CanSeeTarget(APawn* OwnerPawn, AActor* TargetActor)
 {
 	//Get vector from this AI to target
 	FVector DirectionToTarget = (TargetActor->GetActorLocation() - OwnerPawn->GetActorLocation());
@@ -92,10 +92,10 @@ bool UBTService_SearchForProjectile::CanSeeTarget(APawn* OwnerPawn, AActor* Targ
 }
 
 //Determine whether the projectile will collide with AI pawn (or will be in close range)
-bool UBTService_SearchForProjectile::ProjectileWillCollide(APawn* OwnerPawn, AActor* Proj)
+bool UBTTask_Dodge::ProjectileWillCollide(APawn* OwnerPawn, AActor* Proj)
 {
 	//Starting Location of AI + Velocity of AI * t = Starting Location of Projectile + Velocity of Projectile * t
-	for (float x = 1.0; x <= 3.0; x += 0.5)
+	for (float x = 1.0; x <= 5.0; x++)
 	{
 		FVector NextLocation = Proj->GetActorLocation() + Proj->GetVelocity() * x;
 		FVector Line = NextLocation - OwnerPawn->GetActorLocation();
@@ -104,7 +104,7 @@ bool UBTService_SearchForProjectile::ProjectileWillCollide(APawn* OwnerPawn, AAc
 			return true;
 	}
 	return false;
-	
+
 	/*
 	float xSeconds = (OwnerPawn->GetActorLocation().X - Proj->GetActorLocation().X) / (Proj->GetVelocity().X - OwnerPawn->GetVelocity().X);
 	if (xSeconds < 0)	//Will never cross

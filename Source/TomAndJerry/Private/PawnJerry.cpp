@@ -254,6 +254,13 @@ bool APawnJerry::HasWeapon(const int& WeaponNum) const
 	return false;
 }
 
+int APawnJerry::GetSelectedWeapon() const
+{
+	if (Weapon == nullptr)
+		return -1;
+	return Weapon->GetWeaponNumber();
+}
+
 //Called when a player clicks with left mouse
 //Input binding is used here, as SetupPlayerInputComponent is called before BeginPlay and Weapon will be null
 void APawnJerry::BeginFire()

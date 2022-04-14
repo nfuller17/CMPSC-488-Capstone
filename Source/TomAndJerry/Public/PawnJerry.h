@@ -46,12 +46,16 @@ public:
 	float GetHealth() const {return Health;}
 	UFUNCTION(BlueprintPure)
 	int GetUIHealth() const {return FMath::RoundFromZero(Health);}
+	UFUNCTION(BlueprintPure)
+	float GetHealthPercent() const { return Health / HealthMax; }
 	float GetHealthMax() const {return HealthMax;}
 	void AddHealth(const float& HealthAdd);
 	UFUNCTION(BlueprintPure)
 	UAmmoComponent* GetAmmoComponent() const {return AmmoComponent;}
 	UFUNCTION(BlueprintPure)
 	bool HasWeapon(const int& WeaponNum) const;
+	UFUNCTION(BlueprintPure)
+		int GetSelectedWeapon() const;
 	FTimerHandle DestroyTimer;
 	UFUNCTION(BlueprintCallable)
 	void DestroyOnSpectate(const bool& SpectateMode);
