@@ -35,6 +35,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	bool PlayerTeam;
+	void ServeDamage(AActor* Victim, AController* OwnerController);
 	
 private:
 	bool CanDamageBoss = false;
@@ -47,8 +48,11 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float Damage;
 	UPROPERTY(EditDefaultsOnly)
-	float Speed;
-	UPROPERTY(EditDefaultsOnly)
 	bool bSplashDamage;
+	//If Splash Damage is set, how far away can Pawns be damaged by this projectile when it explodes
+	UPROPERTY(EditDefaultsOnly)
+	float DamageRadius = 100.0;
+	UPROPERTY(EditDefaultsOnly)
+	float Speed;
 
 };

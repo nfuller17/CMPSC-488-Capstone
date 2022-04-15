@@ -3,6 +3,7 @@
 
 #include "Projectile.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "PawnMonster.h"
 #include "PawnJerry.h"
 #include "PawnBoss.h"
@@ -69,27 +70,42 @@ void AProjectile::NotifyActorBeginOverlap(AActor* OtherActor)
 
 void AProjectile::Explode(AActor* TargetActor)
 {
+	AController* OwnerController = GetInstigatorController();
+	if (OwnerController == nullptr)
+		return;
 	if (bSplashDamage)	//Damage any Pawns within our radius
 	{
-		
+		TArray< TEnumAsByte< EObjectTypeQuery > > ObjectTypes;
+		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
+		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel4));
+		TArray < AActor*> IgnoreActors;
+		TArray< AActor* > FoundActors;
+		if (UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetActorLocation(), DamageRadius, ObjectTypes, APawn::StaticClass(), IgnoreActors, FoundActors))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Splash damage!"));
+			for (auto Victim : FoundActors)
+			{
+				ServeDamage(Victim, OwnerController);
+			}
+		}
 	}
 	else	//Must land direct hit
 	{
-		if (TargetActor)
+		if (TargetActor != nullptr)
 		{
 			//Damage the TargetActor
-			AController* OwnerController = GetInstigatorController();
-			if (OwnerController)
-			{
-				APawnBoss* Boss = Cast<APawnBoss>(TargetActor);
-				if (Boss == nullptr || Boss != nullptr && CanDamageBoss)
-				{
-					FPointDamageEvent DamageEvent(Damage, FHitResult(), GetActorLocation() - TargetActor->GetActorLocation(), nullptr);
-					TargetActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
-				}
-			}				
+			ServeDamage(TargetActor, OwnerController);			
 		}
 	}
 	Destroy();
+}
+
+void AProjectile::ServeDamage(AActor* Victim, AController* OwnerController)
+{
+	APawnBoss* Boss = Cast<APawnBoss>(Victim);
+	if (Boss != nullptr && !CanDamageBoss)
+		return;
+	FPointDamageEvent DamageEvent(Damage, FHitResult(), GetActorLocation() - Victim->GetActorLocation(), nullptr);
+	Victim->TakeDamage(Damage, DamageEvent, OwnerController, this);
 }
 
