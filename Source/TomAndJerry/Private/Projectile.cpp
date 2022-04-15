@@ -38,7 +38,7 @@ void AProjectile::Tick(float DeltaTime)
 	
 	if (Root)
 	{
-		Root->MoveComponent(Speed*DeltaTime*(GetActorRotation().Vector()), GetActorRotation(), false);
+		Root->MoveComponent(Speed*DeltaTime*(GetActorRotation().Vector()), GetActorRotation(), true);
 	}
 }
 
