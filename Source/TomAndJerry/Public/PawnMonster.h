@@ -107,4 +107,6 @@ private:
 		float FireRate;
 	bool bCanFire = true;	//Used with timer
 	bool bCanMelee = true;	//Used with timer
+	UPROPERTY(EditAnywhere)
+		UParticleSystem* DeathEffect;
 };

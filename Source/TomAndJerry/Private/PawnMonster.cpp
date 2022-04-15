@@ -6,6 +6,7 @@
 #include "../TomAndJerryGameModeBase.h"
 #include "Projectile.h"
 #include "AIController.h"
+#include "Kismet/GameplayStatics.h"
 #include "Components/CapsuleComponent.h"
 
 // Sets default values
@@ -222,6 +223,10 @@ void APawnMonster::Died()
 	{
 		Game->SpectateList.RemoveSingle(this);
 	}
+
+	//Spawn muzzle flash
+	if (DeathEffect != nullptr)
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathEffect, GetActorLocation(), GetActorRotation());
 	//Normally, we want to destroy the Actor here after dying
 	//However, this is a virtual method that is overridden in derived classes
 	//Calling Destroy here could be dangerous if it finishes first before the derived class can finish its implementation of this function

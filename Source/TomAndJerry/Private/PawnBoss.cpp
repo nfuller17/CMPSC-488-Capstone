@@ -11,5 +11,5 @@ void APawnBoss::Died()
 	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
 	if (Game)
 		Game->EndGame(true);
-	GetWorldTimerManager().SetTimer(DestroyTimer, this, &APawnBoss::DestroyHelper, DestroyDelay, false, DestroyDelay);
+	Destroy();
 }

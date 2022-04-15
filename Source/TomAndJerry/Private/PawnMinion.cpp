@@ -11,5 +11,5 @@ void APawnMinion::Died()
 	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
 	if (Game)
 		Game->DecrementNumMonsters();
-	GetWorldTimerManager().SetTimer(DestroyTimer, this, &APawnMinion::DestroyHelper, DestroyDelay, false, DestroyDelay);
+	Destroy();
 }
