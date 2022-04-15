@@ -150,6 +150,11 @@ void APawnMonster::MeleeAttack(AActor* Victim)
 	Victim->TakeDamage(MeleeDamage, DamageEvent, GetController(), this);
 }
 
+bool APawnMonster::IsAttackingWithMelee() const
+{
+	return GetWorldTimerManager().IsTimerActive(MeleeTimer);
+}
+
 //Called by the AI Behavior Tree, which has made a check to see if this Pawn has the requested Skill
 //This function will call CanExecute() on the requested Skill, which will return a boolean indiciating whether the correct conditions are in place
 //If CanExecute() returns true, decrement this Pawn's energy by the Skill's cost

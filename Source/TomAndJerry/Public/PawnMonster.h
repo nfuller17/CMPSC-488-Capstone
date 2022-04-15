@@ -48,6 +48,8 @@ public:
 	virtual float GetDamageBonus() const{return DamageBonus;}
 	virtual void SetDamageBonus(const float& _DamageBonus){DamageBonus = _DamageBonus;}
 	bool IsMelee() const { return bIsMeleeOnly; }
+	UFUNCTION(BlueprintPure)
+	bool IsAttackingWithMelee() const;
 	FTimerHandle FiringTimer;
 	FTimerHandle MeleeTimer;
 	FTimerHandle DestroyTimer;
