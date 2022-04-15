@@ -12,8 +12,8 @@ APickup::APickup()
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	SetRootComponent(Root);
 
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
-	StaticMesh->SetupAttachment(Root);
+	Effect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Effect"));
+	Effect->SetupAttachment(Root);
 }
 
 // Called when the game starts or when spawned

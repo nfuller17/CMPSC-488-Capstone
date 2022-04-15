@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Factory_Pickup.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Pickup.generated.h"
 
 class AFactory_Pickup;
@@ -30,7 +31,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 		USceneComponent* Root;
 	UPROPERTY(VisibleAnywhere)
-		UStaticMeshComponent* StaticMesh;
+		UParticleSystemComponent* Effect;
 	AFactory_Pickup* PickupFactory;
 	
 };
