@@ -41,6 +41,11 @@ void APawnMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 float APawnMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float DamageToDo = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	//Check if we are already dead
+	if (IsDead())
+	{
+		return DamageToDo;
+	}
 	//Check for Friendly fire
 	if (EventInstigator != nullptr)		//Important to check not null in the event Instigator dies before TakeDamage is called, such as in projectiles
 	{
