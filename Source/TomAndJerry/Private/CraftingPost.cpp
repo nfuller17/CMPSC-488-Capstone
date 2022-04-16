@@ -2,6 +2,7 @@
 
 
 #include "CraftingPost.h"
+#include "Kismet/GameplayStatics.h"
 #include "PawnJerry.h"
 #include "ControllerJerry.h"
 #include "../TomAndJerryGameModeBase.h"
@@ -34,7 +35,6 @@ void ACraftingPost::NotifyActorBeginOverlap(AActor* OtherActor)
 	APawnJerry* Jerry = Cast<APawnJerry>(OtherActor);
 	if (Jerry)
 	{
-		// AControllerJerry* JerryController = Cast<AControllerJerry>(Jerry->GetController());
 		const uint8 NumMaterials = Jerry->GetMaterials().Num();
 		Jerry->CollectMaterials();
 		ATomAndJerryGameModeBase* TomAndJerryGame = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
@@ -42,7 +42,10 @@ void ACraftingPost::NotifyActorBeginOverlap(AActor* OtherActor)
 		{
 			TomAndJerryGame->DepositMaterial(NumMaterials, Jerry);
 		}
-		UE_LOG(LogTemp, Warning, TEXT("Collected %d materials from player."), NumMaterials);
+		if (NumMaterials > 0 && CollectEffect != nullptr)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), CollectEffect, GetActorLocation(), GetActorRotation());
+		}
 	}
 }
 

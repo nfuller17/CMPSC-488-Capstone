@@ -232,7 +232,13 @@ void APawnMonster::Died()
 	//Spawn muzzle flash
 	if (DeathEffect != nullptr)
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathEffect, GetActorLocation(), GetActorRotation());
+	//Hide character mesh
+	USkeletalMeshComponent* MonsterMesh = GetMesh();
+	if (MonsterMesh != nullptr)
+		MonsterMesh->SetVisibility(false, false);
 	//Normally, we want to destroy the Actor here after dying
 	//However, this is a virtual method that is overridden in derived classes
 	//Calling Destroy here could be dangerous if it finishes first before the derived class can finish its implementation of this function
+	//Let children call their own Destroy timer
+
 }
