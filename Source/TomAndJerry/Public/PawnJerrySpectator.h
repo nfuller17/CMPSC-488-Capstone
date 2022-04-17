@@ -20,12 +20,12 @@ public:
 	void MoveForward(float Val) override;
 	void MoveRight(float Val) override;
 	void OpenMenu();
-
-protected:
-	virtual void BeginPlay() override;
 	void SpectateNextTarget();
 	void FreeSpectate();
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
-	//AActor* CurrentViewTarget;
+	AActor* CurrentViewTarget;
 };

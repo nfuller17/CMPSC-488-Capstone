@@ -82,7 +82,6 @@ void AProjectile::Explode(AActor* TargetActor)
 		TArray< AActor* > FoundActors;
 		if (UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetActorLocation(), DamageRadius, ObjectTypes, APawn::StaticClass(), IgnoreActors, FoundActors))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Splash damage!"));
 			for (auto Victim : FoundActors)
 			{
 				ServeDamage(Victim, OwnerController);
@@ -102,6 +101,8 @@ void AProjectile::Explode(AActor* TargetActor)
 
 void AProjectile::ServeDamage(AActor* Victim, AController* OwnerController)
 {
+	if (Victim == nullptr)	//Safety check
+		return;
 	APawnBoss* Boss = Cast<APawnBoss>(Victim);
 	if (Boss != nullptr && !CanDamageBoss)
 		return;

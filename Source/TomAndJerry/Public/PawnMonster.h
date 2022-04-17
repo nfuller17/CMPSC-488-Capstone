@@ -64,7 +64,7 @@ protected:
 	virtual void Died();
 	//Called in conjunction with DestroyTimer
 	//Needed since callback function expects void type, but Destroy() returns boolean
-	void DestroyHelper(){Destroy();}
+	void DestroyHelper();
 	bool PlayerTeam;
 	UPROPERTY(VisibleAnywhere)
 		float Health;

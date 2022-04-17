@@ -10,5 +10,6 @@ void APawnAlly::Died()
 	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
 	if (Game)
 		Game->DecrementNumAlliesForSpectate();
+	UE_LOG(LogTemp, Warning, TEXT("Ally died!"));
 	GetWorldTimerManager().SetTimer(DestroyTimer, this, &APawnAlly::DestroyHelper, DestroyDelay, false, DestroyDelay);
 }

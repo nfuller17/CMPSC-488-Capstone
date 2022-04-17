@@ -49,9 +49,9 @@ float APawnMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	//Check for Friendly fire
 	if (EventInstigator != nullptr)		//Important to check not null in the event Instigator dies before TakeDamage is called, such as in projectiles
 	{
+		APawnMonster* Monster = Cast<APawnMonster>(EventInstigator->GetPawn());
 		if (PlayerTeam)	//This monster is on player team - ignore damage caused by other friendly AI and by player
 		{
-			APawnMonster* Monster = Cast<APawnMonster>(EventInstigator->GetPawn());
 			if (Monster != nullptr && Monster->PlayerTeam)
 			{
 				return 0.0;
@@ -63,7 +63,6 @@ float APawnMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		}
 		else //On hostile monster team - ignore damage caused by other hostile monsters
 		{
-			APawnMonster* Monster = Cast<APawnMonster>(EventInstigator->GetPawn());
 			if (Monster != nullptr && !Monster->PlayerTeam)
 			{
 				return 0.0;
@@ -228,11 +227,12 @@ void APawnMonster::Died()
 	GetWorldTimerManager().ClearTimer(EnergyTimer);
 	DetachFromControllerPendingDestroy();
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
-	if (Game != nullptr && Game->GetSpectateMode())
-	{
-		Game->SpectateList.RemoveSingle(this);
-	}
+	//ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
+	//if (Game != nullptr && Game->GetSpectateMode())
+	//{
+	//	Game->SpectateList.RemoveSingleSwap(this, true);
+	//	UE_LOG(LogTemp, Warning, TEXT("Size of spectate list: %d"), Game->SpectateList.Num());
+	//}
 
 	//Spawn muzzle flash
 	if (DeathEffect != nullptr)
@@ -246,4 +246,11 @@ void APawnMonster::Died()
 	//Calling Destroy here could be dangerous if it finishes first before the derived class can finish its implementation of this function
 	//Let children call their own Destroy timer
 
+}
+
+void APawnMonster::DestroyHelper()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Destroying pawn"));
+	GetWorldTimerManager().ClearTimer(DestroyTimer);
+	Destroy();
 }

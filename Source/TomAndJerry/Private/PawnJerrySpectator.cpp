@@ -2,7 +2,9 @@
 
 
 #include "PawnJerrySpectator.h"
+#include "EngineUtils.h"
 #include "ControllerJerry.h"
+#include "PawnMonster.h"
 #include "../TomAndJerryGameModeBase.h"
 
 void APawnJerrySpectator::BeginPlay()
@@ -44,11 +46,25 @@ void APawnJerrySpectator::SpectateNextTarget()
 		return;
 	if (Game->GetSpectateMode())
 	{
-		for (int x = 0; Game != nullptr && Game->SpectateList.Num() > 0 && x < Game->SpectateList.Num(); x++)
+		int32 NumControllers = GetWorld()->GetNumControllers() - 1;
+		int32 RandomIndex = FMath::RandRange(0, NumControllers);
+		uint8 Counter = 0;
+		for (auto Monster : TActorRange<APawnMonster>(GetWorld()))
+		{
+			if (Counter == RandomIndex)
+			{
+				PC->SetViewTarget(Monster);
+				CurrentViewTarget = Monster;
+				return;
+			}
+			Counter++;
+		}
+		/*for (int x = 0; Game != nullptr && Game->SpectateList.Num() > 0 && x < Game->SpectateList.Num(); x++)
 		{
 			if (PC->GetViewTarget() == this)
 			{
 				PC->SetViewTarget(Game->SpectateList[x]);
+				CurrentViewTarget = Game->SpectateList[x];
 				return;
 			}
 			else if (PC->GetViewTarget() == Game->SpectateList[x])
@@ -57,15 +73,18 @@ void APawnJerrySpectator::SpectateNextTarget()
 				if (x + 1 < Game->SpectateList.Num())
 				{
 					PC->SetViewTarget(Game->SpectateList[x + 1]);
+					CurrentViewTarget = Game->SpectateList[x + 1];
 					return;
 				}
 				else if (x == Game->SpectateList.Num() - 1)	//At last in list, go to beginning
 				{
 					PC->SetViewTarget(Game->SpectateList[0]);
+					CurrentViewTarget = Game->SpectateList[0];
 					return;
 				}
 			}
 		}
+		*/
 	}
 }
 

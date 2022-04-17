@@ -12,5 +12,5 @@ void APawnMinion::Died()
 	if (Game)
 		Game->DecrementNumMonsters();
 	GetWorldTimerManager().SetTimer(DestroyTimer, this, &APawnMinion::DestroyHelper, DestroyDelay, false, DestroyDelay);
-	UE_LOG(LogTemp, Warning, TEXT("Died!"));
+	UE_LOG(LogTemp, Warning, TEXT("Minion Died!"));
 }

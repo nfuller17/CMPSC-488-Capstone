@@ -19,10 +19,10 @@ bool AFactory_Monster::SpawnMonster()
 	if (Monster == nullptr)
 		return false;
 	Monster->SetTeam(false);
-	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
-	if (Game != nullptr && Game->GetSpectateMode())
-	{
-		Game->SpectateList.Emplace(Monster);
-	}
+	//ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
+	//if (Game != nullptr && Game->GetSpectateMode())
+	//{
+	//	Game->SpectateList.Emplace(Monster);
+	//}
 	return true;
 }

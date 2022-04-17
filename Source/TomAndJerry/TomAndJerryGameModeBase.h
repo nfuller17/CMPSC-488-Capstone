@@ -43,7 +43,7 @@ public:
 	bool GetSpectateMode() const { return SpectateMode; }
 	UFUNCTION(BlueprintCallable)
 	void SpawnAlliesIfSpectating(const bool& _SpectateMode);
-	TArray<APawn*> SpectateList;
+	//TArray<APawn*> SpectateList;
 	void SpawnSuperWeapon(APawnJerry* Player);
 	bool HasSuperWeapon() const { return ReceivedSuperWeapon; }
 	UFUNCTION(BlueprintPure)

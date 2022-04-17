@@ -3,7 +3,7 @@
 
 #include "TomAndJerryGameModeBase.h"
 #include "EngineUtils.h"
-#include "WeaponMaterial.h"
+#include "Factory_Material.h"
 #include "Kismet/GameplayStatics.h"
 
 void ATomAndJerryGameModeBase::BeginPlay()
@@ -11,9 +11,7 @@ void ATomAndJerryGameModeBase::BeginPlay()
 	Super::BeginPlay();
 	
 	//Get a count of how many materials there are in the level
-	//NICK !! - Change this to iterate over all weapon material factories instead. There should be a one-to-one relationship between factory and material, so this should work.
-	//P.S. - hi
-	for (auto Material: TActorRange<AWeaponMaterial>(GetWorld()))
+	for (auto Material: TActorRange<AFactory_Material>(GetWorld()))
 		MaterialsTotal++;
 	UE_LOG(LogTemp, Warning, TEXT("Game Started. Number of materials to collect: %d."), MaterialsTotal);
 	
@@ -22,6 +20,9 @@ void ATomAndJerryGameModeBase::BeginPlay()
 		MonsterFactories.Emplace(Factory);
 	for (auto Factory: TActorRange<AFactory_Boss>(GetWorld()))
 		BossFactories.Emplace(Factory);
+
+	//Reserve space for SpectateList, which can be at most the number of minions and allies spawned in the game at once
+	//SpectateList.Reserve(MaxMonsters + MaxAlliesForSpectate);
 	
 	//Set timer to spawn monsters
 	GetWorldTimerManager().SetTimer(SpawnTimer, this, &ATomAndJerryGameModeBase::SpawnMonster, MonsterSpawnInterval, true, 0);
