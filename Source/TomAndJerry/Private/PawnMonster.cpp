@@ -225,7 +225,7 @@ void APawnMonster::Died()
 {
 	StopFire();
 	GetWorldTimerManager().ClearTimer(EnergyTimer);
-	DetachFromControllerPendingDestroy();
+	//DetachFromControllerPendingDestroy();
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	//ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
 	//if (Game != nullptr && Game->GetSpectateMode())
