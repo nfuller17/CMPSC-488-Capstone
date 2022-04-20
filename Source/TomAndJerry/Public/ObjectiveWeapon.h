@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "MinorObjective.h"
+#include "GameFramework/Actor.h"
 #include "ObjectiveWeapon.generated.h"
 
 /**
@@ -25,5 +26,7 @@ public:
 private:
 	//The weapon class to provide the player
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AWeapon> WeaponClass;
+		TSubclassOf<AWeapon> WeaponClass;
+	UPROPERTY(EditAnywhere)
+		UParticleSystem* CollectEffect;
 };

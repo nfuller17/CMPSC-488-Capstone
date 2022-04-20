@@ -25,5 +25,5 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere)
-	UParticleSystem* CollectEffect;
+		UParticleSystem* CollectEffect;
 };

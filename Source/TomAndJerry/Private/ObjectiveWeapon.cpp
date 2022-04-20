@@ -4,6 +4,7 @@
 #include "ObjectiveWeapon.h"
 #include "Weapon.h"
 #include "PawnJerry.h"
+#include "Kismet/GameplayStatics.h"
 
 void AObjectiveWeapon::Complete()
 {
@@ -11,8 +12,12 @@ void AObjectiveWeapon::Complete()
 	if (ActivatingPawn != nullptr)
 	{
 		APawnJerry* JerryPawn = Cast<APawnJerry>(ActivatingPawn);
-		if (JerryPawn)
+		if (JerryPawn) {
 			JerryPawn->AddWeapon(WeaponClass);
+			if (CollectEffect != nullptr)
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), CollectEffect, GetActorLocation(), GetActorRotation());
+			Destroy();
+		}
 	}
 }
 
