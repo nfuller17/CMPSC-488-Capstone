@@ -91,6 +91,8 @@ void APawnJerry::Dodge(const int32 Direction)
 {
 	if (IsDead())
 		return;
+	if (!CanJump())
+		return;
 	if (GetWorld()->GetTimeSeconds() - LastDodgeTime >= TimeBetweenDodges) {	// Checks to see if enough time has passed to perform a dodge
 		if (GetWorld()->GetTimeSeconds() - LastDirInputTime <= DoublePressTime) {	// Checks to see if two direction inputs occur in rapid succession
 			if (Direction == prevDir) {		// If the previous input direction is the same as the current one...
