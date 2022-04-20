@@ -4,6 +4,7 @@
 - Add win/lose screen
 
 [LOWER PRIORITY]
+- If a factory attempts to spawn a pickup while the player is standing on top of it, that factory will not spawn any more pickups
 - Fix AI spazzing out sometimes during combat
 - Add some graphics, such as material icons, to instructions menu
 - Sound effects for minions, boss, pickups
