@@ -41,5 +41,5 @@ private:
 	uint16 StartingAmmo = 50;
 	//Max ammo amount for all weapons. Ammo is shared across all weapons.
 	UPROPERTY(EditDefaultsOnly, Category="Ammo", meta=(ClampMin= "1"))
-	uint16 AmmoMax = 100;
+	uint16 AmmoMax = 200;
 };

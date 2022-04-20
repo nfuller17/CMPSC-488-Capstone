@@ -20,5 +20,5 @@ public:
 private:
 	//How much health does this pickup provide
 	UPROPERTY(EditAnywhere)
-	float HealthAmount = 20.0;
+	float HealthAmount = 75.0;
 };

@@ -20,5 +20,5 @@ public:
 private:
 	//How much health does this pickup provide
 	UPROPERTY(EditAnywhere, meta=(ClampMin= "1"))
-	uint16 AmmoAmount = 30;
+	uint16 AmmoAmount = 35;
 };
