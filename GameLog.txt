@@ -1,18 +1,26 @@
 *********************************************************** TO DO ***********************************************************
+[HIGH PRIORITY]
+- Fix AI shooting projectiles at player after death
+- Add win/lose screen
+
+[LOWER PRIORITY]
 - Fix AI spazzing out sometimes during combat
 - Add some graphics, such as material icons, to instructions menu
 - Sound effects for minions, boss, pickups
 - Fix Mage/Muriel projectiles sometimes not colliding with walls
-- Add win/lose screen
-- Gameplay balance
 - AI:
 	- If AI takes damage, have AI turn in the direction from where it was hit. AI vision can then take care of the rest to detect for an enemy (if enough time)
 	- Add skill branch/nodes to behavior tree for Friendly AI (if enough time)
-- Map:
-	- Move material factories to final locations
-	- Add factories to the final zone (minion, boss, health, ammo, ally)
 	
 *********************************************************** FINISHED ***********************************************************
+4/18 - [4/20]
+	- Added player ability to jump
+	- Attempt made at game balancing
+	- Map changes:
+		- Moved material factories to final locations
+		- Added factories to the final zone (minion, boss, health, ammo, ally)
+		- Added other needed factories around the map
+	
 4/11 - 4/18
 	- Created in-game menu
 	- Removed HUD displaying on main menu and spectate mode
