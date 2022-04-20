@@ -16,7 +16,6 @@ void AObjectiveWeapon::Complete()
 			JerryPawn->AddWeapon(WeaponClass);
 			if (CollectEffect != nullptr)
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), CollectEffect, GetActorLocation(), GetActorRotation());
-			Destroy();
 		}
 	}
 }
