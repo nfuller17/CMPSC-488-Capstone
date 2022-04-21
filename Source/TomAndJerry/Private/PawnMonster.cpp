@@ -108,6 +108,8 @@ void APawnMonster::StopFire()
 
 void APawnMonster::FireProjectile()
 {
+	if (IsDead())
+		return;
 	//Spawn a projectile, in front of the Monster, facing the direction of the Monster
 	AAIController* MonsterController = Cast<AAIController>(GetController());
 	if (MonsterController == nullptr)
@@ -120,7 +122,7 @@ void APawnMonster::FireProjectile()
 	FRotator SpawnRotation = FVector(TargetPawn->GetActorLocation() - SpawnLocation).Rotation();
 	FTransform Transform = FTransform(SpawnRotation, SpawnLocation, FVector(1,1,1));
 	AProjectile* Proj = GetWorld()->SpawnActorDeferred<AProjectile>(ProjectileClass, Transform, this, this);
-	if (Proj)
+	if (Proj != nullptr)
 	{
 		Proj->SetTeam(false);
 		float AddDamage = Proj->GetDamage();	//Apply any damage bonus, if any
@@ -148,6 +150,8 @@ void APawnMonster::StopMelee()
 
 void APawnMonster::MeleeAttack(AActor* Victim)
 {
+	if (IsDead())
+		return;
 	if (Victim == nullptr)
 		return;
 	FPointDamageEvent DamageEvent(MeleeDamage, FHitResult(), GetActorLocation() - Victim->GetActorLocation(), nullptr);
@@ -165,6 +169,8 @@ bool APawnMonster::IsAttackingWithMelee() const
 //This function is void, but the calling AI Behavior Tree will always return Succeed
 void APawnMonster::DoSkill(const TSubclassOf<ASkill> RequestedSkill)
 {
+	if (IsDead())
+		return;
 	if (bSkillIsActive)
 		return;
 	for (auto SkillBlueprintClass: Skills)
@@ -225,14 +231,8 @@ void APawnMonster::Died()
 {
 	StopFire();
 	GetWorldTimerManager().ClearTimer(EnergyTimer);
-	//DetachFromControllerPendingDestroy();
+	DetachFromControllerPendingDestroy();
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
-	//if (Game != nullptr && Game->GetSpectateMode())
-	//{
-	//	Game->SpectateList.RemoveSingleSwap(this, true);
-	//	UE_LOG(LogTemp, Warning, TEXT("Size of spectate list: %d"), Game->SpectateList.Num());
-	//}
 
 	//Spawn muzzle flash
 	if (DeathEffect != nullptr)

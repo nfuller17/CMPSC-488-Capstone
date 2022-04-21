@@ -4,6 +4,7 @@
 #include "BTService_UpdateTargetLocation.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
+#include "PawnJerrySpectator.h"
 
 UBTService_UpdateTargetLocation::UBTService_UpdateTargetLocation()
 {
@@ -20,5 +21,12 @@ void UBTService_UpdateTargetLocation::TickNode(UBehaviorTreeComponent& OwnerComp
 	AActor* FocusActor = AIController->GetFocusActor();
 	if (FocusActor == nullptr)
 		return;
+	APawnJerrySpectator* Spectator = Cast<APawnJerrySpectator>(FocusActor);
+	if (Spectator != nullptr)
+	{
+		AIController->ClearFocus(EAIFocusPriority::Gameplay);
+		OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+		return;
+	}
 	OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), FocusActor->GetActorLocation());
 }

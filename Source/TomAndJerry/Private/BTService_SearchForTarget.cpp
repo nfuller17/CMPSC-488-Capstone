@@ -123,6 +123,9 @@ void UBTService_SearchForTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 		APawnJerry* Player = Cast<APawnJerry>(Target);
 		if (Player != nullptr && Player->IsDead())
 			continue;
+		APawnJerrySpectator* Spectator = Cast<APawnJerrySpectator>(Target);
+		if (Spectator != nullptr)
+			continue;
 		float Distance = 0.0;
 
 		if ((bOnPlayerTeam && TargetMonster != nullptr && !TargetMonster->IsPlayerTeam())		//On player team - check for Bosses or Minions

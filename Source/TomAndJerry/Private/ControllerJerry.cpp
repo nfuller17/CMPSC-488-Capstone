@@ -16,7 +16,7 @@ void AControllerJerry::Spectate(const bool& bSpectate)
 	if (bSpectate)
 	{
 		BeginSpectatingState();
-		ASpectatorPawn* SpecPawn = SpawnSpectatorPawn();
+		ASpectatorPawn* SpecPawn = GetWorld()->SpawnActor<ASpectatorPawn>(JerrySpectatorPawn, GetSpawnLocation(), GetControlRotation());
 		if (SpecPawn == nullptr)
 			return;
 		APawn* JerryPawn = GetPawn();
