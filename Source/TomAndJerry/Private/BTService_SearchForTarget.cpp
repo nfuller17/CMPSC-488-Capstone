@@ -91,12 +91,17 @@ void UBTService_SearchForTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 		APawn* Player = PawnOwner->GetWorld()->GetFirstPlayerController()->GetPawn();
 		if (Player != nullptr)
 		{
-			//Is Player in range of this AI?
-			if ((Player->GetActorLocation() - PawnOwner->GetActorLocation()).Size() <= ChangeFocusToPlayerRadius)
+			//Make sure player is not spectator
+			APawnJerry* Jerry = Cast<APawnJerry>(Player);
+			if (Jerry != nullptr)
 			{
-				AIController->SetFocus(Player);
-				OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), Player->GetActorLocation());
-				return;
+				//Is Player in range of this AI?
+				if ((Jerry->GetActorLocation() - PawnOwner->GetActorLocation()).Size() <= ChangeFocusToPlayerRadius)
+				{
+					AIController->SetFocus(Jerry);
+					OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), Jerry->GetActorLocation());
+					return;
+				}
 			}
 		}
 	}
@@ -111,7 +116,7 @@ void UBTService_SearchForTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 
 	//Check to see if an enemy is within our "eye sight"
 	//Loop through all Pawns that this AI can potentially see
-	for (auto Target : TActorRange<APawn>(PawnOwner->GetWorld()))
+	for (auto Target : TActorRange<ACharacter>(PawnOwner->GetWorld()))
 	{
 		//Simple intial check if we have a direct line of sight to Target
 		if (!AIController->LineOfSightTo(Target))
@@ -122,9 +127,6 @@ void UBTService_SearchForTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 			continue;
 		APawnJerry* Player = Cast<APawnJerry>(Target);
 		if (Player != nullptr && Player->IsDead())
-			continue;
-		APawnJerrySpectator* Spectator = Cast<APawnJerrySpectator>(Target);
-		if (Spectator != nullptr)
 			continue;
 		float Distance = 0.0;
 
