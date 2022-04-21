@@ -1,19 +1,24 @@
 *********************************************************** TO DO ***********************************************************
 [HIGH PRIORITY]
-- Fix AI shooting projectiles at player after death
 - Add win/lose screen
+- Add icons in Instructions menu
+- Design HUD for Skills
 
 [LOWER PRIORITY]
 - If a factory attempts to spawn a pickup while the player is standing on top of it, that factory will not spawn any more pickups
-- Fix AI spazzing out sometimes during combat
 - Add some graphics, such as material icons, to instructions menu
 - Sound effects for minions, boss, pickups
-- Fix Mage/Muriel projectiles sometimes not colliding with walls
 - AI:
 	- If AI takes damage, have AI turn in the direction from where it was hit. AI vision can then take care of the rest to detect for an enemy (if enough time)
 	- Add skill branch/nodes to behavior tree for Friendly AI (if enough time)
 	
 *********************************************************** FINISHED ***********************************************************
+4/20 - 4/23
+	- Fix AI shooting projectiles at player after death
+	- Fixed AI targeting player during spectate mode
+	- Improved instructions menu
+	- Fixed most of minion projectiles colliding with walls and sometimes not disappearing
+
 4/18 - [4/20]
 	- Added player ability to jump
 	- Attempt made at game balancing
