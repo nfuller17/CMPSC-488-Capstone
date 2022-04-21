@@ -2,6 +2,7 @@
 [HIGH PRIORITY]
 - Add win/lose screen
 - Add icons in Instructions menu
+- Add Instructions menu to In-Game menu
 - Design HUD for Skills
 
 [LOWER PRIORITY]
