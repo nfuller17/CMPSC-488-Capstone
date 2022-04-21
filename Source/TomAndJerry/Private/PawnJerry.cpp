@@ -10,6 +10,7 @@
 #include "PawnMonster.h"
 #include "GameFramework/GameModeBase.h"
 #include "../TomAndJerryGameModeBase.h"
+#include "Skill_Amplify.h"
 
 // Sets default values
 APawnJerry::APawnJerry()
@@ -164,8 +165,8 @@ void APawnJerry::NotifyActorEndOverlap(AActor* OtherActor)
 float APawnJerry::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float DamageToDo = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	if (IsDead())
-		return 0;
+	if (IsDead() || bInvulnerable)
+		return 0.0;
 	//Check friendly fire
 	//Checking EventInstigator not null is particularly important since AI controllers can be destroyed before we take damage, e.g. projectiles traveling
 	if (EventInstigator != nullptr)
@@ -230,9 +231,8 @@ void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 	{
 		if (wClass->GetDefaultObject<AWeapon>()->GetWeaponNumber() == WeaponNumber)	//wClass is a TSubclassOf template. Need to get the actual weapon class using GetDefaultObject
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Weapon %d found!"), WeaponNumber);
 			//Destroy the weapon the Weapon pointer is currently pointing to
-			if (Weapon)
+			if (Weapon != nullptr)
 			{
 				Weapon->StopFire();
 				Weapon->Destroy();
@@ -245,6 +245,15 @@ void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 				if (AmmoComponent != nullptr)
 					Weapon->SetAmmoComponent(AmmoComponent);
 				Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+				if (bAmplified)
+				{
+					ASkill_Amplify* Amplify = Cast<ASkill_Amplify>(Skill);
+					if (Amplify != nullptr)
+					{
+						Weapon->SetFireRate(Weapon->GetFireRate() * Amplify->GetFireRateMultiplier());
+						Weapon->SetAmmoPerFire(0);
+					}
+				}
 				return;	
 			}
 		}
@@ -347,6 +356,11 @@ void APawnJerry::PreviousSkill()
 
 void APawnJerry::ExecuteSkill()
 {
+	if (Skill != nullptr)	//Already have a running skill
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Already have a skill running!"));
+		return;
+	}
 	if (Energy < EnergyMax)
 		return;
 	if (Skills.Num() == 0)
@@ -354,7 +368,7 @@ void APawnJerry::ExecuteSkill()
 		UE_LOG(LogTemp, Warning, TEXT("CAUTION: Skills array is empty for PawnJerry!"));
 		return;
 	}
-	ASkill* Skill = GetWorld()->SpawnActor<ASkill>(Skills[SkillIndex]);
+	Skill = GetWorld()->SpawnActor<ASkill>(Skills[SkillIndex]);
 	if (Skill == nullptr)
 		return;
 	Skill->SetOwner(this);

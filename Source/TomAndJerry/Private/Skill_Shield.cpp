@@ -3,6 +3,7 @@
 
 #include "Skill_Shield.h"
 #include "EngineUtils.h"
+#include "PawnJerry.h"
 #include "Projectile.h"
 
 void ASkill_Shield::BeginPlay()
@@ -33,15 +34,30 @@ void ASkill_Shield::Execute()
 	//Do not call Super!
 	
 	APawnMonster* Monster = Cast<APawnMonster>(GetOwner());
-	if (Monster == nullptr)
+	if (Monster != nullptr)
+	{
+		Monster->SetDamageReduction(DamageReduction);
 		return;
-	Monster->SetDamageReduction(DamageReduction);	
+	}
+	APawnJerry* Player = Cast<APawnJerry>(GetOwner());
+	if (Player != nullptr)
+	{
+		Player->SetInvulnerability(true);
+	}
 }
 
 void ASkill_Shield::Destroyed()
 {
 	Super::Destroyed();
 	APawnMonster* Monster = Cast<APawnMonster>(GetOwner());
-	if (Monster)
+	if (Monster != nullptr)
+	{
 		Monster->SetDamageReduction(0.0);	//Reset damage reduction
+		return;
+	}
+	APawnJerry* Player = Cast<APawnJerry>(GetOwner());
+	if (Player != nullptr)
+	{
+		Player->SetInvulnerability(false);
+	}
 }

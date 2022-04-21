@@ -47,6 +47,6 @@ void ASkill_Regenerate::AddHealth()
 	APawnJerry* Player = Cast<APawnJerry>(GetOwner());
 	if (Player != nullptr)
 	{
-
+		Player->AddHealth(RegenerationAmount);
 	}
 }

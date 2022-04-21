@@ -56,6 +56,7 @@ public:
 	UAmmoComponent* GetAmmoComponent() const {return AmmoComponent;}
 	UFUNCTION(BlueprintPure)
 	bool HasWeapon(const int& WeaponNum) const;
+	AWeapon* GetWeapon() const { return Weapon; }
 	UFUNCTION(BlueprintPure)
 	int GetSelectedWeapon() const;
 	UFUNCTION(BlueprintPure)
@@ -64,7 +65,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DestroyOnSpectate(const bool& SpectateMode);
 	void OpenMenu();
+	void SetSkill(ASkill* _Skill) { Skill = _Skill; }
 	void AddEnergy(const int& Amount);
+	void SetInvulnerability(const bool& _bInvulnerable) { bInvulnerable = _bInvulnerable; }
+	void SetAmplified(const bool& _bAmplified) { bAmplified = _bAmplified; }
 	
 
 protected:
@@ -128,6 +132,8 @@ private:
 	float EnergyRegenRate = 1.0;
 	UPROPERTY(EditAnywhere)
 	uint8 EnergyRegenAmount = 1;
+	//Current activiating skill
+	ASkill* Skill;
 	//The allowed skills this Pawn can perform
 	UPROPERTY(EditDefaultsOnly, Category = "Skills")
 	TArray<TSubclassOf<ASkill>> Skills;
@@ -137,5 +143,7 @@ private:
 	void AddEnergyHelper();
 	void NextSkill();
 	void PreviousSkill();
+	bool bInvulnerable = false;
+	bool bAmplified = false;
 };
 

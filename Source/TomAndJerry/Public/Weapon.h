@@ -33,6 +33,9 @@ public:
 	FTimerHandle SpamTimer;		//Independent timer to prevent spamming mouse button and bypassing fire rate
 	bool IsMelee() const { return bIsMelee; }
 	bool IsFiring() const;
+	float GetFireRate() const { return FireRate; }
+	void SetFireRate(const float& _FireRate) { FireRate = _FireRate; }
+	void SetAmmoPerFire(const uint16& _AmmoPerFire) { AmmoPerFire = _AmmoPerFire; }
 
 protected:
 	// Called when the game starts or when spawned
