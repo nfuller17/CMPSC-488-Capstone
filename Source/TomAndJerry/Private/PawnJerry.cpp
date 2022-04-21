@@ -28,6 +28,9 @@ void APawnJerry::BeginPlay()
 	AmmoComponent = FindComponentByClass<UAmmoComponent>();
 	Health = HealthMax;
 
+	//Start energy regen timer
+	GetWorldTimerManager().SetTimer(EnergyTimer, this, &APawnJerry::AddEnergyHelper, EnergyRegenRate, true, 0.0);
+
 	//If we respawned after dying and we had a super weapon, re-create our super weapon
 	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
 	if (Game != nullptr && Game->HasSuperWeapon())
@@ -75,6 +78,9 @@ void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeBackward"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 3);
 	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeRight"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 4);
 	PlayerInputComponent->BindAction(TEXT("OpenMenu"), EInputEvent::IE_Pressed, this, &APawnJerry::OpenMenu);
+	PlayerInputComponent->BindAction(TEXT("NextSkill"), EInputEvent::IE_Pressed, this, &APawnJerry::NextSkill);
+	PlayerInputComponent->BindAction(TEXT("PreviousSkill"), EInputEvent::IE_Pressed, this, &APawnJerry::PreviousSkill);
+	PlayerInputComponent->BindAction(TEXT("DoSkill"), EInputEvent::IE_Pressed, this, &APawnJerry::ExecuteSkill);
 }
 
 void APawnJerry::MoveForward(float AxisValue)
@@ -310,6 +316,51 @@ void APawnJerry::OpenMenu()
 	AControllerJerry* PC = Cast<AControllerJerry>(GetController());
 	if (PC != nullptr)
 		PC->OpenMenu();
+}
+
+void APawnJerry::AddEnergyHelper()
+{
+	AddEnergy(EnergyRegenAmount);
+}
+
+void APawnJerry::AddEnergy(const int& Amount)
+{
+	Energy += FMath::Min(Amount, EnergyMax - Energy);
+	UE_LOG(LogTemp, Warning, TEXT("Energy: %d"), Energy);
+}
+
+void APawnJerry::NextSkill()
+{
+	SkillIndex++;
+	if (SkillIndex >= Skills.Num())
+		SkillIndex = 0;
+	UE_LOG(LogTemp, Warning, TEXT("SkillIndex: %d"), SkillIndex);
+}
+
+void APawnJerry::PreviousSkill()
+{
+	SkillIndex--;
+	if (SkillIndex < 0)
+		SkillIndex = Skills.Num() - 1;
+	UE_LOG(LogTemp, Warning, TEXT("SkillIndex: %d"), SkillIndex);
+}
+
+void APawnJerry::ExecuteSkill()
+{
+	if (Energy < EnergyMax)
+		return;
+	if (Skills.Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("CAUTION: Skills array is empty for PawnJerry!"));
+		return;
+	}
+	ASkill* Skill = GetWorld()->SpawnActor<ASkill>(Skills[SkillIndex]);
+	if (Skill == nullptr)
+		return;
+	Skill->SetOwner(this);
+	Skill->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
+	Skill->Execute();
+	Energy = 0;	//Could use skill energy cost instead, but for player let's just reset energy to 0
 }
 
 void APawnJerry::Died()

@@ -5,9 +5,11 @@
 #include "ControllerJerry.h"
 #include "AmmoComponent.h"
 #include "Factory_Material.h"
+#include "Skill.h"
 #include "PawnJerry.generated.h"
 
 //Forward class declaration - ie tell Compiler to compile this class first
+class ASkill;
 class AWeapon;
 
 UCLASS()
@@ -62,6 +64,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DestroyOnSpectate(const bool& SpectateMode);
 	void OpenMenu();
+	void AddEnergy(const int& Amount);
 	
 
 protected:
@@ -76,13 +79,6 @@ protected:
 	virtual void Destroyed() override;
 
 private:
-	
-	//Pointer to currently held weapon, if any
-	AWeapon* Weapon;
-	
-	//WeaponInventory is an array of Subclasses of type Weapon
-	//It represents the weapons the player has collected
-	TArray<TSubclassOf<AWeapon>> WeaponInventory;
 	
 	//Allows the character to move forward(AxisValue = 1.0) or backward(AxisValue = -1.0)
 	//Already framerate independent
@@ -112,11 +108,34 @@ private:
 	
 	TArray<AFactory_Material*>	MaterialInventory;
 	
-	//Weapon
+	//Weapon stuff
+	AWeapon* Weapon;
+	//WeaponInventory is an array of Subclasses of type Weapon
+	//It represents the weapons the player has collected
+	TArray<TSubclassOf<AWeapon>> WeaponInventory;
 	void BeginFire();
 	void StopFire();
 	void SelectWeapon(const int32 WeaponNumber);
 	UAmmoComponent* AmmoComponent;
 	DECLARE_DELEGATE_OneParam(FSelectWeaponDelegate, const int32);
+
+	//Energy and skills
+	int Energy = 0;
+	UPROPERTY(EditAnywhere)
+	int EnergyMax = 100;
+	FTimerHandle EnergyTimer;
+	UPROPERTY(EditAnywhere)
+	float EnergyRegenRate = 1.0;
+	UPROPERTY(EditAnywhere)
+	uint8 EnergyRegenAmount = 1;
+	//The allowed skills this Pawn can perform
+	UPROPERTY(EditDefaultsOnly, Category = "Skills")
+	TArray<TSubclassOf<ASkill>> Skills;
+	//Current index of skill
+	int SkillIndex = 0;
+	void ExecuteSkill();
+	void AddEnergyHelper();
+	void NextSkill();
+	void PreviousSkill();
 };
 

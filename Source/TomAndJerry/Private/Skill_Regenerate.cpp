@@ -2,6 +2,7 @@
 
 
 #include "Skill_Regenerate.h"
+#include "PawnJerry.h"
 
 void ASkill_Regenerate::BeginPlay()
 {
@@ -29,12 +30,23 @@ void ASkill_Regenerate::Execute()
 void ASkill_Regenerate::AddHealth()
 {
 	APawnMonster* Monster = Cast<APawnMonster>(GetOwner());
-	if (Monster == nullptr)
-		return;
-	if (Monster->IsDead())
+	if (Monster != nullptr)
 	{
-		GetWorldTimerManager().ClearTimer(RegenerationTimer);
-		Destroy();
+		if (Monster->IsDead())
+		{
+			GetWorldTimerManager().ClearTimer(RegenerationTimer);
+			Destroy();
+		}
+		else
+		{
+			Monster->AddHealth(RegenerationAmount);
+			return;
+		}
 	}
-	Monster->AddHealth(RegenerationAmount);
+
+	APawnJerry* Player = Cast<APawnJerry>(GetOwner());
+	if (Player != nullptr)
+	{
+
+	}
 }
