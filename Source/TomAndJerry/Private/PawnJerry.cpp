@@ -383,6 +383,7 @@ void APawnJerry::Died()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	if (Weapon != nullptr)
 		Weapon->Destroy();
+	Weapon = nullptr;
 	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
 	Game->DecrementNumLives();
 
@@ -418,10 +419,13 @@ void APawnJerry::Destroyed()
 	WeaponInventory.Empty();
 	MaterialInventory.Empty();
 	Skills.Empty();
-	AGameModeBase* Game = GetWorld()->GetAuthGameMode();
+	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
 	if (Game != nullptr)
 	{
-		Game->RestartPlayer(GetWorld()->GetFirstPlayerController());
-		UE_LOG(LogTemp, Warning, TEXT("Restarting player!"));
+		uint8 NumLives = Game->GetNumLives();
+		if (NumLives > 0)
+		{
+			Game->RestartPlayer(GetWorld()->GetFirstPlayerController());
+		}
 	}
 }
