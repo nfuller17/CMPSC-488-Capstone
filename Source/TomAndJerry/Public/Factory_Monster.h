@@ -19,6 +19,7 @@ class TOMANDJERRY_API AFactory_Monster : public ANavigationObjectBase
 	
 public:
 	bool SpawnMonster();
+	virtual void Destroyed() override;
 	
 protected:
 	UPROPERTY(EditAnywhere)

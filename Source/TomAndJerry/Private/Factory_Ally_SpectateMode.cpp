@@ -19,10 +19,11 @@ bool AFactory_Ally_SpectateMode::SpawnAlly()
 	if (Ally == nullptr)
 		return false;
 	Ally->SetTeam(true);
-	//ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
-	//if (Game != nullptr && Game->GetSpectateMode())
-	//{
-	//	Game->SpectateList.Emplace(Ally);
-	//}
 	return true;
+}
+
+void AFactory_Ally_SpectateMode::Destroyed()
+{
+	Super::Destroyed();
+	Allies.Empty();
 }

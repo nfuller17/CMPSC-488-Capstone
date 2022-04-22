@@ -36,7 +36,6 @@ void APickup::Destroyed()
 	if (PickupFactory != nullptr)
 	{
 		PickupFactory->RestartTimer();
-		PickupFactory->SetPickup(nullptr);
 	}
 }
 

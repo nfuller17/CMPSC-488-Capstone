@@ -16,6 +16,7 @@ class TOMANDJERRY_API AFactory_Boss : public ANavigationObjectBase
 	
 public:
 	bool SpawnBoss();
+	virtual void Destroyed() override;
 	
 protected:
 	UPROPERTY(EditAnywhere)

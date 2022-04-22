@@ -18,10 +18,8 @@ void AFactory_Pickup::RestartTimer()
 
 void AFactory_Pickup::SpawnPickup()
 {
-	if (Pickup != nullptr)	//Pickup for this factory already exists
-		return;
-	Pickup = GetWorld()->SpawnActor<APickup>(PickupClass, GetActorLocation(), GetActorForwardVector().Rotation());
-	if (Pickup)
+	APickup* Pickup = GetWorld()->SpawnActor<APickup>(PickupClass, GetActorLocation(), GetActorForwardVector().Rotation());
+	if (Pickup != nullptr)
 	{
 		Pickup->SetPickupFactory(this);
 	}

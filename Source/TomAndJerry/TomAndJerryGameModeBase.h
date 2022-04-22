@@ -34,16 +34,12 @@ public:
 	void DecrementNumMonsters();
 	void DecrementNumAlliesForSpectate();
 	void DecrementNumLives() { NumLives--; }
-	
-	void Restart(APawnJerry* Jerry);
-	
 	float GetPlayerSpawnDelay() const{return PlayerSpawnDelay;}
 	UFUNCTION(BlueprintCallable)
 	void SetSpectateMode(const bool& _SpectateMode) { SpectateMode = _SpectateMode; }
 	bool GetSpectateMode() const { return SpectateMode; }
 	UFUNCTION(BlueprintCallable)
 	void SpawnAlliesIfSpectating(const bool& _SpectateMode);
-	//TArray<APawn*> SpectateList;
 	void SpawnSuperWeapon(APawnJerry* Player);
 	bool HasSuperWeapon() const { return ReceivedSuperWeapon; }
 	UFUNCTION(BlueprintPure)

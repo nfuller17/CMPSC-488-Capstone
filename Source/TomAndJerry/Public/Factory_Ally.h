@@ -18,6 +18,9 @@ public:
 	FTimerHandle SpawnTimer;
 	void SpawnAllyObjective();
 	void SetAllyObjective(AObjectiveAlly* _AllyObjective) { AllyObjective = _AllyObjective; }
+	virtual void Destroyed() override;
+
+
 protected:
 	virtual void BeginPlay() override;
 private:

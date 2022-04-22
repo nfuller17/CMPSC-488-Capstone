@@ -27,3 +27,9 @@ void AObjectiveAlly::Complete()
 	}
 	Destroy();
 }
+
+void AObjectiveAlly::Destroyed()
+{
+	Super::Destroyed();
+	Allies.Empty();
+}

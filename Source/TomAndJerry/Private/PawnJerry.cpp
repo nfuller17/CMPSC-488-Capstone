@@ -395,7 +395,7 @@ void APawnJerry::Died()
 	// TODO: Temporary code. If NumLives is 0, display a game over screen and exit back to the main menu.
 	//		 For right now, the game is just restarted.
 	if (Game->GetNumLives() == 0) {
-		Game->Restart(this);
+		Game->EndGame(false);
 	}
 
 	float SpawnDelay;
@@ -415,6 +415,9 @@ void APawnJerry::DestroyHelper()
 void APawnJerry::Destroyed()
 {
 	Super::Destroyed();
+	WeaponInventory.Empty();
+	MaterialInventory.Empty();
+	Skills.Empty();
 	AGameModeBase* Game = GetWorld()->GetAuthGameMode();
 	if (Game != nullptr)
 	{

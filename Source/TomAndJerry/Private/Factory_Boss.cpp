@@ -6,6 +6,10 @@
 bool AFactory_Boss::SpawnBoss()
 {
 	//Pick a random monster from the Monsters array
+	if (Bosses.Num() == 0)
+	{
+		return false;
+	}
 	TSubclassOf<APawnBoss> BossClass = Bosses[FMath::RandRange(0, Bosses.Num()-1)];
 	if (BossClass == nullptr)
 		return false;
@@ -15,4 +19,10 @@ bool AFactory_Boss::SpawnBoss()
 	Boss->SetTeam(false);
 	UE_LOG(LogTemp, Warning, TEXT("Boss spawned"));
 	return true;
+}
+
+void AFactory_Boss::Destroyed()
+{
+	Super::Destroyed();
+	Bosses.Empty();
 }

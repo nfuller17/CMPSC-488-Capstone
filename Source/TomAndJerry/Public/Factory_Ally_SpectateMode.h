@@ -16,6 +16,7 @@ class TOMANDJERRY_API AFactory_Ally_SpectateMode : public ANavigationObjectBase
 
 public:
 	bool SpawnAlly();
+	virtual void Destroyed() override;
 protected:
 	UPROPERTY(EditAnywhere)
 		TArray<TSubclassOf<APawnAlly>> Allies;

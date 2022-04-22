@@ -18,7 +18,6 @@ public:
 	void SpawnPickup();
 	void RestartTimer();
 	FTimerHandle SpawnTimer;
-	void SetPickup(APickup* _Pickup){Pickup = _Pickup;}
 	
 protected:
 	virtual void BeginPlay() override;
@@ -26,7 +25,6 @@ protected:
 private:
 	UPROPERTY(EditAnywhere)
 	float RespawnRate = 30.0;
-	APickup* Pickup;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<APickup> PickupClass;
 	

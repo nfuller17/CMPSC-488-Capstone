@@ -57,7 +57,6 @@ void ATomAndJerryGameModeBase::SpawnBoss()
 {
 	if (BossFactories.Num() == 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("CAUTION: BOSS FACTORY ARRAY IN TOMANDJERRYGAMEMODEBASE IS EMPTY"));
 		return;
 	}
 	AFactory_Boss* Factory = BossFactories[FMath::RandRange(0, BossFactories.Num()-1)];
@@ -102,14 +101,6 @@ void ATomAndJerryGameModeBase::DecrementNumAlliesForSpectate()
 		NumAlliesForSpectate = 0;
 }
 
-void ATomAndJerryGameModeBase::Restart(APawnJerry* Jerry)
-{
-	// AGameMode* Game = Cast<AGameMode>this;
-	// Game->RestartGame(); 
-	APlayerController* JController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	JController->ConsoleCommand("RestartLevel");
-}
-
 void ATomAndJerryGameModeBase::DepositMaterial(const uint8& Count, APawnJerry* Player)
 {
 	if (Count <= 0)
@@ -120,15 +111,8 @@ void ATomAndJerryGameModeBase::DepositMaterial(const uint8& Count, APawnJerry* P
 	//If player drops off a material, spawn a boss the first time they do so
 	if (!bBossSpawned)
 		SpawnBoss();
-	// ----------- For Test ---------------------
-	// ----------- Remove after finished --------
-	if (Player != nullptr && !ReceivedSuperWeapon)
-	{
-		SpawnSuperWeapon(Player);
-		ReceivedSuperWeapon = true;
-	}
 
-	/*
+
 	//Spawn a super weapon when all materials have been collected
 	if (MaterialsCollected >= MaterialsTotal && Player != nullptr && !ReceivedSuperWeapon)
 	{
@@ -136,7 +120,6 @@ void ATomAndJerryGameModeBase::DepositMaterial(const uint8& Count, APawnJerry* P
 		//If pawn dies, this boolean can be used so they respawn with the super weapon instead of having to  re-collect materials again
 		ReceivedSuperWeapon = true;
 	}
-	*/
 }
 
 //Called either DepositMaterial the first time player deposits material,
@@ -159,6 +142,11 @@ void ATomAndJerryGameModeBase::SpawnSuperWeapon(APawnJerry* Player)
 
 void ATomAndJerryGameModeBase::EndGame(const bool bPlayerWon)
 {
+	MonsterFactories.Empty();
+	BossFactories.Empty();
+	AllyFactories.Empty();
+	SuperWeapons.Empty();
+
 	GetWorldTimerManager().ClearTimer(SpawnTimer);
 	for (AController* Controller : TActorRange<AController>(GetWorld()))
 	{

@@ -30,3 +30,9 @@ void AFactory_Ally::SpawnAllyObjective()
 		AllyObjective->SetFactory(this);
 	}
 }
+
+void AFactory_Ally::Destroyed()
+{
+	Super::Destroyed();
+	AllyObjectives.Empty();
+}

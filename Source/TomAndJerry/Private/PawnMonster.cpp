@@ -229,6 +229,7 @@ bool APawnMonster::IsDead() const
 
 void APawnMonster::Died()
 {
+	Skills.Empty();
 	StopFire();
 	GetWorldTimerManager().ClearTimer(EnergyTimer);
 	DetachFromControllerPendingDestroy();
@@ -236,7 +237,7 @@ void APawnMonster::Died()
 
 	//Spawn muzzle flash
 	if (DeathEffect != nullptr)
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathEffect, GetActorLocation(), GetActorRotation());
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathEffect, GetActorLocation(), GetActorRotation(), true);
 	//Hide character mesh
 	USkeletalMeshComponent* MonsterMesh = GetMesh();
 	if (MonsterMesh != nullptr)
