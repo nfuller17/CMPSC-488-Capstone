@@ -9,6 +9,10 @@
 void AControllerJerry::BeginPlay()
 {
 	Super::BeginPlay();
+	if (WinScreen != nullptr)
+		WinScreen->RemoveFromViewport();
+	if (LoseScreen != nullptr)
+		LoseScreen->RemoveFromViewport();
 }
 
 void AControllerJerry::Spectate(const bool& bSpectate)
@@ -66,5 +70,17 @@ void AControllerJerry::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)
 {
 	Super::GameHasEnded(EndGameFocus, bIsWinner);
 	DestroyHUD();
+	if (bIsWinner)
+	{
+		WinScreen = CreateWidget(this, WinScreenClass);
+		if (WinScreen != nullptr)
+			WinScreen->AddToViewport();
+	}
+	else
+	{
+		LoseScreen = CreateWidget(this, LoseScreenClass);
+		if (LoseScreen != nullptr)
+			LoseScreen->AddToViewport();
+	}
 	GetWorldTimerManager().SetTimer(RestartTimer, this, &APlayerController::RestartLevel, RestartDelay);
 }

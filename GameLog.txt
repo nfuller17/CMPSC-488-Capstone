@@ -1,8 +1,6 @@
 *********************************************************** TO DO ***********************************************************
 [HIGH PRIORITY]
-- Add win/lose screen
 - Add icons in Instructions menu
-- Add Instructions menu to In-Game menu
 - Design HUD for Skills
 
 [LOWER PRIORITY]
@@ -19,6 +17,7 @@
 	- Fixed AI targeting player during spectate mode
 	- Improved instructions menu
 	- Fixed most of minion projectiles colliding with walls and sometimes not disappearing
+	- Added win/lose screen
 
 4/18 - [4/20]
 	- Added player ability to jump

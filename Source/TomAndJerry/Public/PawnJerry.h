@@ -67,6 +67,12 @@ public:
 	void OpenMenu();
 	void SetSkill(ASkill* _Skill) { Skill = _Skill; }
 	void AddEnergy(const int& Amount);
+	UFUNCTION(BlueprintPure)
+	int GetEnergy() const { return Energy; }
+	UFUNCTION(BlueprintPure)
+	int GetEnergymax() const { return EnergyMax; }
+	UFUNCTION(BlueprintPure)
+	int GetSkillSelection() const { return SkillIndex; }
 	void SetInvulnerability(const bool& _bInvulnerable) { bInvulnerable = _bInvulnerable; }
 	void SetAmplified(const bool& _bAmplified) { bAmplified = _bAmplified; }
 	

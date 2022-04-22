@@ -41,6 +41,14 @@ private:
 	UPROPERTY()
 	UUserWidget* HUD;
 	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> WinScreenClass;
+	UPROPERTY()
+	UUserWidget* WinScreen;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> LoseScreenClass;
+	UPROPERTY()
+	UUserWidget* LoseScreen;
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UUserWidget> InGameMenuClass;
 	UPROPERTY()
 	UUserWidget* InGameMenu;
