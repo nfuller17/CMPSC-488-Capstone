@@ -70,6 +70,8 @@ public:
 	UFUNCTION(BlueprintPure)
 	int GetEnergy() const { return Energy; }
 	UFUNCTION(BlueprintPure)
+	float GetEnergyPercent() const { return (float) Energy / EnergyMax; }
+	UFUNCTION(BlueprintPure)
 	int GetEnergymax() const { return EnergyMax; }
 	UFUNCTION(BlueprintPure)
 	int GetSkillSelection() const { return SkillIndex; }
@@ -130,7 +132,7 @@ private:
 	DECLARE_DELEGATE_OneParam(FSelectWeaponDelegate, const int32);
 
 	//Energy and skills
-	int Energy = 0;
+	int Energy = 50;
 	UPROPERTY(EditAnywhere)
 	int EnergyMax = 100;
 	FTimerHandle EnergyTimer;
