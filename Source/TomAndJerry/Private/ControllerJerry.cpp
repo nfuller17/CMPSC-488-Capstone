@@ -9,9 +9,9 @@
 void AControllerJerry::BeginPlay()
 {
 	Super::BeginPlay();
-	if (WinScreen != nullptr)
+	if (IsValid(WinScreen))
 		WinScreen->RemoveFromViewport();
-	if (LoseScreen != nullptr)
+	if (IsValid(LoseScreen))
 		LoseScreen->RemoveFromViewport();
 }
 
@@ -24,7 +24,7 @@ void AControllerJerry::Spectate(const bool& bSpectate)
 		if (SpecPawn == nullptr)
 			return;
 		APawn* JerryPawn = GetPawn();
-		if (JerryPawn != nullptr)
+		if (IsValid(JerryPawn))
 		{
 			JerryPawn->Destroy();
 		}
@@ -41,7 +41,7 @@ ASpectatorPawn* AControllerJerry::SpawnSpectatorPawn()
 void AControllerJerry::OpenMenu()
 {
 	InGameMenu = CreateWidget(this, InGameMenuClass);
-	if (InGameMenu != nullptr)
+	if (IsValid(InGameMenu))
 	{
 		UGameplayStatics::SetGamePaused(GetWorld(), true);
 		InGameMenu->AddToViewport();
@@ -56,13 +56,13 @@ void AControllerJerry::CreateHUD()
 	if (HUD != nullptr)	//HUD already exists
 		return;
 	HUD = CreateWidget(this, HUDClass);
-	if (HUD != nullptr)
+	if (IsValid(HUD))
 		HUD->AddToViewport();
 }
 
 void AControllerJerry::DestroyHUD()
 {
-	if (HUD != nullptr)
+	if (IsValid(HUD))
 		HUD->RemoveFromViewport();
 }
 
@@ -73,13 +73,13 @@ void AControllerJerry::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)
 	if (bIsWinner)
 	{
 		WinScreen = CreateWidget(this, WinScreenClass);
-		if (WinScreen != nullptr)
+		if (IsValid(WinScreen))
 			WinScreen->AddToViewport();
 	}
 	else
 	{
 		LoseScreen = CreateWidget(this, LoseScreenClass);
-		if (LoseScreen != nullptr)
+		if (IsValid(LoseScreen))
 			LoseScreen->AddToViewport();
 	}
 	GetWorldTimerManager().SetTimer(RestartTimer, this, &APlayerController::RestartLevel, RestartDelay);

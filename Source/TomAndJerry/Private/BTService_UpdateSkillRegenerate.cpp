@@ -17,17 +17,20 @@ void UBTService_UpdateSkillRegenerate::TickNode(UBehaviorTreeComponent& OwnerCom
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	AAIController* AIController = OwnerComp.GetAIOwner();
-	if (AIController == nullptr)
+	if (!IsValid(AIController))
 		return;
 	APawnMonster* Monster = Cast<APawnMonster>(AIController->GetPawn());
-	if (Monster == nullptr)
+	if (!IsValid(Monster))
 		return;
-	if (Monster->HasSkill(ASkill_Regenerate::StaticClass()))
+	if (IsValid(OwnerComp.GetBlackboardComponent()))
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), true);		
-	}
-	else
-	{
-		OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+		if (Monster->HasSkill(ASkill_Regenerate::StaticClass()))
+		{
+			OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), true);
+		}
+		else
+		{
+			OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+		}
 	}
 }

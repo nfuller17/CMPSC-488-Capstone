@@ -15,10 +15,12 @@ void UBTService_UpdateTargetLocation::TickNode(UBehaviorTreeComponent& OwnerComp
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
 	AAIController* AIController = OwnerComp.GetAIOwner();
-	if (AIController == nullptr)
+	if (!IsValid(AIController))
 		return;
 	AActor* FocusActor = AIController->GetFocusActor();
-	if (FocusActor == nullptr)
+	if (!IsValid(FocusActor))
+		return;
+	if (!IsValid(OwnerComp.GetBlackboardComponent()))
 		return;
 	OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), FocusActor->GetActorLocation());
 }

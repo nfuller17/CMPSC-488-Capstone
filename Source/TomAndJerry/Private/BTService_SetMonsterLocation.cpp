@@ -15,10 +15,11 @@ void UBTService_SetMonsterLocation::TickNode(UBehaviorTreeComponent& OwnerComp, 
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	AAIController* AIController = OwnerComp.GetAIOwner();
-	if (AIController == nullptr)
+	if (!IsValid(AIController))
 		return;
 	APawn* AIPawn = AIController->GetPawn();
-	if (AIPawn == nullptr)
+	if (!IsValid(AIPawn))
 		return;
-	OwnerComp.GetBlackboardComponent()->SetValueAsObject(GetSelectedBlackboardKey(), AIPawn);
+	if (IsValid(OwnerComp.GetBlackboardComponent()))
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject(GetSelectedBlackboardKey(), AIPawn);
 }

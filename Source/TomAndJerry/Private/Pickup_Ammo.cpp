@@ -11,11 +11,11 @@ void APickup_Ammo::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (OtherActor != nullptr)
 	{
 		APawnJerry* Player = Cast<APawnJerry>(OtherActor);
-		if (Player == nullptr)
+		if (!IsValid(Player))
 			return;
 
 		UAmmoComponent* AmmoComponent = Player->FindComponentByClass<UAmmoComponent>();
-		if (AmmoComponent == nullptr)
+		if (!IsValid(AmmoComponent))
 			return;
 		if (AmmoComponent->GetAmmoAmount() >= AmmoComponent->GetAmmoMax())
 			return;

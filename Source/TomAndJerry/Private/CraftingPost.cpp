@@ -33,12 +33,12 @@ void ACraftingPost::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 	APawnJerry* Jerry = Cast<APawnJerry>(OtherActor);
-	if (Jerry)
+	if (IsValid(Jerry))
 	{
 		const uint8 NumMaterials = Jerry->GetMaterials().Num();
 		Jerry->CollectMaterials();
 		ATomAndJerryGameModeBase* TomAndJerryGame = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
-		if (TomAndJerryGame)
+		if (IsValid(TomAndJerryGame))
 		{
 			TomAndJerryGame->DepositMaterial(NumMaterials, Jerry);
 		}

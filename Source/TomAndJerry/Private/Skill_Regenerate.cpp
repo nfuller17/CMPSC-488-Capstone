@@ -14,6 +14,8 @@ bool ASkill_Regenerate::CanExecute(const APawnMonster* Monster) const
 {
 	if (!Super::CanExecute(Monster))
 		return false;
+	if (!IsValid(Monster))
+		return false;
 	if (Monster->GetHealth() > MinHealth)
 		return false;
 	return true;
@@ -30,7 +32,7 @@ void ASkill_Regenerate::Execute()
 void ASkill_Regenerate::AddHealth()
 {
 	APawnMonster* Monster = Cast<APawnMonster>(GetOwner());
-	if (Monster != nullptr)
+	if (IsValid(Monster))
 	{
 		if (Monster->IsDead())
 		{
@@ -45,7 +47,7 @@ void ASkill_Regenerate::AddHealth()
 	}
 
 	APawnJerry* Player = Cast<APawnJerry>(GetOwner());
-	if (Player != nullptr)
+	if (IsValid(Player))
 	{
 		Player->AddHealth(RegenerationAmount);
 	}

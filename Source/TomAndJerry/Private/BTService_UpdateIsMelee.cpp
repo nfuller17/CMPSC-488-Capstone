@@ -16,17 +16,20 @@ void UBTService_UpdateIsMelee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
 	AAIController* AI = OwnerComp.GetAIOwner();
-	if (AI == nullptr)
+	if (!IsValid(AI))
 		return;
 	APawnMonster* AIMonster = Cast<APawnMonster>(AI->GetPawn());
-	if (AIMonster == nullptr)
+	if (!IsValid(AIMonster))
 		return;
-	if (AIMonster->IsMelee())
+	if (IsValid(OwnerComp.GetBlackboardComponent()))
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), true);
-	}
-	else
-	{
-		OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+		if (AIMonster->IsMelee())
+		{
+			OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), true);
+		}
+		else
+		{
+			OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+		}
 	}
 }

@@ -15,11 +15,11 @@ void ASkill_Amplify::Execute()
 {
 	//Do not call Super!
 	APawnJerry* Player = Cast<APawnJerry>(GetOwner());
-	if (Player == nullptr)
+	if (!IsValid(Player))
 		return;
 	Player->SetAmplified(true);
 	AWeapon* Weapon = Player->GetWeapon();
-	if (Weapon == nullptr)
+	if (!IsValid(Weapon))
 		return;
 	Weapon->SetFireRate(Weapon->GetFireRate() * FireRateMultiplier);
 	Weapon->SetAmmoPerFire(0);
@@ -29,14 +29,13 @@ void ASkill_Amplify::Destroyed()
 {
 	Super::Destroyed();
 	APawnJerry* Player = Cast<APawnJerry>(GetOwner());
-	if (Player != nullptr)
+	if (IsValid(Player))
 	{
 		Player->SetAmplified(false);
 		AWeapon* Weapon = Player->GetWeapon();
-		if (Weapon != nullptr)
+		if (IsValid(Weapon))
 		{
 			Weapon->SetFireRate(Weapon->GetFireRate() * 1 / FireRateMultiplier);
-			//TODO: Restore AmmoPerFire to default instance
 			Weapon->SetAmmoPerFire(1);
 		}
 	}

@@ -10,14 +10,5 @@ UBTTask_SelectSkill::UBTTask_SelectSkill()
 
 EBTNodeResult::Type UBTTask_SelectSkill::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	/*Super::ExecuteTask(OwnerComp, NodeMemory);
-	AAIController* AIController = OwnerComp.GetAIOwner();
-	if (AIController == nullptr)
-		return EBTNodeResult::Failed;
-	APawnMonster* Monster = Cast<APawnMonster>(AIController->GetPawn());
-	if (Monster == nullptr)
-		return EBTNodeResult::Failed;
-	Monster->DoSkill();
-	*/
 	return EBTNodeResult::Succeeded;
 }

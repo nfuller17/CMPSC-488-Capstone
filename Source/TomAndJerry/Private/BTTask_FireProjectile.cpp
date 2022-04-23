@@ -14,10 +14,10 @@ EBTNodeResult::Type UBTTask_FireProjectile::ExecuteTask(UBehaviorTreeComponent& 
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 	AAIController* AIController = OwnerComp.GetAIOwner();
-	if (AIController == nullptr)
+	if (!IsValid(AIController))
 		return EBTNodeResult::Failed;
 	APawnMonster* Monster = Cast<APawnMonster>(AIController->GetPawn());
-	if (Monster == nullptr)
+	if (!IsValid(Monster))
 		return EBTNodeResult::Failed;
 	Monster->StartFire();
 	return EBTNodeResult::Succeeded;

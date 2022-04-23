@@ -18,14 +18,14 @@ bool ASkill_DamageBoost::CanExecute(const APawnMonster* Monster) const
 		return false;
 	//Execute if Enemy target has relatively high health
 	AAIController* AI = Cast<AAIController>(Monster->GetController());
-	if (AI)
+	if (IsValid(AI))
 	{
 		AActor* EnemyActor = AI->GetFocusActor();
 		APawnJerry* Player = Cast<APawnJerry>(EnemyActor);
-		if (Player == nullptr)	//Try for AI on player team
+		if (!IsValid(Player))	//Try for AI on player team
 		{
 			APawnMonster* OtherMonster = Cast<APawnMonster>(EnemyActor);
-			if (OtherMonster == nullptr)
+			if (!IsValid(OtherMonster))
 			{
 				return false;
 			}
@@ -45,7 +45,7 @@ bool ASkill_DamageBoost::CanExecute(const APawnMonster* Monster) const
 void ASkill_DamageBoost::Execute()
 {
 	APawnMonster* Monster = Cast<APawnMonster>(GetOwner());
-	if (Monster == nullptr)
+	if (!IsValid(Monster))
 		return;
 	Monster->SetDamageBonus(DamageBonus);
 }
@@ -54,6 +54,6 @@ void ASkill_DamageBoost::Destroyed()
 {
 	Super::Destroyed();
 	APawnMonster* Monster = Cast<APawnMonster>(GetOwner());
-	if (Monster)
+	if (IsValid(Monster))
 		Monster->SetDamageBonus(1.0);	//Reset damage bonus
 }

@@ -9,7 +9,7 @@ void APawnBoss::Died()
 {
 	Super::Died();
 	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
-	if (Game)
+	if (IsValid(Game))
 		Game->EndGame(true);
 	GetWorldTimerManager().SetTimer(DestroyTimer, this, &APawnBoss::DestroyHelper, DestroyDelay, false, DestroyDelay);
 }

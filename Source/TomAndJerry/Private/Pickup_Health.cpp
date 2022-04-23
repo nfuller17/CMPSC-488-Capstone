@@ -11,7 +11,7 @@ void APickup_Health::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (OtherActor != nullptr)
 	{
 		APawnJerry* Player = Cast<APawnJerry>(OtherActor);
-		if (Player != nullptr)
+		if (IsValid(Player))
 		{
 			if (Player->GetHealth() < Player->GetHealthMax())
 			{
@@ -22,7 +22,7 @@ void APickup_Health::NotifyActorBeginOverlap(AActor* OtherActor)
 		else
 		{
 			APawnMonster* Monster = Cast<APawnMonster>(OtherActor);
-			if (Monster != nullptr)
+			if (IsValid(Monster))
 			{
 				if (Monster->GetHealth() < Monster->GetHealthMax())
 				{

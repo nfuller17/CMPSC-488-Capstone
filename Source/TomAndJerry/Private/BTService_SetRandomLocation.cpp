@@ -21,10 +21,10 @@ void UBTService_SetRandomLocation::TickNode(UBehaviorTreeComponent& OwnerComp, u
 	//Choose a random location that is far enough, or a location that is out of sight
 
 	AAIController* AI = OwnerComp.GetAIOwner();
-	if (AI == nullptr)
+	if (!IsValid(AI))
 		return;
 	APawn* AIPawn = AI->GetPawn();
-	if (AIPawn == nullptr)
+	if (!IsValid(AIPawn))
 		return;
 	FVector CurrentLocation = AIPawn->GetActorLocation();
 	FNavLocation NewLocation = FNavLocation();
@@ -32,7 +32,7 @@ void UBTService_SetRandomLocation::TickNode(UBehaviorTreeComponent& OwnerComp, u
 	//First, see if we can find a valid point nearby us
 	//Move there if the AI does not have a line of sight to it (i.e. in a building, behind a wall, etc.)
 	UNavigationSystemV1* Navigation = Cast<UNavigationSystemV1>(GetWorld()->GetNavigationSystem());
-	if (Navigation == nullptr)
+	if (!IsValid(Navigation))
 		return;
 
 	uint8 SafeCount = 0;
@@ -43,16 +43,19 @@ void UBTService_SetRandomLocation::TickNode(UBehaviorTreeComponent& OwnerComp, u
 			if ((CurrentLocation - NewLocation.Location).Size() < MinimumDistance)
 				continue;
 			//Check if AI can see this location
-			if (CanSeeTarget(AIPawn, NewLocation.Location))
+			if (IsValid(OwnerComp.GetBlackboardComponent()))
 			{
-				OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), NewLocation.Location);
-				return;
-			}
-			SafeCount++;
-			if (SafeCount >= 10)	//Perhaps AI is facing a wall, cannot move ahead!
-			{
-				OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), NewLocation.Location);
-				return;
+				if (CanSeeTarget(AIPawn, NewLocation.Location))
+				{
+					OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), NewLocation.Location);
+					return;
+				}
+				SafeCount++;
+				if (SafeCount >= 10)	//Perhaps AI is facing a wall, cannot move ahead!
+				{
+					OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), NewLocation.Location);
+					return;
+				}
 			}
 		}
 	}
@@ -61,12 +64,14 @@ void UBTService_SetRandomLocation::TickNode(UBehaviorTreeComponent& OwnerComp, u
 bool UBTService_SetRandomLocation::CanSeeTarget(APawn* OwnerPawn, const FVector& TargetLocation)
 {
 	//Get normalized vector from this current location to target location
+	if (!IsValid(OwnerPawn))
+		return false;
 	FVector DirectionToTarget = (TargetLocation - OwnerPawn->GetActorLocation()).GetSafeNormal(1.0);
 
 	//Get OwnerPawn's viewpoint
 	FVector Location;
 	FRotator Rotation;
-	if (OwnerPawn->GetController() != nullptr)
+	if (IsValid(OwnerPawn->GetController()))
 		OwnerPawn->GetController()->GetPlayerViewPoint(Location, Rotation);
 
 	//Turn OwnerPawn's rotation into normalized vector

@@ -15,10 +15,10 @@ EBTNodeResult::Type UBTTask_DoSkill_Shield::ExecuteTask(UBehaviorTreeComponent& 
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 	AAIController* AIController = OwnerComp.GetAIOwner();
-	if (AIController == nullptr)
+	if (!IsValid(AIController))
 		return EBTNodeResult::Failed;
 	APawnMonster* Monster = Cast<APawnMonster>(AIController->GetPawn());
-	if (Monster == nullptr)
+	if (!IsValid(Monster))
 		return EBTNodeResult::Failed;
 	Monster->DoSkill(ASkill_Shield::StaticClass());
 	return EBTNodeResult::Succeeded;

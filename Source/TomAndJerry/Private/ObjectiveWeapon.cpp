@@ -12,9 +12,10 @@ void AObjectiveWeapon::Complete()
 	if (ActivatingPawn != nullptr)
 	{
 		APawnJerry* JerryPawn = Cast<APawnJerry>(ActivatingPawn);
-		if (JerryPawn) {
+		if (IsValid(JerryPawn))
+		{
 			JerryPawn->AddWeapon(WeaponClass);
-			if (CollectEffect != nullptr)
+			if (IsValid(CollectEffect))
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), CollectEffect, GetActorLocation(), GetActorRotation());
 		}
 	}

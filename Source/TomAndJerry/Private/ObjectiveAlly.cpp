@@ -6,7 +6,7 @@
 void AObjectiveAlly::Complete()
 {
 	Super::Complete();
-	if (ActivatingPawn != nullptr)
+	if (IsValid(ActivatingPawn))
 	{
 		//Spawn a random ally from Allies list
 		if (Allies.Num() == 0)
@@ -15,12 +15,12 @@ void AObjectiveAlly::Complete()
 			return;
 		}
 		APawnAlly* Ally = GetWorld()->SpawnActor<APawnAlly>(Allies[FMath::RandRange(0, Allies.Num() - 1)], ActivatingPawn->GetActorLocation() + FVector(200, 0, 0), GetActorForwardVector().Rotation());
-		if (Ally != nullptr)
+		if (IsValid(Ally))
 		{
 			Ally->SetTeam(true);
 		}
 	}
-	if (Factory != nullptr)
+	if (IsValid(Factory))
 	{
 		Factory->RestartTimer();
 		Factory->SetAllyObjective(nullptr);

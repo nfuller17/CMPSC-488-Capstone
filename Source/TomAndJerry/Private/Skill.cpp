@@ -14,7 +14,8 @@ ASkill::ASkill()
 	SetRootComponent(Root);
 
 	Effect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Effect"));
-	Effect->SetupAttachment(Root);
+	if (IsValid(Effect))
+		Effect->SetupAttachment(Root);
 
 }
 
@@ -31,9 +32,12 @@ void ASkill::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	
 	APawnMonster* Monster = Cast<APawnMonster>(GetOwner());
-	if (Monster && Monster->IsDead())
+	if (IsValid(Monster))
 	{
-		Destroy();
+		if (Monster->IsDead())
+		{
+			Destroy();
+		}
 	}
 
 }
@@ -51,12 +55,12 @@ void ASkill::Destroyed()
 	if (GetOwner() != nullptr)
 	{
 		APawnMonster* Monster = Cast<APawnMonster>(GetOwner());
-		if (Monster != nullptr)
+		if (IsValid(Monster))
 			Monster->SetSkillIsActive(false);
 		else
 		{
 			APawnJerry* Player = Cast<APawnJerry>(GetOwner());
-			if (Player != nullptr)
+			if (IsValid(Player))
 			{
 				Player->SetSkill(nullptr);
 			}

@@ -17,20 +17,20 @@ EBTNodeResult::Type UBTTask_CheckTargetIsHostile::ExecuteTask(UBehaviorTreeCompo
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	AAIController* AIController = OwnerComp.GetAIOwner();
-	if (AIController == nullptr)
+	if (!IsValid(AIController))
 		return EBTNodeResult::Failed;
 	AActor* FocusActor = AIController->GetFocusActor();
 	if (FocusActor == nullptr)
 		return EBTNodeResult::Failed;
 	APawnMonster* PawnOwner = Cast<APawnMonster>(AIController->GetPawn());
-	if (PawnOwner == nullptr)
+	if (!IsValid(PawnOwner))
 		return EBTNodeResult::Failed;
 
 	bool bOnPlayerTeam = PawnOwner->IsPlayerTeam();
 	APawnMonster* Monster = Cast<APawnMonster>(FocusActor);
 	APawnJerry* Player = Cast<APawnJerry>(FocusActor);
-	if (bOnPlayerTeam && Monster != nullptr && !Monster->IsPlayerTeam()
-		|| !bOnPlayerTeam && ( Player != nullptr || Monster != nullptr && Monster->IsPlayerTeam() ) )
+	if (bOnPlayerTeam && IsValid(Monster) && !Monster->IsPlayerTeam()
+		|| !bOnPlayerTeam && ( IsValid(Player) || IsValid(Monster) && Monster->IsPlayerTeam()))
 	{
 		return EBTNodeResult::Succeeded;
 	}

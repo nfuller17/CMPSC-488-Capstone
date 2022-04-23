@@ -16,7 +16,10 @@ AWeapon::AWeapon()
 	SetRootComponent(Root);
 
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-	Mesh->SetupAttachment(Root);
+	if (IsValid(Mesh))
+	{
+		Mesh->SetupAttachment(Root);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -72,9 +75,14 @@ void AWeapon::FirePrimary()
 	APawn* OwnerPawn = Cast<APawn>(GetOwner());
 	if (OwnerPawn == nullptr)
 		return;
+	if (!IsValid(OwnerPawn))
+		return;
 	//Check if we are dead
 	APawnJerry* JerryPawn = Cast<APawnJerry>(OwnerPawn);
 	if (JerryPawn == nullptr)
+		return;
+
+	if (!IsValid(JerryPawn))
 		return;
 
 	if (JerryPawn->IsDead())
@@ -83,16 +91,16 @@ void AWeapon::FirePrimary()
 		return;
 	}
 	AController* OwnerController = OwnerPawn->GetController();
-	if (OwnerController == nullptr)
+	if (OwnerController == nullptr || !IsValid(OwnerController))
+		return;
+
+	if (AmmoComponent == nullptr || !IsValid(AmmoComponent))
 		return;
 	
-	if (AmmoComponent != nullptr)
+
+	if (AmmoPerFire > AmmoComponent->GetAmmoAmount())
 	{
-		if (AmmoPerFire > AmmoComponent->GetAmmoAmount())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Out of Ammo!"));
-			return;	
-		}
+		return;	
 	}
 
 	FVector StartLocation;
@@ -122,13 +130,13 @@ void AWeapon::FirePrimary()
 				FVector SpawnLocation = Mesh->GetBoneLocation("Ammo", EBoneSpaces::WorldSpace);
 				FTransform Transform = FTransform(RealFireRotation.Rotation(), SpawnLocation, FVector(1, 1, 1));
 				AProjectile* Proj = GetWorld()->SpawnActorDeferred<AProjectile>(ProjectileClass, Transform, Cast<AActor>(OwnerPawn), OwnerPawn);
-				if (Proj)
-				{
-					Proj->SetTeam(true);	//Weapons always belong to Player, so we always set this Projectile to player team
-					if (IsSuperWeapon)
-						Proj->SetCanDamageBoss(true);
-					Proj->FinishSpawning(Transform);
-				}
+				if (Proj == nullptr || !IsValid(Proj))
+					return;
+
+				Proj->SetTeam(true);	//Weapons always belong to Player, so we always set this Projectile to player team
+				if (IsSuperWeapon)
+					Proj->SetCanDamageBoss(true);
+				Proj->FinishSpawning(Transform);
 			}
 		}
 	}
@@ -137,10 +145,7 @@ void AWeapon::FirePrimary()
 	UGameplayStatics::SpawnSoundAttached(firingSound, Mesh, TEXT("Muzzle"));
 
 
-	if (AmmoComponent != nullptr)
-	{
-		AmmoComponent->ConsumeAmmo(AmmoPerFire);
-	}
+	AmmoComponent->ConsumeAmmo(AmmoPerFire);
 	
 	
 	//Spawn muzzle flash
@@ -160,14 +165,14 @@ void AWeapon::Trace(const FVector& StartLocation, const FVector& Direction, APaw
 		//Damage Actor
 		FVector DirectionFromShot = -Direction;
 		AActor* HitActor = Hit.GetActor();
-		if (HitActor)
+		if (HitActor == nullptr || !IsValid(HitActor))
+			return;
+
+		APawnBoss* Boss = Cast<APawnBoss>(HitActor);
+		if (Boss == nullptr || Boss != nullptr && IsValid(Boss) && IsSuperWeapon)
 		{
-			APawnBoss* Boss = Cast<APawnBoss>(HitActor);
-			if (Boss == nullptr || Boss != nullptr && IsSuperWeapon)
-			{
-				FPointDamageEvent DamageEvent(HitscanDamage, Hit, DirectionFromShot, nullptr);
-				HitActor->TakeDamage(HitscanDamage, DamageEvent, OwnerPawn->GetController(), this);
-			}
+			FPointDamageEvent DamageEvent(HitscanDamage, Hit, DirectionFromShot, nullptr);
+			HitActor->TakeDamage(HitscanDamage, DamageEvent, OwnerPawn->GetController(), this);
 		}
 
 		//Impact

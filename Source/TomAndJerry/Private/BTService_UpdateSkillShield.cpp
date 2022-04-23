@@ -16,17 +16,20 @@ void UBTService_UpdateSkillShield::TickNode(UBehaviorTreeComponent& OwnerComp, u
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	AAIController* AIController = OwnerComp.GetAIOwner();
-	if (AIController == nullptr)
+	if (!IsValid(AIController))
 		return;
 	APawnMonster* Monster = Cast<APawnMonster>(AIController->GetPawn());
-	if (Monster == nullptr)
+	if (!IsValid(Monster))
 		return;
-	if (Monster->HasSkill(ASkill_Shield::StaticClass()))
+	if (IsValid(OwnerComp.GetBlackboardComponent()))
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), true);		
-	}
-	else
-	{
-		OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+		if (Monster->HasSkill(ASkill_Shield::StaticClass()))
+		{
+			OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), true);
+		}
+		else
+		{
+			OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
+		}
 	}
 }

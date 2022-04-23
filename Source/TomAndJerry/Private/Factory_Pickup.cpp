@@ -19,7 +19,7 @@ void AFactory_Pickup::RestartTimer()
 void AFactory_Pickup::SpawnPickup()
 {
 	APickup* Pickup = GetWorld()->SpawnActor<APickup>(PickupClass, GetActorLocation(), GetActorForwardVector().Rotation());
-	if (Pickup != nullptr)
+	if (IsValid(Pickup))
 	{
 		Pickup->SetPickupFactory(this);
 	}

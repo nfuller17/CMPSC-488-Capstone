@@ -13,7 +13,8 @@ APickup::APickup()
 	SetRootComponent(Root);
 
 	Effect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Effect"));
-	Effect->SetupAttachment(Root);
+	if (IsValid(Effect))
+		Effect->SetupAttachment(Root);
 }
 
 // Called when the game starts or when spawned
@@ -33,7 +34,7 @@ void APickup::Tick(float DeltaTime)
 void APickup::Destroyed()
 {
 	Super::Destroyed();
-	if (PickupFactory != nullptr)
+	if (IsValid(PickupFactory))
 	{
 		PickupFactory->RestartTimer();
 	}

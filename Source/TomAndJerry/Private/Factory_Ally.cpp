@@ -25,7 +25,7 @@ void AFactory_Ally::SpawnAllyObjective()
 		return;
 	}
 	AllyObjective = GetWorld()->SpawnActor<AObjectiveAlly>(AllyObjectives[FMath::RandRange(0, AllyObjectives.Num() - 1)], GetActorLocation(), GetActorForwardVector().Rotation());
-	if (AllyObjective != nullptr)
+	if (IsValid(AllyObjective))
 	{
 		AllyObjective->SetFactory(this);
 	}

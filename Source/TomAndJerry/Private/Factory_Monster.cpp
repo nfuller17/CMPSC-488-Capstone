@@ -16,7 +16,7 @@ bool AFactory_Monster::SpawnMonster()
 	if (MonsterClass == nullptr)
 		return false;
 	APawnMonster* Monster = GetWorld()->SpawnActor<APawnMonster>(MonsterClass, GetActorLocation(), GetActorForwardVector().Rotation());
-	if (Monster == nullptr)
+	if (!IsValid(Monster))
 		return false;
 	Monster->SetTeam(false);
 	return true;

@@ -47,12 +47,12 @@ float APawnMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		return DamageToDo;
 	}
 	//Check for Friendly fire
-	if (EventInstigator != nullptr)		//Important to check not null in the event Instigator dies before TakeDamage is called, such as in projectiles
+	if (IsValid(EventInstigator))		//Important to check not null in the event Instigator dies before TakeDamage is called, such as in projectiles
 	{
 		APawnMonster* Monster = Cast<APawnMonster>(EventInstigator->GetPawn());
 		if (PlayerTeam)	//This monster is on player team - ignore damage caused by other friendly AI and by player
 		{
-			if (Monster != nullptr && Monster->PlayerTeam)
+			if (IsValid(Monster) && Monster->PlayerTeam)
 			{
 				return 0.0;
 			}
@@ -63,7 +63,7 @@ float APawnMonster::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		}
 		else //On hostile monster team - ignore damage caused by other hostile monsters
 		{
-			if (Monster != nullptr && !Monster->PlayerTeam)
+			if (IsValid(Monster) && !Monster->PlayerTeam)
 			{
 				return 0.0;
 			}
@@ -112,17 +112,17 @@ void APawnMonster::FireProjectile()
 		return;
 	//Spawn a projectile, in front of the Monster, facing the direction of the Monster
 	AAIController* MonsterController = Cast<AAIController>(GetController());
-	if (MonsterController == nullptr)
+	if (!IsValid(MonsterController))
 		return;
 	APawn* TargetPawn = Cast<APawn>(MonsterController->GetFocusActor());
-	if (TargetPawn == nullptr)
+	if (!IsValid(TargetPawn))
 		return;
 	FVector SpawnLocation = MonsterController->GetPawn()->GetActorLocation();
 	SpawnLocation += FVector(0, 50, 0);		//Not sure which is "Forward"
 	FRotator SpawnRotation = FVector(TargetPawn->GetActorLocation() - SpawnLocation).Rotation();
 	FTransform Transform = FTransform(SpawnRotation, SpawnLocation, FVector(1,1,1));
 	AProjectile* Proj = GetWorld()->SpawnActorDeferred<AProjectile>(ProjectileClass, Transform, this, this);
-	if (Proj != nullptr)
+	if (IsValid(Proj))
 	{
 		Proj->SetTeam(false);
 		float AddDamage = Proj->GetDamage();	//Apply any damage bonus, if any
@@ -152,7 +152,7 @@ void APawnMonster::MeleeAttack(AActor* Victim)
 {
 	if (IsDead())
 		return;
-	if (Victim == nullptr)
+	if (!IsValid(Victim))
 		return;
 	FPointDamageEvent DamageEvent(MeleeDamage, FHitResult(), GetActorLocation() - Victim->GetActorLocation(), nullptr);
 	Victim->TakeDamage(MeleeDamage, DamageEvent, GetController(), this);
@@ -175,15 +175,17 @@ void APawnMonster::DoSkill(const TSubclassOf<ASkill> RequestedSkill)
 		return;
 	for (auto SkillBlueprintClass: Skills)
 	{
+		if (!IsValid(SkillBlueprintClass))
+			continue;
 		ASkill* SkillObject = SkillBlueprintClass->GetDefaultObject<ASkill>();
-		if (SkillObject && SkillObject->IsA(RequestedSkill))
+		if (IsValid(SkillObject) && SkillObject->IsA(RequestedSkill))
 		{
 			if (Energy < SkillObject->GetEnergyCost())
 				return;
 			if (!SkillObject->CanExecute(this))
 				return;
 			ASkill* SkillInstance = GetWorld()->SpawnActor<ASkill>(SkillObject->GetClass());
-			if (SkillInstance != nullptr)
+			if (IsValid(SkillInstance))
 			{
 				SkillInstance->SetOwner(this);
 				SkillInstance->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
@@ -201,8 +203,10 @@ bool APawnMonster::HasSkill(TSubclassOf<ASkill> SkillClass)
 {
 	for (auto Skill : Skills)
 	{
+		if (!IsValid(Skill))
+			continue;
 		ASkill* SkillObject = Skill->GetDefaultObject<ASkill>();
-		if (SkillObject && SkillObject->IsA(SkillClass))
+		if (IsValid(SkillObject) && SkillObject->IsA(SkillClass))
 			return true;
 	}
 	return false;
@@ -233,14 +237,15 @@ void APawnMonster::Died()
 	StopFire();
 	GetWorldTimerManager().ClearTimer(EnergyTimer);
 	DetachFromControllerPendingDestroy();
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (IsValid(GetCapsuleComponent()))
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	//Spawn muzzle flash
 	if (DeathEffect != nullptr)
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathEffect, GetActorLocation(), GetActorRotation(), true);
 	//Hide character mesh
 	USkeletalMeshComponent* MonsterMesh = GetMesh();
-	if (MonsterMesh != nullptr)
+	if (IsValid(MonsterMesh))
 		MonsterMesh->SetVisibility(false, false);
 	//Normally, we want to destroy the Actor here after dying
 	//However, this is a virtual method that is overridden in derived classes
@@ -251,7 +256,6 @@ void APawnMonster::Died()
 
 void APawnMonster::DestroyHelper()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Destroying pawn"));
 	GetWorldTimerManager().ClearTimer(DestroyTimer);
 	Destroy();
 }

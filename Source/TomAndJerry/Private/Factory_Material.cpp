@@ -12,6 +12,6 @@ void AFactory_Material::BeginPlay()
 void AFactory_Material::SpawnMaterial()
 {
 	AWeaponMaterial* MaterialInstance = GetWorld()->SpawnActor<AWeaponMaterial>(Material, GetActorLocation(), GetActorRotation());
-	if (MaterialInstance != nullptr)
+	if (IsValid(MaterialInstance))
 		MaterialInstance->SetFactory(this);
 }

@@ -16,10 +16,12 @@ void UBTService_PlayerLocationIfSeen::TickNode(UBehaviorTreeComponent& OwnerComp
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-	if (PlayerPawn == nullptr)
+	if (!IsValid(PlayerPawn))
 		return;
 	AAIController* AIController = OwnerComp.GetAIOwner();
-	if (AIController == nullptr)
+	if (!IsValid(AIController))
+		return;
+	if (!IsValid(OwnerComp.GetBlackboardComponent()))
 		return;
 	if (AIController->LineOfSightTo(PlayerPawn))
 	{

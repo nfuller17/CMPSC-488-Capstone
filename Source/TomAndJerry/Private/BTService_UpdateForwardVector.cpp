@@ -15,10 +15,11 @@ void UBTService_UpdateForwardVector::TickNode(UBehaviorTreeComponent& OwnerComp,
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	AAIController* AIController = OwnerComp.GetAIOwner();
-	if (AIController == nullptr)
+	if (!IsValid(AIController))
 		return;
 	APawn* AIPawn = AIController->GetPawn();
-	if (AIPawn == nullptr)
+	if (!IsValid(AIPawn))
 		return;
-	OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), AIPawn->GetActorForwardVector());
+	if (IsValid(OwnerComp.GetBlackboardComponent()))
+		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), AIPawn->GetActorForwardVector());
 }

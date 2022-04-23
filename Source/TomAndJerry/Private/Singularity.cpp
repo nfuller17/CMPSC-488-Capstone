@@ -30,7 +30,7 @@ void ASingularity::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	for (APawnMonster* Monster : TActorRange<APawnMonster>(GetWorld()))
 	{
-		if (!Monster->IsPlayerTeam() && !Monster->IsDead())
+		if (IsValid(Monster) && !Monster->IsPlayerTeam() && !Monster->IsDead())
 		{
 			FVector Direction = GetActorLocation() - Monster->GetActorLocation();
 			float Distance = Direction.Size();
@@ -47,7 +47,7 @@ void ASingularity::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 	APawnMonster* Monster = Cast<APawnMonster>(OtherActor);
-	if (Monster != nullptr && !Monster->IsPlayerTeam() && !Monster->IsDead() && GetOwner() != nullptr)
+	if (IsValid(Monster) && !Monster->IsPlayerTeam() && !Monster->IsDead() && GetOwner() != nullptr)
 	{
 		AController* OwnerController = GetInstigatorController();
 		FPointDamageEvent DamageEvent(Damage, FHitResult(), GetActorLocation() - Monster->GetActorLocation(), nullptr);

@@ -9,8 +9,7 @@ void APawnMinion::Died()
 {
 	Super::Died();
 	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
-	if (Game)
+	if (IsValid(Game))
 		Game->DecrementNumMonsters();
 	GetWorldTimerManager().SetTimer(DestroyTimer, this, &APawnMinion::DestroyHelper, DestroyDelay, false, DestroyDelay);
-	UE_LOG(LogTemp, Warning, TEXT("Minion Died!"));
 }

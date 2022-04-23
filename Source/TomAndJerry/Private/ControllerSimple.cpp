@@ -16,10 +16,13 @@ void AControllerSimple::BeginPlay()
 		FVector EndLocation;
 		for (auto NOBLocation : TActorRange<ANOB_TwoPoints>(GetWorld()))
 		{
-			if (NOBLocation->bStart)
-				StartLocation = NOBLocation->GetActorLocation();
-			else
-				EndLocation = NOBLocation->GetActorLocation();
+			if (IsValid(NOBLocation))
+			{
+				if (NOBLocation->bStart)
+					StartLocation = NOBLocation->GetActorLocation();
+				else
+					EndLocation = NOBLocation->GetActorLocation();
+			}
 		}
 		GetBlackboardComponent()->SetValueAsVector(TEXT("PointA"), StartLocation);
 		GetBlackboardComponent()->SetValueAsVector(TEXT("PointB"), EndLocation);

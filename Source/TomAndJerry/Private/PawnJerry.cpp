@@ -25,7 +25,8 @@ void APawnJerry::BeginPlay()
 	Super::BeginPlay();
 	
 	//Hide the weapon mesh that comes with the Wraith mesh
-	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
+	if (IsValid(GetMesh()))
+		GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
 	AmmoComponent = FindComponentByClass<UAmmoComponent>();
 	Health = HealthMax;
 
@@ -34,7 +35,7 @@ void APawnJerry::BeginPlay()
 
 	//If we respawned after dying and we had a super weapon, re-create our super weapon
 	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
-	if (Game != nullptr && Game->HasSuperWeapon())
+	if (IsValid(Game) && Game->HasSuperWeapon())
 	{
 		Game->SpawnSuperWeapon(this);
 	}
@@ -57,31 +58,33 @@ void APawnJerry::DestroyOnSpectate(const bool& SpectateMode)
 void APawnJerry::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APawnJerry::MoveForward);
-	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis(TEXT("Strafe"), this, &APawnJerry::Strafe);
-	PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon1"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 1);
-	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon2"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 2);
-	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon3"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 3);
-	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon4"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 4);
-	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon5"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 5);
-	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon6"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 6);
-	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon7"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 7);
-	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon8"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 8);
-	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon9"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 9);
-	PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon0"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 0);
-	PlayerInputComponent->BindAction(TEXT("FirePrimary"), EInputEvent::IE_Pressed, this, &APawnJerry::BeginFire);
-	PlayerInputComponent->BindAction(TEXT("FirePrimary"), EInputEvent::IE_Released, this, &APawnJerry::StopFire);
-	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeForward"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 1);
-	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeLeft"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 2);
-	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeBackward"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 3);
-	PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeRight"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 4);
-	PlayerInputComponent->BindAction(TEXT("OpenMenu"), EInputEvent::IE_Pressed, this, &APawnJerry::OpenMenu);
-	PlayerInputComponent->BindAction(TEXT("NextSkill"), EInputEvent::IE_Pressed, this, &APawnJerry::NextSkill);
-	PlayerInputComponent->BindAction(TEXT("PreviousSkill"), EInputEvent::IE_Pressed, this, &APawnJerry::PreviousSkill);
-	PlayerInputComponent->BindAction(TEXT("DoSkill"), EInputEvent::IE_Pressed, this, &APawnJerry::ExecuteSkill);
+	if (IsValid(PlayerInputComponent))
+	{
+		PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APawnJerry::MoveForward);
+		PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
+		PlayerInputComponent->BindAxis(TEXT("Strafe"), this, &APawnJerry::Strafe);
+		PlayerInputComponent->BindAxis(TEXT("LookRight"), this, &APawn::AddControllerYawInput);
+		PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon1"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 1);
+		PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon2"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 2);
+		PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon3"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 3);
+		PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon4"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 4);
+		PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon5"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 5);
+		PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon6"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 6);
+		PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon7"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 7);
+		PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon8"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 8);
+		PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon9"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 9);
+		PlayerInputComponent->BindAction<FSelectWeaponDelegate>(TEXT("SelectWeapon0"), EInputEvent::IE_Pressed, this, &APawnJerry::SelectWeapon, 0);
+		PlayerInputComponent->BindAction(TEXT("FirePrimary"), EInputEvent::IE_Pressed, this, &APawnJerry::BeginFire);
+		PlayerInputComponent->BindAction(TEXT("FirePrimary"), EInputEvent::IE_Released, this, &APawnJerry::StopFire);
+		PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeForward"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 1);
+		PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeLeft"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 2);
+		PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeBackward"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 3);
+		PlayerInputComponent->BindAction<FDodgeDelegate>(TEXT("DodgeRight"), EInputEvent::IE_Pressed, this, &APawnJerry::Dodge, 4);
+		PlayerInputComponent->BindAction(TEXT("OpenMenu"), EInputEvent::IE_Pressed, this, &APawnJerry::OpenMenu);
+		PlayerInputComponent->BindAction(TEXT("NextSkill"), EInputEvent::IE_Pressed, this, &APawnJerry::NextSkill);
+		PlayerInputComponent->BindAction(TEXT("PreviousSkill"), EInputEvent::IE_Pressed, this, &APawnJerry::PreviousSkill);
+		PlayerInputComponent->BindAction(TEXT("DoSkill"), EInputEvent::IE_Pressed, this, &APawnJerry::ExecuteSkill);
+	}
 }
 
 void APawnJerry::MoveForward(float AxisValue)
@@ -136,7 +139,7 @@ void APawnJerry::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (IsDead())
 		return;
 	AWeaponMaterial* WeaponMaterial = Cast<AWeaponMaterial>(OtherActor);
-	if (WeaponMaterial)
+	if (IsValid(WeaponMaterial))
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("Player walked over a Weapon Material!"));
 		AddWeaponMaterial(WeaponMaterial->GetFactory());
@@ -145,7 +148,8 @@ void APawnJerry::NotifyActorBeginOverlap(AActor* OtherActor)
 	else
 	{	//Not a Weapon Material. Check if we are standing on a Minor Objective
 		AMinorObjective* MinorObjective = Cast<AMinorObjective>(OtherActor);
-		if (MinorObjective) {
+		if (IsValid(MinorObjective))
+		{
 			MinorObjective->SetActivatingPawn(this);
 			MinorObjective->BeginActivation();
 		}
@@ -157,7 +161,8 @@ void APawnJerry::NotifyActorEndOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorEndOverlap(OtherActor);
 	AMinorObjective* MinorObjective = Cast<AMinorObjective>(OtherActor);
-	if (MinorObjective) {
+	if (IsValid(MinorObjective))
+	{
 		MinorObjective->StopActivation();
 	}
 }
@@ -169,10 +174,10 @@ float APawnJerry::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 		return 0.0;
 	//Check friendly fire
 	//Checking EventInstigator not null is particularly important since AI controllers can be destroyed before we take damage, e.g. projectiles traveling
-	if (EventInstigator != nullptr)
+	if (IsValid(EventInstigator))
 	{
 		APawnMonster* Monster = Cast<APawnMonster>(EventInstigator->GetPawn());
-		if (Monster != nullptr && Monster->IsPlayerTeam())	//Friendly AI
+		if (IsValid(Monster) && Monster->IsPlayerTeam())	//Friendly AI
 			return 0.0;
 	}
 
@@ -206,8 +211,8 @@ void APawnJerry::AddWeapon(TSubclassOf<AWeapon> WeaponClass)
 	//Only add if player does not have this weapon
 	for (auto wClass: WeaponInventory)
 	{
-		if (wClass == WeaponClass){
-			UE_LOG(LogTemp, Warning, TEXT("Player already has this weapon - not adding."));
+		if (wClass == WeaponClass)
+		{
 			return;
 		}
 	}
@@ -222,58 +227,63 @@ void APawnJerry::SelectWeapon(const int32 WeaponNumber)
 	if (IsDead())
 		return;
 	//Check if the currently held weapon is already selected
-	if (Weapon)
+	if (IsValid(Weapon))
 	{
 		if (Weapon->GetWeaponNumber() == WeaponNumber)
 			return;
 	}
 	for (auto wClass: WeaponInventory)
 	{
-		if (wClass->GetDefaultObject<AWeapon>()->GetWeaponNumber() == WeaponNumber)	//wClass is a TSubclassOf template. Need to get the actual weapon class using GetDefaultObject
+		if (IsValid(wClass))
 		{
-			//Destroy the weapon the Weapon pointer is currently pointing to
-			if (Weapon != nullptr)
+			if (wClass->GetDefaultObject<AWeapon>()->GetWeaponNumber() == WeaponNumber)	//wClass is a TSubclassOf template. Need to get the actual weapon class using GetDefaultObject
 			{
-				Weapon->StopFire();
-				Weapon->Destroy();
-			}
-			//Spawn an instance of the selected Weapon
-			Weapon = GetWorld()->SpawnActor<AWeapon>(wClass);
-			if (Weapon)
-			{
-				Weapon->SetOwner(this);
-				if (AmmoComponent != nullptr)
-					Weapon->SetAmmoComponent(AmmoComponent);
-				Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
-				if (bAmplified)
+				//Destroy the weapon the Weapon pointer is currently pointing to
+				if (IsValid(Weapon))
 				{
-					ASkill_Amplify* Amplify = Cast<ASkill_Amplify>(Skill);
-					if (Amplify != nullptr)
-					{
-						Weapon->SetFireRate(Weapon->GetFireRate() * Amplify->GetFireRateMultiplier());
-						Weapon->SetAmmoPerFire(0);
-					}
+					Weapon->StopFire();
+					Weapon->Destroy();
 				}
-				return;	
+				//Spawn an instance of the selected Weapon
+				Weapon = GetWorld()->SpawnActor<AWeapon>(wClass);
+				if (IsValid(Weapon))
+				{
+					Weapon->SetOwner(this);
+					if (IsValid(AmmoComponent))
+						Weapon->SetAmmoComponent(AmmoComponent);
+					Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+					if (bAmplified)
+					{
+						ASkill_Amplify* Amplify = Cast<ASkill_Amplify>(Skill);
+						if (IsValid(Amplify))
+						{
+							Weapon->SetFireRate(Weapon->GetFireRate() * Amplify->GetFireRateMultiplier());
+							Weapon->SetAmmoPerFire(0);
+						}
+					}
+					return;
+				}
 			}
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Player does not have this weapon in inventory."));
 }
 
 bool APawnJerry::HasWeapon(const int& WeaponNum) const
 {
 	for (auto wClass: WeaponInventory)
 	{
-		if (wClass->GetDefaultObject<AWeapon>()->GetWeaponNumber() == WeaponNum)
-			return true;
+		if (IsValid(wClass))
+		{
+			if (wClass->GetDefaultObject<AWeapon>()->GetWeaponNumber() == WeaponNum)
+				return true;
+		}
 	}
 	return false;
 }
 
 int APawnJerry::GetSelectedWeapon() const
 {
-	if (Weapon == nullptr)
+	if (!IsValid(Weapon))
 		return -1;
 	return Weapon->GetWeaponNumber();
 }
@@ -284,7 +294,7 @@ void APawnJerry::BeginFire()
 {
 	if (IsDead())
 		return;
-	if (Weapon)
+	if (IsValid(Weapon))
 		Weapon->BeginFire();
 }
 
@@ -292,13 +302,13 @@ void APawnJerry::BeginFire()
 //Input binding is used here, as SetupPlayerInputComponent is called before BeginPlay and Weapon will be null
 void APawnJerry::StopFire()
 {
-	if (Weapon)
+	if (IsValid(Weapon))
 		Weapon->StopFire();
 }
 
 bool APawnJerry::IsFiringMelee() const
 {
-	if (Weapon == nullptr)
+	if (!IsValid(Weapon))
 		return false;
 	return Weapon->IsMelee() && Weapon->IsFiring();
 }
@@ -323,7 +333,7 @@ void APawnJerry::CollectMaterials()
 void APawnJerry::OpenMenu()
 {
 	AControllerJerry* PC = Cast<AControllerJerry>(GetController());
-	if (PC != nullptr)
+	if (IsValid(PC))
 		PC->OpenMenu();
 }
 
@@ -335,7 +345,6 @@ void APawnJerry::AddEnergyHelper()
 void APawnJerry::AddEnergy(const int& Amount)
 {
 	Energy += FMath::Min(Amount, EnergyMax - Energy);
-	UE_LOG(LogTemp, Warning, TEXT("Energy: %d"), Energy);
 }
 
 void APawnJerry::NextSkill()
@@ -343,7 +352,6 @@ void APawnJerry::NextSkill()
 	SkillIndex++;
 	if (SkillIndex >= Skills.Num())
 		SkillIndex = 0;
-	UE_LOG(LogTemp, Warning, TEXT("SkillIndex: %d"), SkillIndex);
 }
 
 void APawnJerry::PreviousSkill()
@@ -351,25 +359,22 @@ void APawnJerry::PreviousSkill()
 	SkillIndex--;
 	if (SkillIndex < 0)
 		SkillIndex = Skills.Num() - 1;
-	UE_LOG(LogTemp, Warning, TEXT("SkillIndex: %d"), SkillIndex);
 }
 
 void APawnJerry::ExecuteSkill()
 {
-	if (Skill != nullptr)	//Already have a running skill
+	if (IsValid(Skill))	//Already have a running skill
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Already have a skill running!"));
 		return;
 	}
 	if (Energy < EnergyMax)
 		return;
 	if (Skills.Num() == 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("CAUTION: Skills array is empty for PawnJerry!"));
 		return;
 	}
 	Skill = GetWorld()->SpawnActor<ASkill>(Skills[SkillIndex]);
-	if (Skill == nullptr)
+	if (!IsValid(Skill))
 		return;
 	Skill->SetOwner(this);
 	Skill->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform);
@@ -379,28 +384,32 @@ void APawnJerry::ExecuteSkill()
 
 void APawnJerry::Died()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Player died!"));
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	if (Weapon != nullptr)
+	if (IsValid(GetCapsuleComponent()))
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	if (IsValid(Weapon))
 		Weapon->Destroy();
 	Weapon = nullptr;
 	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
-	Game->DecrementNumLives();
+	if (IsValid(Game))
+		Game->DecrementNumLives();
 
 	//Iterate over Materials array, and call Spawn on the factories
 	for (auto Factory : MaterialInventory)
 	{
-		Factory->SpawnMaterial();
+		if (IsValid(Factory))
+			Factory->SpawnMaterial();
 	}
-
-	// TODO: Temporary code. If NumLives is 0, display a game over screen and exit back to the main menu.
-	//		 For right now, the game is just restarted.
-	if (Game->GetNumLives() == 0) {
-		Game->EndGame(false);
+	
+	if (IsValid(Game))
+	{
+		if (Game->GetNumLives() == 0)
+		{
+			Game->EndGame(false);
+		}
 	}
 
 	float SpawnDelay;
-	if (Game != nullptr)
+	if (IsValid(Game))
 		SpawnDelay = Game->GetPlayerSpawnDelay();
 	else
 		SpawnDelay = 3.0;
@@ -420,7 +429,7 @@ void APawnJerry::Destroyed()
 	MaterialInventory.Empty();
 	Skills.Empty();
 	ATomAndJerryGameModeBase* Game = Cast<ATomAndJerryGameModeBase>(GetWorld()->GetAuthGameMode());
-	if (Game != nullptr)
+	if (IsValid(Game))
 	{
 		uint8 NumLives = Game->GetNumLives();
 		if (NumLives > 0)

@@ -19,11 +19,11 @@ EBTNodeResult::Type UBTTask_Dodge::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	AAIController* AIController = OwnerComp.GetAIOwner();
-	if (AIController == nullptr)
+	if (!IsValid(AIController))
 		return EBTNodeResult::Failed;
 
 	APawnMonster* PawnOwner = Cast<APawnMonster>(AIController->GetPawn());
-	if (PawnOwner == nullptr)
+	if (!IsValid(PawnOwner))
 		return EBTNodeResult::Failed;
 
 	bool bOnPlayerTeam = PawnOwner->IsPlayerTeam();
@@ -36,23 +36,26 @@ EBTNodeResult::Type UBTTask_Dodge::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 			continue;
 
 		//Is this projectile hostile?
-		APawnMonster* Monster = Cast<APawnMonster>(Proj->GetOwner());
-		if (Monster == PawnOwner)
-			continue;	//Don't dodge our own projectiles!
-		APawnJerry* Player = Cast<APawnJerry>(Proj->GetOwner());
-		if (bOnPlayerTeam && Monster != nullptr && !Monster->IsPlayerTeam() ||
-			!bOnPlayerTeam && (Player != nullptr || Monster != nullptr && Monster->IsPlayerTeam()))
+		if (IsValid(Proj))
 		{
-			//Can we see this projectile, and will this projectile potentially hit us?
-			if (CanSeeTarget(PawnOwner, Proj) && ProjectileWillCollide(PawnOwner, Proj))
+			APawnMonster* Monster = Cast<APawnMonster>(Proj->GetOwner());
+			if (Monster == PawnOwner)
+				continue;	//Don't dodge our own projectiles!
+			APawnJerry* Player = Cast<APawnJerry>(Proj->GetOwner());
+			if (bOnPlayerTeam && IsValid(Monster) && !Monster->IsPlayerTeam() ||
+				!bOnPlayerTeam && (IsValid(Player) || IsValid(Monster) && Monster->IsPlayerTeam()))
 			{
-				//There's at least one projectile that can hit us, dodge!
-				FVector DodgeDirection = PawnOwner->GetActorRightVector();
-				if (FMath::FRandRange(0.0, 1.0) <= 0.49)
-					DodgeDirection = -DodgeDirection;
-				FVector DodgeVector = (DodgeDirection * DodgeStrength) + FVector(0, 0, ZAdd);
-				PawnOwner->LaunchCharacter(DodgeVector, true, true);
-				return EBTNodeResult::Succeeded;
+				//Can we see this projectile, and will this projectile potentially hit us?
+				if (CanSeeTarget(PawnOwner, Proj) && ProjectileWillCollide(PawnOwner, Proj))
+				{
+					//There's at least one projectile that can hit us, dodge!
+					FVector DodgeDirection = PawnOwner->GetActorRightVector();
+					if (FMath::FRandRange(0.0, 1.0) <= 0.49)
+						DodgeDirection = -DodgeDirection;
+					FVector DodgeVector = (DodgeDirection * DodgeStrength) + FVector(0, 0, ZAdd);
+					PawnOwner->LaunchCharacter(DodgeVector, true, true);
+					return EBTNodeResult::Succeeded;
+				}
 			}
 		}
 	}
@@ -61,6 +64,8 @@ EBTNodeResult::Type UBTTask_Dodge::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 
 bool UBTTask_Dodge::CanSeeTarget(APawn* OwnerPawn, AActor* TargetActor)
 {
+	if (!IsValid(OwnerPawn) || !IsValid(TargetActor))
+		return false;
 	//Get vector from this AI to target
 	FVector DirectionToTarget = (TargetActor->GetActorLocation() - OwnerPawn->GetActorLocation());
 	float Distance = DirectionToTarget.Size();
@@ -72,7 +77,7 @@ bool UBTTask_Dodge::CanSeeTarget(APawn* OwnerPawn, AActor* TargetActor)
 	//Get OwnerPawn's viewpoint
 	FVector Location;
 	FRotator Rotation;
-	if (OwnerPawn->GetController() != nullptr)
+	if (IsValid(OwnerPawn->GetController()))
 		OwnerPawn->GetController()->GetPlayerViewPoint(Location, Rotation);
 
 	//Turn OwnerPawn's rotation into normalized vector
@@ -94,6 +99,8 @@ bool UBTTask_Dodge::CanSeeTarget(APawn* OwnerPawn, AActor* TargetActor)
 //Determine whether the projectile will collide with AI pawn (or will be in close range)
 bool UBTTask_Dodge::ProjectileWillCollide(APawn* OwnerPawn, AActor* Proj)
 {
+	if (!IsValid(OwnerPawn) || !IsValid(Proj))
+		return false;
 	//Starting Location of AI + Velocity of AI * t = Starting Location of Projectile + Velocity of Projectile * t
 	for (float x = 1.0; x <= 5.0; x++)
 	{
@@ -104,33 +111,4 @@ bool UBTTask_Dodge::ProjectileWillCollide(APawn* OwnerPawn, AActor* Proj)
 			return true;
 	}
 	return false;
-
-	/*
-	float xSeconds = (OwnerPawn->GetActorLocation().X - Proj->GetActorLocation().X) / (Proj->GetVelocity().X - OwnerPawn->GetVelocity().X);
-	if (xSeconds < 0)	//Will never cross
-		return false;
-
-	float ySeconds = (OwnerPawn->GetActorLocation().Y - Proj->GetActorLocation().Y) / (Proj->GetVelocity().Y - OwnerPawn->GetVelocity().Y);
-	if (ySeconds < 0)	//Will never cross
-		return false;
-
-
-	float zSeconds = (OwnerPawn->GetActorLocation().Z - Proj->GetActorLocation().Z) / (Proj->GetVelocity().Z - OwnerPawn->GetVelocity().Z);
-	if (zSeconds < 0)	//Will never cross
-		return false;
-
-	//Actor location returns a point that is probably in the center of the character capsule component
-	//We want to return true if the projectile will hit any point on the capsule component
-	float xLowerBound = xSeconds - 2.0;
-	float xUpperBound = xSeconds + 2.0;
-	if (ySeconds < xLowerBound || ySeconds > xUpperBound || zSeconds < xLowerBound || zSeconds > xUpperBound)
-		return false;
-	float yLowerBound = ySeconds - 2.0;
-	float yUpperBound = ySeconds + 2.0;
-	if (xSeconds < yLowerBound || xSeconds > yUpperBound || zSeconds < yLowerBound || zSeconds > yUpperBound)
-		return false;
-	float zLowerBound = zSeconds - 2.0;
-	float zUpperBound = zSeconds + 2.0;
-	return xSeconds >= zLowerBound && xSeconds <= zUpperBound && ySeconds >= zLowerBound && ySeconds <= zUpperBound;
-	*/
 }

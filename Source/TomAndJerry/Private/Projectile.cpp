@@ -17,7 +17,8 @@ AProjectile::AProjectile()
 	SetRootComponent(Root);
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	Mesh->SetupAttachment(Root);
+	if (IsValid(Mesh))
+		Mesh->SetupAttachment(Root);
 }
 
 // Called when the game starts or when spawned
@@ -36,7 +37,7 @@ void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	if (Root)
+	if (IsValid(Root))
 	{
 		Root->MoveComponent(Speed*DeltaTime*(GetActorRotation().Vector()), GetActorRotation(), true);
 	}
@@ -101,10 +102,10 @@ void AProjectile::Explode(AActor* TargetActor)
 
 void AProjectile::ServeDamage(AActor* Victim, AController* OwnerController)
 {
-	if (Victim == nullptr)	//Safety check
+	if (!IsValid(Victim))	//Safety check
 		return;
 	APawnBoss* Boss = Cast<APawnBoss>(Victim);
-	if (Boss != nullptr && !CanDamageBoss)
+	if (IsValid(Boss) && !CanDamageBoss)
 		return;
 	FPointDamageEvent DamageEvent(Damage, FHitResult(), GetActorLocation() - Victim->GetActorLocation(), nullptr);
 	Victim->TakeDamage(Damage, DamageEvent, OwnerController, this);

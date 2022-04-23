@@ -16,21 +16,21 @@ void UBTService_ClearTargetIfDead::TickNode(UBehaviorTreeComponent& OwnerComp, u
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	AAIController* AIController = OwnerComp.GetAIOwner();
-	if (AIController == nullptr)
+	if (!IsValid(AIController))
+		return;
+	if (!IsValid(OwnerComp.GetBlackboardComponent()))
 		return;
 	AActor* FocusActor = AIController->GetFocusActor();
-	if (FocusActor == nullptr)	//Previous focus actor destroyed
+	if (!IsValid(FocusActor))	//Previous focus actor destroyed
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Focus Actor is null"));
 		OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
 	}
 	else
 	{
 		APawnMonster* Monster = Cast<APawnMonster>(FocusActor);
 		APawnJerry* Player = Cast<APawnJerry>(FocusActor);
-		if (Monster != nullptr && Monster->IsDead() || Player != nullptr && Player->IsDead())
+		if (IsValid(Monster) && Monster->IsDead() || IsValid(Player) && Player->IsDead())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Target is Dead"));
 			OwnerComp.GetBlackboardComponent()->ClearValue(GetSelectedBlackboardKey());
 			AIController->ClearFocus(EAIFocusPriority::Gameplay);
 		}

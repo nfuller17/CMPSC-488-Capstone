@@ -15,10 +15,10 @@ void ASkill_Speed::Execute()
 {
 	//Do not call Super!
 	ACharacter* Pawn = Cast<ACharacter>(GetOwner());
-	if (Pawn == nullptr)
+	if (Pawn == nullptr || !IsValid(Pawn))
 		return;
 	UCharacterMovementComponent* Movement = Pawn->GetCharacterMovement();
-	if (Movement == nullptr)
+	if (Movement == nullptr || !IsValid(Movement))
 		return;
 	Movement->MaxWalkSpeed = Movement->MaxWalkSpeed * SpeedMultiplier;
 }
@@ -27,13 +27,12 @@ void ASkill_Speed::Destroyed()
 {
 	Super::Destroyed();
 	ACharacter* Pawn = Cast<ACharacter>(GetOwner());
-	if (Pawn != nullptr)
-	{
-		UCharacterMovementComponent* Movement = Pawn->GetCharacterMovement();
-		if (Movement != nullptr)
-		{
-			Movement->MaxWalkSpeed = Movement->MaxWalkSpeed * (1 / SpeedMultiplier);
-		}
-	}
+	if (Pawn == nullptr || !IsValid(Pawn))
+		return;
+
+	UCharacterMovementComponent* Movement = Pawn->GetCharacterMovement();
+	if (Movement == nullptr || !IsValid(Movement))
+		return;
+	Movement->MaxWalkSpeed = Movement->MaxWalkSpeed * (1 / SpeedMultiplier);
 
 }

@@ -16,7 +16,7 @@ bool AFactory_Ally_SpectateMode::SpawnAlly()
 	if (AllyClass == nullptr)
 		return false;
 	APawnAlly* Ally = GetWorld()->SpawnActor<APawnAlly>(AllyClass, GetActorLocation(), GetActorForwardVector().Rotation());
-	if (Ally == nullptr)
+	if (!IsValid(Ally))
 		return false;
 	Ally->SetTeam(true);
 	return true;

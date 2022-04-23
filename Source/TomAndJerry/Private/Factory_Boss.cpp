@@ -14,10 +14,9 @@ bool AFactory_Boss::SpawnBoss()
 	if (BossClass == nullptr)
 		return false;
 	APawnBoss* Boss = GetWorld()->SpawnActor<APawnBoss>(BossClass, GetActorLocation(), GetActorForwardVector().Rotation());
-	if (Boss == nullptr)
+	if (!IsValid(Boss))
 		return false;
 	Boss->SetTeam(false);
-	UE_LOG(LogTemp, Warning, TEXT("Boss spawned"));
 	return true;
 }
 

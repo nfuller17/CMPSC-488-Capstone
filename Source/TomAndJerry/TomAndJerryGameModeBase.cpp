@@ -32,7 +32,6 @@ void ATomAndJerryGameModeBase::SpawnAlliesIfSpectating(const bool& _SpectateMode
 {
 	if (_SpectateMode)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Spectate mode set for game mode base!"));
 		for (auto Factory : TActorRange<AFactory_Ally_SpectateMode>(GetWorld()))
 			AllyFactories.Emplace(Factory);
 		//Set timer to spawn monsters
@@ -49,8 +48,11 @@ void ATomAndJerryGameModeBase::SpawnMonster()
 	AFactory_Monster* Factory = MonsterFactories[FMath::RandRange(0, MonsterFactories.Num()-1)];
 	if (Factory == nullptr)
 		return;
-	if (Factory->SpawnMonster())
-		NumMonsters++;
+	if (IsValid(Factory))
+	{
+		if (Factory->SpawnMonster())
+			NumMonsters++;
+	}
 }
 
 void ATomAndJerryGameModeBase::SpawnBoss()
@@ -62,9 +64,12 @@ void ATomAndJerryGameModeBase::SpawnBoss()
 	AFactory_Boss* Factory = BossFactories[FMath::RandRange(0, BossFactories.Num()-1)];
 	if (Factory == nullptr)
 		return;
-	if (Factory->SpawnBoss())
+	if (IsValid(Factory))
 	{
-		bBossSpawned = true;
+		if (Factory->SpawnBoss())
+		{
+			bBossSpawned = true;
+		}
 	}
 }
 
@@ -83,8 +88,11 @@ void ATomAndJerryGameModeBase::SpawnAlly()
 	AFactory_Ally_SpectateMode* Factory = AllyFactories[FMath::RandRange(0, AllyFactories.Num() - 1)];
 	if (Factory == nullptr)
 		return;
-	if (Factory->SpawnAlly())
-		NumAlliesForSpectate++;
+	if (IsValid(Factory))
+	{
+		if (Factory->SpawnAlly())
+			NumAlliesForSpectate++;
+	}
 }
 
 void ATomAndJerryGameModeBase::DecrementNumMonsters()
@@ -137,7 +145,10 @@ void ATomAndJerryGameModeBase::SpawnSuperWeapon(APawnJerry* Player)
 	TSubclassOf<AWeapon> SuperWeaponClass = SuperWeapons[FMath::RandRange(0, SuperWeapons.Num() - 1)];
 
 	//Add super weapon to player inventory
-	Player->AddWeapon(SuperWeaponClass);
+	if (IsValid(Player))
+	{
+		Player->AddWeapon(SuperWeaponClass);
+	}
 }
 
 void ATomAndJerryGameModeBase::EndGame(const bool bPlayerWon)
@@ -150,7 +161,10 @@ void ATomAndJerryGameModeBase::EndGame(const bool bPlayerWon)
 	GetWorldTimerManager().ClearTimer(SpawnTimer);
 	for (AController* Controller : TActorRange<AController>(GetWorld()))
 	{
-		bool bIsWinner = Controller->IsPlayerController() == bPlayerWon;
-		Controller->GameHasEnded(Controller->GetPawn(), bIsWinner);
+		if (IsValid(Controller))
+		{
+			bool bIsWinner = Controller->IsPlayerController() == bPlayerWon;
+			Controller->GameHasEnded(Controller->GetPawn(), bIsWinner);
+		}
 	}
 }

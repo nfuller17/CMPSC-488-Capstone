@@ -16,10 +16,10 @@ void UBTService_SetFocusOnPlayer::TickNode(UBehaviorTreeComponent& OwnerComp, ui
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);			//Won't work exactly with multiple players, can maybe try for closest player
-	if (PlayerPawn == nullptr)
+	if (!IsValid(PlayerPawn))
 		return;
 	AAIController* AIController = OwnerComp.GetAIOwner();
-	if (AIController == nullptr)
+	if (!IsValid(AIController))
 		return;
 	AIController->SetFocus(PlayerPawn);
 }
