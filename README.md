@@ -5,7 +5,7 @@
 ### Created using Unreal Engine v4.27
 </br>
 
-**In order for the game to function correctly, the following asset packs must be installed from the Unreal Marketplace and added to the local project directory:**
+**In order for the game to function correctly, the following asset packs must be installed from the Unreal Engine Marketplace and added to the local project directory:**
 
 *Paragon: Gideon*  
 https://www.unrealengine.com/marketplace/en-US/product/paragon-gideon
