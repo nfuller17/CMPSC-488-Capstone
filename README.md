@@ -2,7 +2,7 @@
 
 ## Penn State Harrisburg Spring 2022 Capstone project created by Team \#Include <Coffee.sip>
 
-### Created using Unreal Engine v4.27
+### Third-person, single-player shooter created using Unreal Engine v4.27
 </br>
 
 ## Getting Started
