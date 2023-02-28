@@ -2,7 +2,7 @@
 
 ## Penn State Harrisburg Spring 2022 Capstone project created by Team \#Include <Coffee.sip>
 
-### Third-person, single-player shooter created using Unreal Engine v4.27
+### Third-person, single-player shooter game created with Unreal Engine v4.27
 </br>
 
 ## Getting Started
@@ -14,10 +14,10 @@
 - Video Card/DirectX Version: DirectX11 or DirectX12 compatible graphics card
 
 *Download and Installation*
-- Download Tom vs Jerry [here](https://drive.google.com/file/d/1zcOSKP17k7PejoM3ePpwwDIz1pXZiGB1/view?usp=sharing).
+- Download Tom vs Jerry [here (about 8 GB)](https://drive.google.com/file/d/1zcOSKP17k7PejoM3ePpwwDIz1pXZiGB1/view?usp=sharing).
 - Unzip the folder and open *WindowsNoEditor/TomAndJerry* to play
 
-View a copy of our Capstone Conference presentation [here](https://drive.google.com/file/d/13bNekbD_v6aU2cxg2VK-GUT0YmsbWQUl/view?usp=sharing).
+Or, view a copy of our Capstone Conference presentation [here](https://drive.google.com/file/d/13bNekbD_v6aU2cxg2VK-GUT0YmsbWQUl/view?usp=sharing).
 
 ## The Game
 **Objective**: Find and collect 8 purple materials scattered around the arena while avoiding or defeating enemies. Each material must be returned to the central area where the player has spawned. After collecting all materials, a Boss enemy is spawned and the player must use the provided super weapon to defeat it and win the game.
