@@ -8,10 +8,10 @@
 ## Getting Started
 
 *Recommended PC Specification*
-Operating System: Windows 10 64-bit
-Processor: Quad-core Intel or AMD, 2.5 GHz or faster
-Memory: 8 GB RAM
-Video Card/DirectX Version: DirectX11 or DirectX12 compatible graphics card
+- Operating System: Windows 10 64-bit
+- Processor: Quad-core Intel or AMD, 2.5 GHz or faster
+- Memory: 8 GB RAM
+- Video Card/DirectX Version: DirectX11 or DirectX12 compatible graphics card
 
 *Download and Installation*
 - Download Tom vs Jerry [here](https://drive.google.com/file/d/1zcOSKP17k7PejoM3ePpwwDIz1pXZiGB1/view?usp=sharing).
